@@ -1,0 +1,53 @@
+TITLE: CORONA PROJECT DIALOGUE SCRIPT
+
+<DIALOGUE_SET_000>
+
+So now that I know that this works, it's time to spend this whole day improving the system!!!<<
+
+If you are getting this, you don't have to worry about anything.<<
+
+And if you made it to this part as well, then you have just achieved something great!!!<<
+
+A super basic, run-in-the-mill, but very flexible Dialogue Scripting System...<<
+
+that you can use for a game!!!<<
+
+All that you need to do is have DialogueManager to be included into your project...<<
+
+create a .dsf file (a special text file)...<<
+
+And then bada bing bada boom! You're running your own script without having to do it in the inspector!<<
+
+This is a pretty handy system! And also, this system is absolutely free!!!<<
+
+It's like... the basic form of the Dialogue System!<<
+
+It's just that great! You gonna love it!<<
+
+You're probably wondering how to run a specific set of dialogue...<<
+
+Well that's fairly simple as well!!!<<
+
+In Visual Studio, you can call the REQUEST_DIALOGUE_SET method in DialogueManager.<<
+
+You'd do it by typing "DialogueManager.REQUEST_DIALOGUE_SET(0)"<<
+
+The "0" is basically the Dialogue Set (so if you look at the .dsf file associated with this dialogue...<<
+
+It's reading this exact dialogue (DIALOGUE_SET_000).<<
+
+To create a new dialogue set, all you have to do in the .dsf file is add "<DIALOGUE_SET_###>.<<
+
+It has to be in the Arrow Brackets (<...>).<<
+
+Other features of the Dialogue Scripting System will be coming soon, so keep a head out for it!!!<<
+
+That's about it! I'll see ya next time!!!<<
+
+<END>
+
+<DIALOGUE_SET_001>
+
+You have to fix the dialogue system before it's too late!!!<<
+
+<END>
