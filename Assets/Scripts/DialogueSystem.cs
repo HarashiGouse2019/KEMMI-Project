@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Globalization;
@@ -43,14 +44,24 @@ public class DialogueSystem : MonoBehaviour
 
     public static uint lineIndex { get; private set; } = 0;
 
+    public static uint cursorPosition { get; private set; } = 0;
+
     private static bool typeIn;
 
     const int reset = 0;
+    const string BOLD = "<b>", BOLDEND = "</b>";
+    const string ITALIZE = "<i>", ITALIZEEND = "</i>";
+    const string UNDERLINE = "<u>", UNDERLINEEND = "</u>";
+    const string SPEED = "sp=";
+    const string dslFileExtention = ".dsf";
+    const string STRINGNULL = "";
+    const bool SUCCESSFUL = true;
+    const bool FAILURE = false;
 
     void Awake()
     {
         Instance = this;
-        
+
     }
 
     // Start is called before the first frame update
@@ -63,43 +74,119 @@ public class DialogueSystem : MonoBehaviour
     public static void Run()
     {
         if (dialogue.Count != 0 && InBounds((int)lineIndex, dialogue) && IS_TYPE_IN() == false)
+        {
+            //We'll parse the very first dialogue that is ready to be displayed
+            dialogue[(int)lineIndex] = PARSER.PARSER_LINE(dialogue[(int)lineIndex]);
+
             Instance.StartCoroutine(PrintCycle());
+        }
     }
 
     static IEnumerator PrintCycle()
     {
+
         while (true)
         {
-            var text = "";
-            
-            if (lineIndex < dialogue.Count) text = dialogue[(int)lineIndex];
 
             if (IS_TYPE_IN() == false)
             {
                 ENABLE_DIALOGUE_BOX();
 
-                GET_TMPGUI().text = "";
+                GET_TMPGUI().text = STRINGNULL;
+
+                var text = STRINGNULL;
+
+                if (lineIndex < dialogue.Count) text = dialogue[(int)lineIndex];
 
                 //Typewriter effect
                 if (PARSER.LINE_HAS(text, PARSER.tokens[0]))
                 {
-                    for (int value = 0; value < text.Length - PARSER.tokens[0].Length + 1; value++)
+                    for (cursorPosition = 0; cursorPosition < text.Length - PARSER.tokens[0].Length + 1; cursorPosition++)
                     {
-                        UPDATE_TEXT_SPEED(Instance.text_Speed);
-                        GET_TMPGUI().text = text.Substring(0, value);
+
+                        try
+                        {
+                            if (lineIndex < dialogue.Count) text = dialogue[(int)lineIndex];
+
+                            UPDATE_TEXT_SPEED(Instance.text_Speed);
+
+                            GET_TMPGUI().text = text.Substring(0, (int)cursorPosition);
+                        }
+                        catch { }
+
                         yield return new WaitForSeconds(textSpeed);
+
+                        ExcludeAllTags(text);
                     }
                 }
-            }
 
-            SET_TYPE_IN_VALUE(true);
-            Instance.StartCoroutine(WaitForResponse());
+                SET_TYPE_IN_VALUE(true);
+                Instance.StartCoroutine(WaitForResponse());
+
+            }
 
             yield return null;
         }
+
     }
 
-    static bool InBounds(int index, List<string> array) => (index >= 0) && (index < array.Count);
+    static void ExcludeAllTags(string _text)
+    {
+        //Bold tag
+        ExcludeStyleTag(BOLD, BOLDEND, ref _text);
+
+        //Italize tag
+        ExcludeStyleTag(ITALIZE, ITALIZEEND, ref _text);
+
+        //Underline tag
+        ExcludeStyleTag(UNDERLINE, UNDERLINEEND, ref _text);
+
+        //Speed Command Tag: It will consider all of the possible values.
+        for (int value = 0; value < Enum.GetValues(typeof(TextSpeed)).Length; value++)
+            ExecuteSpeedFunctionTag(PARSER.delimiters[0] + SPEED + value + PARSER.delimiters[1], ref _text);
+    }
+
+    static bool ExcludeStyleTag(string _openTag, string _closeTag, ref string _line)
+    {
+        try
+        {
+            if (_line.Substring((int)cursorPosition, _openTag.Length).Contains(_openTag))
+            {
+                ShiftCursorPosition(_openTag.Length);
+                return SUCCESSFUL;
+            }
+
+            else if (_line.Substring((int)cursorPosition, _closeTag.Length).Contains(_closeTag))
+            {
+                ShiftCursorPosition(_closeTag.Length);
+                return SUCCESSFUL;
+            }
+            else
+                return FAILURE;
+        }
+        catch { }
+        return FAILURE;
+    }
+
+    static void ExecuteSpeedFunctionTag(string _tag, ref string _line)
+    {
+        try
+        {
+            if (_line.Substring((int)cursorPosition, _tag.Length).Contains(_tag))
+            {
+                _line = _line.Replace(_tag, "");
+
+                dialogue[(int)lineIndex] = _line;
+
+                int speed = Convert.ToInt32(_tag.Split('<')[1].Split('=')[1].Split('>')[0]);
+
+                Instance.text_Speed = (TextSpeed)speed;
+            }
+        }
+        catch { }
+    }
+
+    static bool InBounds(int index, List<string> array) => (index >= reset) && (index < array.Count);
 
     public static void REQUEST_DIALOGUE_SET(int _dialogueSet)
     {
@@ -172,7 +259,7 @@ public class DialogueSystem : MonoBehaviour
                     if (position > _position)
                     {
                         atTargetLine = true;
-                        if (line != "") dialogue.Add(line);
+                        if (line != STRINGNULL) dialogue.Add(line);
                     }
 
                     position++;
@@ -213,9 +300,25 @@ public class DialogueSystem : MonoBehaviour
         {
             lineIndex += 1;
 
-            GET_TMPGUI().text = "";
+            GET_TMPGUI().text = STRINGNULL;
             SET_TYPE_IN_VALUE(false);
+
+            //We'll parse the next line.
+            dialogue[(int)lineIndex] = PARSER.PARSER_LINE(dialogue[(int)lineIndex]);
         }
+    }
+
+    public static uint ShiftCursorPosition(int _newPosition)
+    {
+        cursorPosition += (uint)_newPosition;
+        return cursorPosition;
+    }
+
+    public static uint ShiftCursorPosition(int _newPosition, string _tag, string _removeFrom)
+    {
+        cursorPosition += (uint)_newPosition;
+        _removeFrom = _removeFrom.Replace(_tag, "");
+        return cursorPosition;
     }
 
     public static void UPDATE_TEXT_SPEED(TextSpeed _textSpeed)
@@ -231,11 +334,11 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-    public static string GET_DIALOGUE_SCRIPTING_FILE() => Instance.dsfName + ".dsf";
+    public static string GET_DIALOGUE_SCRIPTING_FILE() => Instance.dsfName + dslFileExtention;
 
     public static bool IS_TYPE_IN() => typeIn;
 
-    public static void SET_TYPE_IN_VALUE(bool value) {typeIn = value; }
+    public static void SET_TYPE_IN_VALUE(bool value) { typeIn = value; }
 
     public static TextMeshProUGUI GET_TMPGUI() => Instance.TMP_DIALOGUETEXT;
 

@@ -1,48 +1,34 @@
-TITLE: CORONA PROJECT DIALOGUE SCRIPT
+TITLE: EXAMPLE TEXT
 
 <DIALOGUE_SET_000>
 
-So now that I know that this works, it's time to spend this whole day improving the system!!!<<
+[SPEED::FASTER] [BOLD] OH MY GOSH!!!! [BOLD::END] <<
 
-If you are getting this, you don't have to worry about anything.<<
+[SPEED::FAST] The Dialogue Scripting Language (DSL) is actually working.<<
 
-And if you made it to this part as well, then you have just achieved something great!!!<<
+It's at a basic stage, you can only BOLD, ITALIZE, UNDERLINE, and change the text speed.<<
 
-A super basic, run-in-the-mill, but very flexible Dialogue Scripting System...<<
+There are other commands that needs to be implemented, such as SOUND and CUE.<<
 
-that you can use for a game!!!<<
+But SPEED, BOLD, ITALIZE, and UNDERLINE are the pretty important stuff.<<
 
-All that you need to do is have DialogueManager to be included into your project...<<
+I don't want to get too complicated; I just wanted to have a nicer way to write dialogue for a game.<<
 
-create a .dsf file (a special text file)...<<
+[SPEED::SLOW] ...<<
 
-And then bada bing bada boom! You're running your own script without having to do it in the inspector!<<
+[SPEED::FASTER] Yo!<<
 
-This is a pretty handy system! And also, this system is absolutely free!!!<<
+[BOLD] BRO!!! [BOLD::END] <<
 
-It's like... the basic form of the Dialogue System!<<
+[BOLD] THE SCRIPTING LANGUAGE IS ACTUALLY WORKING!!! [BOLD::END] <<
 
-It's just that great! You gonna love it!<<
+[BOLD] AND WHAT'S COOL ABOUT THE SPEED...<<
 
-You're probably wondering how to run a specific set of dialogue...<<
+IT CARRIES ON WITH OTHER DIALOGUE UNLESS I CHANGE IT ON A DIFFERENT LINE!!!<<
 
-Well that's fairly simple as well!!!<<
+[SPEED::NORMAL] Like... [SPEED::FASTER] RIGHT NOW!!! [SPEED::SLOW]  [SPEED::FASTER] IT'S WORKING!!!!!!<<
 
-In Visual Studio, you can call the REQUEST_DIALOGUE_SET method in DialogueManager.<<
-
-You'd do it by typing "DialogueManager.REQUEST_DIALOGUE_SET(0)"<<
-
-The "0" is basically the Dialogue Set (so if you look at the .dsf file associated with this dialogue...<<
-
-It's reading this exact dialogue (DIALOGUE_SET_000).<<
-
-To create a new dialogue set, all you have to do in the .dsf file is add "<DIALOGUE_SET_###>.<<
-
-It has to be in the Arrow Brackets (<...>).<<
-
-Other features of the Dialogue Scripting System will be coming soon, so keep a head out for it!!!<<
-
-That's about it! I'll see ya next time!!!<<
+[SPEED::FAST] This is so cool XD I'm so happy!!!<<
 
 <END>
 
