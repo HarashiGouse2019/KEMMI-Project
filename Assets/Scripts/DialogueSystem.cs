@@ -49,11 +49,16 @@ public class DialogueSystem : MonoBehaviour
 
     private static bool typeIn;
 
+    public static List<DialogueSystemSpriteChanger> dialogueSystemSpriteChangers { get; private set; } = new List<DialogueSystemSpriteChanger>();
+
+    public static Dictionary<string, int> definedExpressions { get; private set; } = new Dictionary<string, int>();
+
     const int reset = 0;
     const string BOLD = "<b>", BOLDEND = "</b>";
     const string ITALIZE = "<i>", ITALIZEEND = "</i>";
     const string UNDERLINE = "<u>", UNDERLINEEND = "</u>";
     const string SKIP = "<skip>";
+    const string EXPRESSION = "<exp>";
     const string SPEED = "sp=";
     const string dslFileExtention = ".dsf";
     const string STRINGNULL = "";
@@ -63,13 +68,16 @@ public class DialogueSystem : MonoBehaviour
     void Awake()
     {
         Instance = this;
-
+        Define_Expressions();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        REQUEST_DIALOGUE_SET(1);
+        REQUEST_DIALOGUE_SET(0);
+
+        dialogueSystemSpriteChangers = FIND_ALL_SPRITECHANGERS();
+
         Run();
     }
 
@@ -90,6 +98,7 @@ public class DialogueSystem : MonoBehaviour
         while (true)
         {
             ExcludeAllTags(dialogue[(int)lineIndex]);
+   
             yield return null;
         }
     }
@@ -155,6 +164,7 @@ public class DialogueSystem : MonoBehaviour
             ExecuteSpeedFunctionTag(PARSER.delimiters[0] + SPEED + value + PARSER.delimiters[1], ref _text);
 
         ExecuteActionFunctionTag(SKIP, ref _text);
+        ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
     }
 
     static bool ExcludeStyleTag(string _openTag, string _closeTag, ref string _line)
@@ -204,7 +214,7 @@ public class DialogueSystem : MonoBehaviour
 
             if (_line.Substring((int)cursorPosition, _tag.Length).Contains(_tag))
             {
-               
+
 
                 _line = _line.Replace(_tag, "");
 
@@ -216,7 +226,80 @@ public class DialogueSystem : MonoBehaviour
         catch { }
     }
 
+    static void ExecuteExpressionFunctionTag(string _tag, ref string _line)
+    {
+        try
+        {
+            if (_line.Substring((int)cursorPosition, _tag.Length).Contains(_tag))
+            {
+                _line = _line.Replace(_tag, "");
+
+                dialogue[(int)lineIndex] = _line;
+
+                ShiftCursorPosition(PARSER.skipValue);
+
+                /*The system will now take this information, from 0 to the current position
+                 and split it down even further, taking all the information.*/
+                string value = PARSER.returnedValue.ToString();
+
+                Debug.Log(value);
+
+                //Now we'll actually check if this expression had been defined in the file first.
+                foreach (KeyValuePair<string, int> expression in definedExpressions)
+                {
+                    //If the key is in the dictionary, and if a number exists!!
+                    if (expression.Key == value)
+                    {
+                        //We get the name, keep if it's EXPRESSION or POSE, and the emotion value
+                        string characterName = expression.Key.Split('_')[0];
+                        string changeType = expression.Key.Split('_')[1];
+                        string characterState = expression.Key.Split('_')[2];
+
+                        Debug.Log(characterName + "_" + changeType);
+
+                        //Now we see if we can grab the image, and have it change...
+                        DialogueSystemSpriteChanger changer = Find_Sprite_Changer(characterName + "_" + changeType);
+                        changer.CHANGE_IMAGE(characterState);
+
+                        //And then we remove it from the string
+                        dialogue[(int)lineIndex] = _line.Replace(value, "");
+                    }
+                    else
+                        //Otherwise, we'll through an error saying this hasn't been defined.
+                        Debug.LogError(value + " has not been defined. Perhaps declaring it in the associated .dsf File.");
+                }
+            }
+        }
+        catch { }
+    }
+
     static bool InBounds(int index, List<string> array) => (index >= reset) && (index < array.Count);
+
+    static DialogueSystemSpriteChanger Find_Sprite_Changer(string _name)
+    {
+        foreach (DialogueSystemSpriteChanger instance in dialogueSystemSpriteChangers)
+        {
+            if (_name == instance.Get_Character_Name())
+                return instance;
+        }
+
+        Debug.LogError("The SpriteChange by the name of " + _name + " doesn't exist.");
+        return null;
+    }
+
+    static List<DialogueSystemSpriteChanger> FIND_ALL_SPRITECHANGERS()
+    {
+        DialogueSystemSpriteChanger[] instances = FindObjectsOfType<DialogueSystemSpriteChanger>();
+
+        List<DialogueSystemSpriteChanger> list = new List<DialogueSystemSpriteChanger>();
+
+        foreach (DialogueSystemSpriteChanger instance in instances)
+        {
+            list.Add(instance);
+        }
+
+        return list;
+    }
 
     public static void REQUEST_DIALOGUE_SET(int _dialogueSet)
     {
@@ -260,6 +343,85 @@ public class DialogueSystem : MonoBehaviour
             }
         }
         Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
+    }
+
+    public static void Define_Expressions()
+    {
+        string dsPath = Application.streamingAssetsPath + @"/" + GET_DIALOGUE_SCRIPTING_FILE();
+
+        string line = null;
+
+        int position = 0;
+
+        bool foundExpression = false;
+
+        if (File.Exists(dsPath))
+        {
+            using (StreamReader fileReader = new StreamReader(dsPath))
+            {
+                while (true)
+                {
+                    line = fileReader.ReadLine();
+
+                    if (line == STRINGNULL)
+                    {
+                        if (foundExpression)
+                            return;
+                    }
+
+                    line.Split(PARSER.delimiters);
+
+                    if (line.Contains("<EXPRESSIONS>"))
+                    {
+                        foundExpression = true;
+                        GetExpressions(position);
+                    }
+
+                    position++;
+                }
+            }
+        }
+        Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
+    }
+
+    static void GetExpressions(int _position)
+    {
+        string dsPath = Application.streamingAssetsPath + @"/" + GET_DIALOGUE_SCRIPTING_FILE();
+
+        string line = null;
+
+        bool atTargetLine = false;
+
+        if (File.Exists(dsPath))
+        {
+            using (StreamReader fileReader = new StreamReader(dsPath))
+            {
+                int position = 0;
+
+                while (true)
+                {
+                    line = fileReader.ReadLine();
+
+                    if (line == STRINGNULL && atTargetLine)
+                        return;
+
+
+                    if (position > _position)
+                    {
+                        atTargetLine = true;
+
+                        if (line != STRINGNULL)
+                        {
+                            string[] data = line.Split('=');
+
+                            definedExpressions.Add(data[0].Replace(" ", ""), Convert.ToInt32(data[1].Replace(" ", "")));
+                        }
+                    }
+
+                    position++;
+                }
+            }
+        }
     }
 
     static void GetDialogue(int _position)

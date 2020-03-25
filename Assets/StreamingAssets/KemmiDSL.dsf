@@ -39,6 +39,36 @@ DATE: ### March 25, 2020 ###
 	 Smile = 7
 ###
 
+###
+
+EXPRESSIONS and POSES has the following syntax:
+
+	CHARACTER + _ + (EXPRESSIONS / POSES) + _ + EMOTION
+	
+	For different variants of emotions, the syntax will change slightly:
+	
+	CHARACTER + _ + (EXPRESSIONS / POSES) + _ + EMOTION-#
+
+###
+<EXPRESSIONS>
+KEMMI_EXPRESSION_HAPPY-0 = 0
+KEMMI_EXPRESSION_HAPPY-1 = 1
+KEMMI_EXPRESSION_SURPRISED = 2
+KEMMI_EXPRESSION_NEUTRAL = 3
+KEMMI_EXPRESSION_MAD-0 = 4
+KEMMI_EXPRESSION_AMAZED = 5
+KEMMI_EXPRESSION_SMUG = 6
+KEMMI_EXPRESSION_HAPPY-3 = 7
+KEMMI_EXPRESSION_HAPPY-4 = 8
+KEMMI_EXPRESSION_MAD-2 = 9
+
+<POSES>
+KEMMI_POSE_NEUTRAL = 0
+KEMMI_POSE_FOWARD = 1
+KEMMI_POSE_QUESTION = 2
+KEMMI_POSE_WAVE = 3
+KEMMI_POSE_HEADTILT = 4
+
 ###---------------------------------------------------------------------------------------------------------------------------------------------------------###
 
 <DIALOGUE_SET_000>

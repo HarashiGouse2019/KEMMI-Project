@@ -443,6 +443,7 @@ GameObject:
   m_Component:
   - component: {fileID: 623169777}
   - component: {fileID: 623169778}
+  - component: {fileID: 623169779}
   m_Layer: 0
   m_Name: SpecialEyes
   m_TagString: Untagged
@@ -502,7 +503,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ef30b53d4a5059e41979a8f63cbf0e5f, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.8666667}
   m_FlipX: 0
   m_FlipY: 0
@@ -510,9 +511,26 @@ SpriteRenderer:
   m_Size: {x: 2.5, y: 2.42}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &623169779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 623169776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6848dd52b4cffd54ca03145bef50447a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: KEMMI
+  changeFor: 0
+  storySpriteElements:
+  - identifier: HAPPY
+    image: {fileID: 21300000, guid: ef30b53d4a5059e41979a8f63cbf0e5f, type: 3}
 --- !u!1 &770873583
 GameObject:
   m_ObjectHideFlags: 0
@@ -761,6 +779,7 @@ GameObject:
   m_Component:
   - component: {fileID: 904942630}
   - component: {fileID: 904942631}
+  - component: {fileID: 904942632}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -833,6 +852,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &904942632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904942629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6848dd52b4cffd54ca03145bef50447a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: KEMMI
+  changeFor: 1
+  storySpriteElements: []
 --- !u!1 &931943441
 GameObject:
   m_ObjectHideFlags: 0
@@ -1995,7 +2029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7988fcda255ae44383df5a782df57a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dsfName: KemmiDSL
+  dsfName: ExpressionTestDSL
   TMP_DIALOGUETEXT: {fileID: 1915386710}
   textBoxUI: {fileID: 95990724}
 --- !u!4 &1507667168
@@ -2099,7 +2133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1807866421
 RectTransform:
   m_ObjectHideFlags: 0

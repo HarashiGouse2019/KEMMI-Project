@@ -1,0 +1,14 @@
+TITLE: ### Expression Test ###
+
+<EXPRESSIONS>
+KEMMI_EXPRESSION_HAPPY = 0
+
+<DIALOGUE_SET_000>
+
+@ [SPEED::NORMAL] Testing out the EXPRESSION tag...<<
+
+@ Ready...<<
+
+@ Let's get the bread! [EXPRESSION::KEMMI_EXPRESSION_HAPPY] <<
+
+<END>

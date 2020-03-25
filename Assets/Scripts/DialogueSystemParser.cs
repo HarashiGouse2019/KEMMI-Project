@@ -32,6 +32,7 @@ namespace DSLParser
         public static bool LINE_HAS(string line, string token) => line.Contains(token);
 
         public static int skipValue = 0;
+        public static object returnedValue = null;
 
         const bool SUCCESSFUL = true;
         const bool FAILURE = false;
@@ -107,7 +108,8 @@ namespace DSLParser
                     ParseToItalizeTag(commands, ref line) ||
                     ParseToUnderlineTag(commands, ref line) ||
                     ParseToSpeedTag(commands, ref line) ||
-                    ParseToActionTag(commands, ref line);
+                    ParseToActionTag(commands, ref line) ||
+                    ParseToExpressionTag(commands, ref line);
 
                 if (tagsParser != SUCCESSFUL)
                     line = line.Replace(commands + " ", "");
@@ -155,6 +157,30 @@ namespace DSLParser
 
                 //Skip value will be assigned, so that the system can read it
                 skipValue = actionString.Length - 1;
+
+                return SUCCESSFUL;
+            }
+            return FAILURE;
+        }
+
+        static bool ParseToExpressionTag(string _styleCommand, ref string _line)
+        {
+            if (_styleCommand.Contains(delimiters[2] + keywords[5]))
+            {
+                var value = _styleCommand.Split(delimiters)[1].Split(':')[2];
+
+                /*The Expression Action is going to be a bit complicated.
+                 We'll have to create a expression tag, and just have the expression we are looking for.
+                 The expression will act exactly like skip, but this is to let the system know that we need
+                 it to use the SpriteChanger, and change the image.*/
+
+                /*The skip tag will do the shift of the cursor for use one the system sees this
+                 parsed information.*/
+                _line = _line.Replace(_styleCommand + " ", "<exp>" + value);
+
+                //Skip value will be assigned, so that the system can read it
+                skipValue = value.Length - 1;
+                returnedValue = value;
 
                 return SUCCESSFUL;
             }
