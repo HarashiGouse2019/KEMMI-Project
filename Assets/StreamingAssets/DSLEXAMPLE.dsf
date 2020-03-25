@@ -76,6 +76,18 @@ it remains constant until it's changed again.
 
 @ [SPEED::FAST] This is so cool XD I'm so happy!!!<<
 
+@ [SPEED::NORMAL] We will also test another function...<<
+
+@ And that is the [BOLD] ACTION [BOLD::END] function.<<
+
+@ We should two astericks surrounding a word(s). For example: *Sigh*.<<
+
+@ Are you ready???<<
+
+@ [ACTION::"Sigh"] <<
+
+@ [BOLD] [SPEED::FASTEST] [ACTION::"Jumps with Joy"] IT WORKS!!!<<
+
 ### END MARKER
 When you are complete with a dialogue set,
 you include the <END> tag.

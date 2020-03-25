@@ -24,7 +24,7 @@
             <Keywords name="Folders in comment, open"></Keywords>
             <Keywords name="Folders in comment, middle"></Keywords>
             <Keywords name="Folders in comment, close"></Keywords>
-            <Keywords name="Keywords1">SPEED&#x000D;&#x000A;BOLD&#x000D;&#x000A;ITALIZE&#x000D;&#x000A;CUE&#x000D;&#x000A;SOUND&#x000D;&#x000A;UNDERLINE&#x000D;&#x000A;INPUT</Keywords>
+            <Keywords name="Keywords1">SPEED&#x000D;&#x000A;BOLD&#x000D;&#x000A;ITALIZE&#x000D;&#x000A;CUE&#x000D;&#x000A;SOUND&#x000D;&#x000A;UNDERLINE&#x000D;&#x000A;INPUT&#x000D;&#x000A;ACTION&#x000D;&#x000A;EXPRESSION</Keywords>
             <Keywords name="Keywords2">&lt;DIALOGUE_SET_ &lt;END</Keywords>
             <Keywords name="Keywords3">SLOWEST SLOWER SLOW NORMAL FAST FASTER FASTEST PRESET_1 PRESET_2 PRESET_3 PRESET_4 PRESET_5 PRESET_6 PRESET_7 PRESET_8 PRESET_9 PRESET_10 PRESET_11 PRESET_12 PRESET_13 PRESET_14 PRESET_15 PRESET_16 END</Keywords>
             <Keywords name="Keywords4"></Keywords>
@@ -38,7 +38,7 @@
             <WordsStyle name="DEFAULT" fgColor="C0C0C0" bgColor="FFFFFF" colorStyle="1" fontName="" fontStyle="0" nesting="0" />
             <WordsStyle name="COMMENTS" fgColor="408080" bgColor="FFFFFF" colorStyle="1" fontName="" fontStyle="0" nesting="0" />
             <WordsStyle name="LINE COMMENTS" fgColor="C0C0C0" bgColor="FFFFFF" colorStyle="1" fontName="" fontStyle="0" nesting="50331649" />
-            <WordsStyle name="NUMBERS" fgColor="00FF40" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="NUMBERS" fgColor="80FFFF" bgColor="FFFFFF" colorStyle="1" fontName="" fontStyle="0" nesting="0" />
             <WordsStyle name="KEYWORDS1" fgColor="00FF80" bgColor="FFFFFF" colorStyle="1" fontName="" fontStyle="2" nesting="0" />
             <WordsStyle name="KEYWORDS2" fgColor="8080FF" bgColor="FFFFFF" colorStyle="1" fontName="" fontStyle="0" nesting="0" />
             <WordsStyle name="KEYWORDS3" fgColor="80FF80" bgColor="FFFFFF" colorStyle="1" fontName="" fontStyle="2" nesting="0" />
@@ -51,7 +51,7 @@
             <WordsStyle name="FOLDER IN CODE1" fgColor="80FF00" bgColor="FFFFFF" colorStyle="1" fontName="" fontStyle="0" nesting="0" />
             <WordsStyle name="FOLDER IN CODE2" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
             <WordsStyle name="FOLDER IN COMMENT" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
-            <WordsStyle name="DELIMITERS1" fgColor="80FF00" bgColor="FFFFFF" colorStyle="1" fontName="" fontStyle="2" nesting="16778240" />
+            <WordsStyle name="DELIMITERS1" fgColor="80FF00" bgColor="FFFFFF" colorStyle="1" fontName="" fontStyle="2" nesting="83887104" />
             <WordsStyle name="DELIMITERS2" fgColor="FF00FF" bgColor="FFFFFF" colorStyle="1" fontName="" fontStyle="0" nesting="50332416" />
             <WordsStyle name="DELIMITERS3" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />
             <WordsStyle name="DELIMITERS4" fgColor="000000" bgColor="FFFFFF" fontName="" fontStyle="0" nesting="0" />

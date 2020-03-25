@@ -20,16 +20,18 @@ namespace DSLParser
             }
         }
 
-        public static char[] delimiters { get; } = { '<', '>', '[', ']' , ',' };
+        public static char[] delimiters { get; } = { '<', '>', '[', ']', ',' };
 
         public static string[] tokens { get; } = { "<<", "::", "END", "@" };
 
-        public static string[] keywords { get; } = { "SPEED", "BOLD", "ITALIZE", "UNDERLINE", "SOUND", "CUE" };
+        public static string[] keywords { get; } = { "SPEED", "BOLD", "ITALIZE", "UNDERLINE", "SOUND", "EXPRESSION", "ACTION" };
 
         public static string[] validTextSpeeds { get; } = { "SLOWEST", "SLOWER", "SLOW", "NORMAL", "FAST", "FASTER", "FASTEST" };
 
         public static List<CommandCallLocation> commandCallLocations = new List<CommandCallLocation>();
         public static bool LINE_HAS(string line, string token) => line.Contains(token);
+
+        public static int skipValue = 0;
 
         const bool SUCCESSFUL = true;
         const bool FAILURE = false;
@@ -104,7 +106,8 @@ namespace DSLParser
                     ParseToBoldTag(commands, ref line) ||
                     ParseToItalizeTag(commands, ref line) ||
                     ParseToUnderlineTag(commands, ref line) ||
-                    ParseToSpeedTag(commands, ref line);
+                    ParseToSpeedTag(commands, ref line) ||
+                    ParseToActionTag(commands, ref line);
 
                 if (tagsParser != SUCCESSFUL)
                     line = line.Replace(commands + " ", "");
@@ -131,6 +134,29 @@ namespace DSLParser
                         return SUCCESSFUL;
                     }
                 }
+            }
+            return FAILURE;
+        }
+
+        static bool ParseToActionTag(string _styleCommand, ref string _line)
+        {
+            if (_styleCommand.Contains(delimiters[2] + keywords[6]))
+            {
+                var actionString = '*' + _styleCommand.Split(delimiters)[1].Split(':')[2].Split('"')[1] + "* ";
+
+                /*The action function is simply to add two asteriks between a word.
+                 For example: [ACTION::"Sighs"] will be replaced by *Sigh* in the text. 
+                 
+                 Very easy function to do.*/
+
+                /*The skip tag will do the shift of the cursor for use one the system sees this
+                 parsed information.*/
+                _line = _line.Replace(_styleCommand + " ", "<skip>" + actionString);
+
+                //Skip value will be assigned, so that the system can read it
+                skipValue = actionString.Length - 1;
+
+                return SUCCESSFUL;
             }
             return FAILURE;
         }

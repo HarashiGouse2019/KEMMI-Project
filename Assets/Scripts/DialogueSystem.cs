@@ -53,6 +53,7 @@ public class DialogueSystem : MonoBehaviour
     const string BOLD = "<b>", BOLDEND = "</b>";
     const string ITALIZE = "<i>", ITALIZEEND = "</i>";
     const string UNDERLINE = "<u>", UNDERLINEEND = "</u>";
+    const string SKIP = "<skip>";
     const string SPEED = "sp=";
     const string dslFileExtention = ".dsf";
     const string STRINGNULL = "";
@@ -68,7 +69,7 @@ public class DialogueSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        REQUEST_DIALOGUE_SET(0);
+        REQUEST_DIALOGUE_SET(1);
         Run();
     }
 
@@ -111,7 +112,7 @@ public class DialogueSystem : MonoBehaviour
                 //Typewriter effect
                 if (PARSER.LINE_HAS(text, PARSER.tokens[0]))
                 {
-                    for (cursorPosition = 0; cursorPosition < text.Length - PARSER.tokens[0].Length + 1; cursorPosition++)
+                    for (; cursorPosition < text.Length - PARSER.tokens[0].Length + 1; cursorPosition++)
                     {
 
                         try
@@ -152,6 +153,8 @@ public class DialogueSystem : MonoBehaviour
         //Speed Command Tag: It will consider all of the possible values.
         for (int value = 0; value < Enum.GetValues(typeof(TextSpeed)).Length; value++)
             ExecuteSpeedFunctionTag(PARSER.delimiters[0] + SPEED + value + PARSER.delimiters[1], ref _text);
+
+        ExecuteActionFunctionTag(SKIP, ref _text);
     }
 
     static bool ExcludeStyleTag(string _openTag, string _closeTag, ref string _line)
@@ -189,6 +192,25 @@ public class DialogueSystem : MonoBehaviour
                 int speed = Convert.ToInt32(_tag.Split('<')[1].Split('=')[1].Split('>')[0]);
 
                 text_Speed = (TextSpeed)speed;
+            }
+        }
+        catch { }
+    }
+
+    static void ExecuteActionFunctionTag(string _tag, ref string _line)
+    {
+        try
+        {
+
+            if (_line.Substring((int)cursorPosition, _tag.Length).Contains(_tag))
+            {
+               
+
+                _line = _line.Replace(_tag, "");
+
+                dialogue[(int)lineIndex] = _line;
+
+                ShiftCursorPosition(PARSER.skipValue);
             }
         }
         catch { }
@@ -286,6 +308,8 @@ public class DialogueSystem : MonoBehaviour
                 {
                     Progress();
 
+                    cursorPosition = reset;
+
                 }
                 else
                 {
@@ -295,6 +319,7 @@ public class DialogueSystem : MonoBehaviour
                     DISABLE_DIALOGUE_BOX();
                     dialogue.Clear();
                     Instance.StopAllCoroutines();
+                    cursorPosition = reset;
                 }
             }
 
