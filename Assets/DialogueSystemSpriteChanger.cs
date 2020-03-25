@@ -60,17 +60,20 @@ public class DialogueSystemSpriteChanger : MonoBehaviour
     //Our sprite render
     private SpriteRenderer spriteRenderer;
 
+    //Prefix is a character man plus _EXPRESSION
+    private string prefix;
+
     void Awake()
     {
         Instance = this;
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         //We modify the name as quickly as possible
-        characterName = characterName.ToUpper() +  '_' + Enum.GetName(typeof(CHANGEFOR), changeFor);
+        prefix = characterName.ToUpper() +  '_' + Enum.GetName(typeof(CHANGEFOR), changeFor);
 
     }
 
-    public string Get_Character_Name() => characterName;
+    public string Get_Prefix() => prefix;
 
     /// <summary>
     /// Change the image based on its identifier

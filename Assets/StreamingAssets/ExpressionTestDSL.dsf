@@ -9,6 +9,6 @@ KEMMI_EXPRESSION_HAPPY = 0
 
 @ Ready...<<
 
-@ Let's get the bread! [EXPRESSION::KEMMI_EXPRESSION_HAPPY] <<
+@ Let's get the bread! [EXPRESSION::0] <<
 
 <END>

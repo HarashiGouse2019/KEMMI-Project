@@ -248,7 +248,7 @@ public class DialogueSystem : MonoBehaviour
                 foreach (KeyValuePair<string, int> expression in definedExpressions)
                 {
                     //If the key is in the dictionary, and if a number exists!!
-                    if (expression.Key == value)
+                    if (expression.Key == value || expression.Value == Convert.ToInt32(value))
                     {
                         //We get the name, keep if it's EXPRESSION or POSE, and the emotion value
                         string characterName = expression.Key.Split('_')[0];
@@ -279,7 +279,7 @@ public class DialogueSystem : MonoBehaviour
     {
         foreach (DialogueSystemSpriteChanger instance in dialogueSystemSpriteChangers)
         {
-            if (_name == instance.Get_Character_Name())
+            if (_name == instance.Get_Prefix())
                 return instance;
         }
 
