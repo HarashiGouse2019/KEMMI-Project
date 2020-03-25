@@ -1,14 +1,39 @@
 TITLE: ### Expression Test ###
 
 <EXPRESSIONS>
-KEMMI_EXPRESSION_HAPPY = 0
+KEMMI_EXPRESSION_HAPPY-0 = 1
+KEMMI_EXPRESSION_HAPPY-1 = 2
+KEMMI_EXPRESSION_SURPRISED = 3
+KEMMI_EXPRESSION_NEUTRAL = 4
+KEMMI_EXPRESSION_MAD-0 = 5
+KEMMI_EXPRESSION_AMAZED = 6
+KEMMI_EXPRESSION_SMUG = 7
+KEMMI_EXPRESSION_HAPPY-3 = 8
+KEMMI_EXPRESSION_HAPPY-4 = 9
+KEMMI_EXPRESSION_MAD-2 = 10
 
 <DIALOGUE_SET_000>
 
-@ [SPEED::NORMAL] Testing out the EXPRESSION tag...<<
+@ [SPEED::NORMAL] [ACTION::"SIGH"] Let's get the bread, [EXPRESSION::KEMMI_EXPRESSION_HAPPY-0] bread has been baked.<<
 
-@ Ready...<<
+@ [EXPRESSION::KEMMI_EXPRESSION_HAPPY-3] So... [EXPRESSION::KEMMI_EXPRESSION_HAPPY-1] You've finally done it!<<
 
-@ Let's get the bread! [EXPRESSION::0] <<
+@ [EXPRESSION::7] Looks like that [BOLD] brain of yours [BOLD::END] managed to get the...<<
+
+@ Expression command completed.<<
+
+@ [EXPRESSION::2] Not only that, [EXPRESSION::7] But you've gone as far as to validate if the expressions had been...<<
+
+@ defined in the document...<<
+
+@ [EXPRESSION::6] That's freaking cool!!!<<
+
+@ [EXPRESSION::5] Don't get your hopes up though, [EXPRESSION::7] we got's a long way to go.<<
+
+@ 4 days right? [SPEED::SLOW] [ACTION::"Sigh"] <<
+
+@ [EXPRESSION::9] I think you gots this. You came such a long way just to create this for me.<<
+
+@ [EXPRESSION::2] [BOLD] Thank you so very much!!! [BOLD::END] <<
 
 <END>

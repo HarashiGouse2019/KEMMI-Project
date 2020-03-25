@@ -58,21 +58,19 @@ namespace DSLParser
             int startingBracketPos = 0;
             int endingBracketPos = 0;
 
-            //Validate if @ is used. If not, we abort.
-            if (line[0] == '@')
-                line = line.Replace("@ ", "");
-            else
-                return "";
 
             for (int value = 0; value < line.Length; value++)
             {
+                if (line[0] == '@')
+                    line = line.Replace("@ ", "");
+
                 //Now, how will we get the position of [ and ]?
                 if (line[value] == delimiters[2])
                 {
                     startingBracketPos = value;
                 }
 
-                else if (line[value] == delimiters[3])
+                if (line[value] == delimiters[3])
                 {
                     endingBracketPos = value;
 
@@ -83,6 +81,7 @@ namespace DSLParser
 
                     string command = line.Substring(startingBracketPos, (endingBracketPos - startingBracketPos) + 1);
 
+                    
                     /*Now we have to see if it contains one of the commands.*/
                     foreach (string keyword in keywords)
                     {
@@ -176,11 +175,10 @@ namespace DSLParser
 
                 /*The skip tag will do the shift of the cursor for use one the system sees this
                  parsed information.*/
-                _line = _line.Replace(_styleCommand + " ", "<exp>" + value);
+                _line = _line.Replace(_styleCommand + " ", "<exp>");
 
                 //Skip value will be assigned, so that the system can read it
                 skipValue = value.Length - 1;
-                returnedValue = value;
 
                 return SUCCESSFUL;
             }

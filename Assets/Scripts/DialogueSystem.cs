@@ -68,12 +68,14 @@ public class DialogueSystem : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        Define_Expressions();
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        Define_Expressions();
+
         REQUEST_DIALOGUE_SET(0);
 
         dialogueSystemSpriteChangers = FIND_ALL_SPRITECHANGERS();
@@ -98,7 +100,7 @@ public class DialogueSystem : MonoBehaviour
         while (true)
         {
             ExcludeAllTags(dialogue[(int)lineIndex]);
-   
+
             yield return null;
         }
     }
@@ -110,6 +112,8 @@ public class DialogueSystem : MonoBehaviour
         {
             if (IS_TYPE_IN() == false)
             {
+                
+
                 ENABLE_DIALOGUE_BOX();
 
                 GET_TMPGUI().text = STRINGNULL;
@@ -127,6 +131,8 @@ public class DialogueSystem : MonoBehaviour
                         try
                         {
                             if (lineIndex < dialogue.Count) text = dialogue[(int)lineIndex];
+
+                            ExcludeAllTags(text);
 
                             UPDATE_TEXT_SPEED(text_Speed);
 
@@ -195,6 +201,8 @@ public class DialogueSystem : MonoBehaviour
         {
             if (_line.Substring((int)cursorPosition, _tag.Length).Contains(_tag))
             {
+                Debug.Log(_tag);
+
                 _line = _line.Replace(_tag, "");
 
                 dialogue[(int)lineIndex] = _line;
@@ -218,9 +226,9 @@ public class DialogueSystem : MonoBehaviour
 
                 _line = _line.Replace(_tag, "");
 
-                dialogue[(int)lineIndex] = _line;
+                ShiftCursorPosition(_tag.Length - 1);
 
-                ShiftCursorPosition(PARSER.skipValue);
+                dialogue[(int)lineIndex] = _line;
             }
         }
         catch { }
@@ -228,46 +236,50 @@ public class DialogueSystem : MonoBehaviour
 
     static void ExecuteExpressionFunctionTag(string _tag, ref string _line)
     {
+        bool validated = false;
+
         try
         {
+
             if (_line.Substring((int)cursorPosition, _tag.Length).Contains(_tag))
             {
+                /*The system will now take this information, from 0 to the current position
+                 and split it down even further, taking all the information.*/
+
                 _line = _line.Replace(_tag, "");
+
+                ShiftCursorPosition(_tag.Length - 1);
+
+                string value = PARSER.returnedValue.ToString();
 
                 dialogue[(int)lineIndex] = _line;
 
-                ShiftCursorPosition(PARSER.skipValue);
-
-                /*The system will now take this information, from 0 to the current position
-                 and split it down even further, taking all the information.*/
-                string value = PARSER.returnedValue.ToString();
-
                 Debug.Log(value);
 
-                //Now we'll actually check if this expression had been defined in the file first.
-                foreach (KeyValuePair<string, int> expression in definedExpressions)
+                foreach (KeyValuePair<string, int> expressions in definedExpressions)
                 {
-                    //If the key is in the dictionary, and if a number exists!!
-                    if (expression.Key == value || expression.Value == Convert.ToInt32(value))
+                    //Check if a key matches
+                    if (expressions.Key == value || expressions.Value == Convert.ToInt32(value))
                     {
+                        Debug.Log("If you see the 2 before this, that means that it worked.");
                         //We get the name, keep if it's EXPRESSION or POSE, and the emotion value
-                        string characterName = expression.Key.Split('_')[0];
-                        string changeType = expression.Key.Split('_')[1];
-                        string characterState = expression.Key.Split('_')[2];
-
-                        Debug.Log(characterName + "_" + changeType);
+                        string characterName = expressions.Key.Split('_')[0];
+                        string changeType = expressions.Key.Split('_')[1];
+                        string characterState = expressions.Key.Split('_')[2];
 
                         //Now we see if we can grab the image, and have it change...
                         DialogueSystemSpriteChanger changer = Find_Sprite_Changer(characterName + "_" + changeType);
                         changer.CHANGE_IMAGE(characterState);
-
-                        //And then we remove it from the string
-                        dialogue[(int)lineIndex] = _line.Replace(value, "");
+                        validated = true;
+                        break;
                     }
-                    else
-                        //Otherwise, we'll through an error saying this hasn't been defined.
-                        Debug.LogError(value + " has not been defined. Perhaps declaring it in the associated .dsf File.");
+                    
                 }
+
+                if (!validated)
+                    //Otherwise, we'll through an error saying this hasn't been defined.
+                    Debug.LogError(value + " has not been defined. Perhaps declaring it in the associated .dsf File.");
+
             }
         }
         catch { }
@@ -403,7 +415,7 @@ public class DialogueSystem : MonoBehaviour
                     line = fileReader.ReadLine();
 
                     if (line == STRINGNULL && atTargetLine)
-                        return;
+                            return;
 
 
                     if (position > _position)
@@ -413,13 +425,14 @@ public class DialogueSystem : MonoBehaviour
                         if (line != STRINGNULL)
                         {
                             string[] data = line.Split('=');
-
                             definedExpressions.Add(data[0].Replace(" ", ""), Convert.ToInt32(data[1].Replace(" ", "")));
                         }
                     }
 
                     position++;
                 }
+
+                
             }
         }
     }

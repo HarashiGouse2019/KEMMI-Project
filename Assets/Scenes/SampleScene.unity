@@ -459,8 +459,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 623169776}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.88, y: -0.61999995, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.71, y: -0.74, z: 0}
+  m_LocalScale: {x: 1.6021392, y: 1.4888335, z: 1}
   m_Children: []
   m_Father: {fileID: 904942630}
   m_RootOrder: 0
@@ -503,15 +503,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.8666667}
+  m_Sprite: {fileID: 21300000, guid: 9f04e8642261de64e9787eca7bb0bd5e, type: 3}
+  m_Color: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 0.7490196}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.5, y: 2.42}
+  m_Size: {x: 13.45, y: 17.37}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &623169779
@@ -529,8 +529,26 @@ MonoBehaviour:
   characterName: KEMMI
   changeFor: 0
   storySpriteElements:
-  - identifier: HAPPY
-    image: {fileID: 21300000, guid: ef30b53d4a5059e41979a8f63cbf0e5f, type: 3}
+  - identifier: HAPPY-0
+    image: {fileID: 21300000, guid: 8ebe3b17c0152cc4eae8c39a114f19a5, type: 3}
+  - identifier: HAPPY-1
+    image: {fileID: 21300000, guid: 322499365a365d54d84b1acdbdfcd86f, type: 3}
+  - identifier: SURPRISED
+    image: {fileID: 21300000, guid: 35200451bda5e9a42a4edc5ad637dff1, type: 3}
+  - identifier: NEUTRAL
+    image: {fileID: 21300000, guid: 9f04e8642261de64e9787eca7bb0bd5e, type: 3}
+  - identifier: MAD-0
+    image: {fileID: 21300000, guid: 1020f0cbfecb5d342933f9fbad80ce89, type: 3}
+  - identifier: AMAZED
+    image: {fileID: 21300000, guid: 719b10eb230f6924d85955115f26ed0b, type: 3}
+  - identifier: SMUG
+    image: {fileID: 21300000, guid: cc067762a1b089c418e121a209918e1a, type: 3}
+  - identifier: HAPPY-3
+    image: {fileID: 21300000, guid: 181769d540f830c49a37d44cbae04b50, type: 3}
+  - identifier: HAPPY-4
+    image: {fileID: 21300000, guid: f828aa2ce474ae346ac3ade3ec7bfea8, type: 3}
+  - identifier: MAD-2
+    image: {fileID: 21300000, guid: 2b1743936df62d3428fac53e1a4bfadf, type: 3}
 --- !u!1 &770873583
 GameObject:
   m_ObjectHideFlags: 0
