@@ -22,11 +22,11 @@ namespace DSLParser
 
         public static char[] delimiters { get; } = { '<', '>', '[', ']' , ',' };
 
-        public static string[] tokens { get; } = { "<<", "::", "END" };
+        public static string[] tokens { get; } = { "<<", "::", "END", "@" };
 
         public static string[] keywords { get; } = { "SPEED", "BOLD", "ITALIZE", "UNDERLINE", "SOUND", "CUE" };
 
-        public static string[] validTextSpeeds { get; } = { "SLOWER", "SLOW", "NORMAL", "FAST", "FASTER" };
+        public static string[] validTextSpeeds { get; } = { "SLOWEST", "SLOWER", "SLOW", "NORMAL", "FAST", "FASTER", "FASTEST" };
 
         public static List<CommandCallLocation> commandCallLocations = new List<CommandCallLocation>();
         public static bool LINE_HAS(string line, string token) => line.Contains(token);
@@ -55,9 +55,14 @@ namespace DSLParser
             int startingBracketPos = 0;
             int endingBracketPos = 0;
 
+            //Validate if @ is used. If not, we abort.
+            if (line[0] == '@')
+                line = line.Replace("@ ", "");
+            else
+                return "";
+
             for (int value = 0; value < line.Length; value++)
             {
-
                 //Now, how will we get the position of [ and ]?
                 if (line[value] == delimiters[2])
                 {
@@ -67,8 +72,6 @@ namespace DSLParser
                 else if (line[value] == delimiters[3])
                 {
                     endingBracketPos = value;
-
-                    Debug.Log(startingBracketPos + "," + endingBracketPos);
 
                     /*At this point, we want to see if a command is actually
                      in between the brackets. If there is, then we can remove

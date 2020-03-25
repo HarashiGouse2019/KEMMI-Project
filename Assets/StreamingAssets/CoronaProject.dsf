@@ -1,39 +1,98 @@
-TITLE: EXAMPLE TEXT
+### TITLE
+This is going to be the title (obviously).
+This is just your normal everyday comment.
+###
+TITLE: ###EXAMPLE TEXT###
 
+AUTHOR: ###MIIJII###
+
+DATE: ### March 24, 2020 ###
+
+###This is how you define a dialogue set.###
 <DIALOGUE_SET_000>
 
-[SPEED::FASTER] [BOLD] OH MY GOSH!!!! [BOLD::END] <<
+NOTE: 
+### BASICS
 
-[SPEED::FAST] The Dialogue Scripting Language (DSL) is actually working.<<
+You always start a line with '@' and always end with '<<'.
+You can stylize your dialogue with [BOLD], [UNDERLINE], and [ITALIZE].
+To end styling, you add '::END' after.
 
-It's at a basic stage, you can only BOLD, ITALIZE, UNDERLINE, and change the text speed.<<
+For example: 
 
-There are other commands that needs to be implemented, such as SOUND and CUE.<<
+	@ [BOLD] Hello! [BOLD::END] <<
+	@ [ITALIZE] Hello! [ITALIZE::END] <<
+	@ [UNDERLINE] Hello! [UNDERLINE::END] <<
+	
+You can also change texting speed with the [SPEED] command. Here are 
+the 7 available speeds:
 
-But SPEED, BOLD, ITALIZE, and UNDERLINE are the pretty important stuff.<<
+	SLOWEST
+	SLOWER
+	SLOW
+	NORMAL
+	FAST
+	FASTER
+	FASTEST
 
-I don't want to get too complicated; I just wanted to have a nicer way to write dialogue for a game.<<
+###
+@ [BOLD] [SPEED::FASTER] OH MY GOSH!!!! [BOLD::END] <<
 
-[SPEED::SLOW] ...<<
+### LEAVE A SPACE
+Be sure that use [], you level space after the commands. 
+If not, the command is ignored.
+###
+@ [SPEED::FAST] The Dialogue Scripting Language (DSL) is actually working.<<
 
-[SPEED::FASTER] Yo!<<
+@ [SPEED::NORMAL] It's at a basic stage, you can only [BOLD] BOLD[BOLD::END] ,[ITALIZE] ITALIZE[ITALIZE::END] , [UNDERLINE] UNDERLINE[UNDERLINE::END] , and change the text speed.<<
 
-[BOLD] BRO!!! [BOLD::END] <<
+@ There are other commands that needs to be implemented, such as SOUND and CUE.<<
 
-[BOLD] THE SCRIPTING LANGUAGE IS ACTUALLY WORKING!!! [BOLD::END] <<
+@ But SPEED, BOLD, ITALIZE, and UNDERLINE are the pretty important stuff.<<
 
-[BOLD] AND WHAT'S COOL ABOUT THE SPEED...<<
+### NESTING
+You can nest commands as well, as you see for this one!
+And you can change the speed more than 1 time!
+###
+@ I don't want to get [BOLD] [ITALIZE] [SPEED::SLOWER] too complicated[BOLD::END] [ITALIZE::END] ; [SPEED::FAST] I just wanted to have a nicer way to write dialogue for a game.<<
 
-IT CARRIES ON WITH OTHER DIALOGUE UNLESS I CHANGE IT ON A DIFFERENT LINE!!!<<
+@ [SPEED::SLOWEST] ...<<
 
-[SPEED::NORMAL] Like... [SPEED::FASTER] RIGHT NOW!!! [SPEED::SLOW]  [SPEED::FASTER] IT'S WORKING!!!!!!<<
+@ [SPEED::FASTER] Yo!<<
 
-[SPEED::FAST] This is so cool XD I'm so happy!!!<<
+### CONSISTENT SPEED
+When the texting speed changes, 
+it remains constant until it's changed again.
+###
+@ [BOLD] BRO!!! [BOLD::END] <<
 
+@ [BOLD] [UNDERLINE] THE SCRIPTING LANGUAGE IS ACTUALLY WORKING!!! [UNDERLINE::END] [BOLD::END] <<
+
+@ [BOLD] AND WHAT'S COOL ABOUT THE [SPEED::SLOWER] SPEED...<<
+
+@ [SPEED::FASTEST] IT CARRIES ON WITH OTHER DIALOGUE UNLESS I CHANGE IT ON A DIFFERENT LINE!!!<<
+
+@ [SPEED::NORMAL] Like [SPEED::SLOWEST] ...[SPEED::FASTER] RIGHT NOW!!! [SPEED::SLOWEST]  [SPEED::FASTER] IT'S WORKING!!!!!!<<
+
+@ [SPEED::FAST] This is so cool XD I'm so happy!!!<<
+
+### END MARKER
+When you are complete with a dialogue set,
+you include the <END> tag.
+###
 <END>
 
-<DIALOGUE_SET_001>
+### CONCLUSION
+A good practice to do for using DSL for Unity,
+stylize first before you do any commands.
 
-You have to fix the dialogue system before it's too late!!!<<
+For example, type:
 
-<END>
+	[BOLD] [SPEED::FASTER] Hi![BOLD::END]
+
+instead of:
+
+	[SPEED::FASTER] [BOLD] Hi! [BOLD::END]
+	
+I assure you, if you did it the 
+###

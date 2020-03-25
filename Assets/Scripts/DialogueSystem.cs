@@ -16,11 +16,13 @@ public class DialogueSystem : MonoBehaviour
 
     public enum TextSpeed
     {
+        SLOWEST,
         SLOWER,
         SLOW,
         NORMAL,
         FAST,
-        FASTER
+        FASTER,
+        FASTEST
     }
 
 
@@ -33,8 +35,7 @@ public class DialogueSystem : MonoBehaviour
     [SerializeField]
     private Image textBoxUI;
 
-    [SerializeField]
-    private TextSpeed text_Speed;
+    private static TextSpeed text_Speed;
 
     private static float textSpeed;
 
@@ -79,6 +80,16 @@ public class DialogueSystem : MonoBehaviour
             dialogue[(int)lineIndex] = PARSER.PARSER_LINE(dialogue[(int)lineIndex]);
 
             Instance.StartCoroutine(PrintCycle());
+            Instance.StartCoroutine(ExclusionCycle());
+        }
+    }
+
+    static IEnumerator ExclusionCycle()
+    {
+        while (true)
+        {
+            ExcludeAllTags(dialogue[(int)lineIndex]);
+            yield return null;
         }
     }
 
@@ -87,7 +98,6 @@ public class DialogueSystem : MonoBehaviour
 
         while (true)
         {
-
             if (IS_TYPE_IN() == false)
             {
                 ENABLE_DIALOGUE_BOX();
@@ -108,15 +118,13 @@ public class DialogueSystem : MonoBehaviour
                         {
                             if (lineIndex < dialogue.Count) text = dialogue[(int)lineIndex];
 
-                            UPDATE_TEXT_SPEED(Instance.text_Speed);
+                            UPDATE_TEXT_SPEED(text_Speed);
 
                             GET_TMPGUI().text = text.Substring(0, (int)cursorPosition);
                         }
                         catch { }
 
                         yield return new WaitForSeconds(textSpeed);
-
-                        ExcludeAllTags(text);
                     }
                 }
 
@@ -180,7 +188,7 @@ public class DialogueSystem : MonoBehaviour
 
                 int speed = Convert.ToInt32(_tag.Split('<')[1].Split('=')[1].Split('>')[0]);
 
-                Instance.text_Speed = (TextSpeed)speed;
+                text_Speed = (TextSpeed)speed;
             }
         }
         catch { }
@@ -259,7 +267,7 @@ public class DialogueSystem : MonoBehaviour
                     if (position > _position)
                     {
                         atTargetLine = true;
-                        if (line != STRINGNULL) dialogue.Add(line);
+                        if (line != STRINGNULL && line[0] == '@') dialogue.Add(line);
                     }
 
                     position++;
@@ -325,11 +333,13 @@ public class DialogueSystem : MonoBehaviour
     {
         switch (_textSpeed)
         {
-            case TextSpeed.SLOWER: textSpeed = 1f; return;
-            case TextSpeed.SLOW: textSpeed = 0.5f; return;
-            case TextSpeed.NORMAL: textSpeed = 0.050f; return;
-            case TextSpeed.FAST: textSpeed = 0.025f; return;
+            case TextSpeed.SLOWEST: textSpeed = 0.25f; return;
+            case TextSpeed.SLOWER: textSpeed = 0.1f; return;
+            case TextSpeed.SLOW: textSpeed = 0.05f; return;
+            case TextSpeed.NORMAL: textSpeed = 0.025f; return;
+            case TextSpeed.FAST: textSpeed = 0.01f; return;
             case TextSpeed.FASTER: textSpeed = 0.005f; return;
+            case TextSpeed.FASTEST: textSpeed = 0.0025f; return;
             default: return;
         }
     }
@@ -345,4 +355,9 @@ public class DialogueSystem : MonoBehaviour
     public static void ENABLE_DIALOGUE_BOX() => Instance.textBoxUI.gameObject.SetActive(true);
 
     public static void DISABLE_DIALOGUE_BOX() => Instance.textBoxUI.gameObject.SetActive(false);
+
+    public void OnDisable()
+    {
+        StopAllCoroutines();
+    }
 }
