@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Globalization;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,9 +48,12 @@ public class DialogueSystem : MonoBehaviour
 
     public static uint CursorPosition { get; private set; } = 0;
 
+    public static string ActionString { get; private set; }
+
     private static bool OnDelay = false;
 
     private static bool typeIn;
+
 
     public static int DialogueSet { get; private set; } = -1;
 
@@ -73,19 +75,14 @@ public class DialogueSystem : MonoBehaviour
     void Awake()
     {
         Instance = this;
-
+        PARSER.Define_Expressions();
+        PARSER.Define_Poses();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        PARSER.Define_Expressions();
-
-        REQUEST_DIALOGUE_SET(0);
-
         DialogueSystemSpriteChangers = FIND_ALL_SPRITECHANGERS();
-
-        Run();
     }
 
     public static void Run()
@@ -95,30 +92,17 @@ public class DialogueSystem : MonoBehaviour
             //We'll parse the very first dialogue that is ready to be displayed
             Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
 
-            Instance.StartCoroutine(ExclusionCycle());
-
             Instance.StartCoroutine(PrintCycle());
 
         }
     }
-
-    static IEnumerator ExclusionCycle()
-    {
-        while (true)
-        {
-            ExcludeAllTags(Dialogue[(int)LineIndex]);
-
-            yield return null;
-        }
-    }
-
     static IEnumerator PrintCycle()
     {
         while (true)
         {
             if (IS_TYPE_IN() == false)
             {
-                ExcludeAllTags(Dialogue[(int)LineIndex]);
+
 
                 ENABLE_DIALOGUE_BOX();
 
@@ -131,20 +115,22 @@ public class DialogueSystem : MonoBehaviour
                 //Typewriter effect
                 if (PARSER.LINE_HAS(text, PARSER.tokens[0]))
                 {
-                    for (CursorPosition = 0; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
+                    for (CursorPosition = 1; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
                     {
-                        try
-                        {
-                            if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
+                        
 
-                            GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
+                        if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
 
-                        }
-                        catch { }
+                        GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
 
                         UPDATE_TEXT_SPEED(SpeedValue);
 
-                        yield return new WaitForSeconds(TextSpeed); 
+
+                        yield return new WaitForSeconds(TextSpeed);
+
+                        ExcludeAllTags(Dialogue[(int)LineIndex]);
+
+                        continue;
                     }
                 }
 
@@ -234,14 +220,17 @@ public class DialogueSystem : MonoBehaviour
 
             if (_line.Substring((int)CursorPosition, _tag.Length).Contains(_tag))
             {
-
-                _line = _line.Remove((int)CursorPosition, _tag.Length);
+                _line = _line.Remove((int)CursorPosition , _tag.Length);
 
                 Dialogue[(int)LineIndex] = _line;
 
-                ShiftCursorPosition(_tag.Length - 1);
+                if (OnDelay == false)
+                {
+                    ShiftCursorPosition(ActionString.Length);
 
-                return SUCCESSFUL;
+                    return SUCCESSFUL;
+                }
+
             }
         }
         catch { }
@@ -268,20 +257,26 @@ public class DialogueSystem : MonoBehaviour
 
                 /*Now we do a substring from the current position to 4 digits.*/
 
-                string value = _line.Substring((int)CursorPosition, 4);
+                string value = _line.Substring((int)CursorPosition, 7);
 
-                Regex ex = new Regex(@"[^\d]");
+                Debug.Log(value);
+
+                Regex ex = new Regex(@"[*\d]");
 
                 Match match = ex.Match(value);
 
                 if (match.Success)
                 {
+                    Debug.Log("Okay");
+
                     string newValue = Regex.Replace(value, @"[^\d]", "");
 
                     //We got to make sure that our number is actually a legit number
                     if (Convert.ToInt32(newValue).GetType() == typeof(int))
                     {
                         int millsecs = Convert.ToInt32(newValue);
+
+                        Debug.Log("Waiting for " + newValue + " milliseconds...");
 
                         Instance.StartCoroutine(DelaySpan(millsecs));
 
@@ -290,15 +285,16 @@ public class DialogueSystem : MonoBehaviour
                         Dialogue[(int)LineIndex] = _line;
 
                         return SUCCESSFUL;
-                    } 
+                    }
                 }
+                else
+                    Debug.Log("Nope");
             }
         }
         catch { }
 
         return FAILURE;
     }
-
 
     static bool ExecuteExpressionFunctionTag(string _tag, ref string _line)
     {
@@ -566,19 +562,21 @@ public class DialogueSystem : MonoBehaviour
 
     public static void UPDATE_TEXT_SPEED(TextSpeedValue _textSpeed)
     {
-        if (OnDelay == false)
+        switch (_textSpeed)
         {
-            switch (_textSpeed)
-            {
-                case TextSpeedValue.SLOWEST: TextSpeed = 0.25f; return;
-                case TextSpeedValue.SLOWER: TextSpeed = 0.1f; return;
-                case TextSpeedValue.SLOW: TextSpeed = 0.05f; return;
-                case TextSpeedValue.NORMAL: TextSpeed = 0.025f; return;
-                case TextSpeedValue.FAST: TextSpeed = 0.01f; return;
-                case TextSpeedValue.FASTER: TextSpeed = 0.005f; return;
-                case TextSpeedValue.FASTEST: TextSpeed = 0.0025f; return;
-            }
+            case TextSpeedValue.SLOWEST: TextSpeed = 0.25f; return;
+            case TextSpeedValue.SLOWER: TextSpeed = 0.1f; return;
+            case TextSpeedValue.SLOW: TextSpeed = 0.05f; return;
+            case TextSpeedValue.NORMAL: TextSpeed = 0.025f; return;
+            case TextSpeedValue.FAST: TextSpeed = 0.01f; return;
+            case TextSpeedValue.FASTER: TextSpeed = 0.005f; return;
+            case TextSpeedValue.FASTEST: TextSpeed = 0.0025f; return;
         }
+    }
+
+    public static void UPDATE_ACTION_STRING(string _value)
+    {
+        ActionString = _value;
     }
 
     public static string GET_DIALOGUE_SCRIPTING_FILE() => Instance.dsfName + dslFileExtention;

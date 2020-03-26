@@ -86,11 +86,11 @@ KEMMI_POSE_HEADTILT = 4
 <DIALOGUE_SET_002>
 @ Huh...<<
 
-@ ...[EXPRESSION::3] [SPEED::NORMAL] You[SPEED::SLOWER] ...<<
+@ ... [EXPRESSION::3] [SPEED::NORMAL] You [SPEED::SLOWER] ...<<
 
-@ [BOLD] [SPEED::FASTER] You... [HALT::500] [SPEED::FASTEST] YOU TOUCHED ME! [BOLD::END] <<
+@ [BOLD] [SPEED::FASTER] You... [HALT::500] [SPEED::FASTEST] [EXPRESSION::5] YOU TOUCHED ME! [BOLD::END] <<
 
-@ [BOLD] I CANNOT [SPEED::SLOW] BELIEVE[SPEED::FASTEST] THAT YOU TOUCHED ME! [BOLD::END] <<
+@ [BOLD] I CANNOT [SPEED::SLOWEST] BELIEVE [SPEED::FASTEST] THAT YOU TOUCHED ME! [BOLD::END] <<
 
 @ ...<<
 
@@ -98,15 +98,17 @@ KEMMI_POSE_HEADTILT = 4
 
 @ [SPEED::SLOWER] ...<<
 
-@ [EXPRESSION::2] I'm... [HALT::250] sorry. [HALT::500] [EXPRESSION::0] [SPEED::FAST] You should know better not to click on people as their [BOLD] sleeping. [BOLD::END] <<
+@ [EXPRESSION::2] I'm... [HALT::500] sorry. [HALT::500] [EXPRESSION::0] [SPEED::FAST] You should know better not to click on people as their [BOLD] sleeping. [BOLD::END] <<
 
-@ [EXPRESSION::7] Perhaps [BOLD] [ITALIZE] [SPEED::NORMAL] "Clicking" [ITALIZE::END] [BOLD::END] [SPEED::FAST] is a bit of an understatement. 
+@ [EXPRESSION::7] Perhaps [BOLD] [ITALIZE] [SPEED::NORMAL] "Clicking" [ITALIZE::END] [BOLD::END] [SPEED::FAST] is a bit of an understatement.<<
 
-@ [EXPRESSION::1] [HALT::500] [EXPRESSION::7] [SPEED::SLOW] I'll... [HALT::1000] [SPEED::FAST] just pretend that none of this happened.<<
+@ [EXPRESSION::1] I'll... <<
+
+@ [HALT::1000] [SPEED::FAST] just pretend that none of this happened.<<
 
 @ [EXPRESSION::1] Hi! [HALT::500] My name is [BOLD] Kemmi[BOLD::END] !<<
 
-@ So! [HALT::500] [EXPRESSION::7] You came to me to learn about the good o' qualities of [BOLD] superb hygiene? [BOLD]<<
+@ So! [HALT::500] [EXPRESSION::7] You came to me to learn about the good o' qualities of [BOLD] superb hygiene? [BOLD::END] <<
 
 @ [EXPRESSION::1] [SPEED::SLOWEST] ... [HALT::1000] [EXPRESSION::5] [SPEED::NORMAL] No?<<
 
