@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Globalization;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,7 +39,7 @@ public class DialogueSystem : MonoBehaviour
 
     private static TextSpeedValue SpeedValue;
 
-    private static float TextSpeed;
+    public static float TextSpeed { get; private set; }
 
     public static List<string> Dialogue = new List<string>();
 
@@ -46,6 +48,8 @@ public class DialogueSystem : MonoBehaviour
     public static uint LineIndex { get; private set; } = 0;
 
     public static uint CursorPosition { get; private set; } = 0;
+
+    private static bool enableCustomSpeed = false;
 
     private static bool typeIn;
 
@@ -59,6 +63,7 @@ public class DialogueSystem : MonoBehaviour
     const string UNDERLINE = "<u>", UNDERLINEEND = "</u>";
     const string SKIP = "<skip>";
     const string EXPRESSION = "<exp>";
+    const string HALT = "<halt>";
     const string SPEED = "sp=";
     const string dslFileExtention = ".dsf";
     const string STRINGNULL = "";
@@ -129,19 +134,19 @@ public class DialogueSystem : MonoBehaviour
                     for (CursorPosition = 0; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition++)
                     {
 
+           
                         try
                         {
                             if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
-
-                            UPDATE_TEXT_SPEED(SpeedValue);
 
                             GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
 
                         }
                         catch { }
 
-                        yield return new WaitForSeconds(TextSpeed);
+                        UPDATE_TEXT_SPEED(SpeedValue);
 
+                        yield return new WaitForSeconds(TextSpeed);
                     }
                 }
 
@@ -170,8 +175,14 @@ public class DialogueSystem : MonoBehaviour
         for (int value = 0; value < Enum.GetValues(typeof(TextSpeedValue)).Length; value++)
             ExecuteSpeedFunctionTag(PARSER.delimiters[0] + SPEED + value + PARSER.delimiters[1], ref _text);
 
+        //Action tag!
         ExecuteActionFunctionTag(SKIP, ref _text);
+
+        //Expression tag!
         ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
+
+        //Halt tage
+        ExecuteWaitFunctionTag(HALT, ref _text);
     }
 
     static bool ExcludeStyleTag(string _openTag, string _closeTag, ref string _line)
@@ -231,6 +242,60 @@ public class DialogueSystem : MonoBehaviour
         }
         catch { }
     }
+
+    static void ExecuteWaitFunctionTag(string _tag, ref string _line)
+    {
+        /*The wait command will take a 4 digit number.
+         We will then convert this into a value that is easily understood
+         by textSpeed. We'll be mainly affecting the textSpeed to create our
+         WAIT function... unless...*/
+        try
+        {
+
+            if (_line.Substring((int)CursorPosition, _tag.Length + 2).Contains(_tag))
+            {
+
+                _line = _line.Replace(_tag, "");
+
+                Dialogue[(int)LineIndex] = _line;
+
+                Debug.Log("GOOD!!!");
+
+                /*Now we do a substring from the current position to 4 digits.*/
+
+                string value = _line.Substring((int)CursorPosition, _tag.Length);
+
+                Debug.Log(value);
+
+                Regex ex = new Regex(@"[^\d]");
+
+                Match match = ex.Match(value);
+
+                if (match.Success)
+                {
+                    Debug.Log("We did it!");
+
+                    string newValue = Regex.Replace(value, @"[^\d]", ""); 
+
+                    //We got to make sure that our number is actually a legit number
+                    if (Convert.ToInt32(newValue).GetType() == typeof(int))
+                    {
+                        int millsecs = Convert.ToInt32(newValue);
+
+                        _line = _line.Replace(newValue, "");
+
+                        Dialogue[(int)LineIndex] = _line;
+
+                        Task.Delay(millsecs).Wait();
+                    }
+                    else
+                        return;
+                }
+            }
+        }
+        catch { }
+    }
+
 
     static void ExecuteExpressionFunctionTag(string _tag, ref string _line)
     {
@@ -295,8 +360,6 @@ public class DialogueSystem : MonoBehaviour
                     return;
                 }
 
-                Debug.Log(data);
-
                 //We get the name, keep if it's EXPRESSION or POSE, and the emotion value
                 string characterName = data.Split('_')[0];
                 string changeType = data.Split('_')[1];
@@ -335,7 +398,7 @@ public class DialogueSystem : MonoBehaviour
 
             int index = 1;
 
-            foreach(string key in keys)
+            foreach (string key in keys)
             {
                 if (_value == index)
                     return keys[index - 1];
@@ -486,16 +549,18 @@ public class DialogueSystem : MonoBehaviour
 
     public static void UPDATE_TEXT_SPEED(TextSpeedValue _textSpeed)
     {
-        switch (_textSpeed)
+        if (enableCustomSpeed == false)
         {
-            case TextSpeedValue.SLOWEST: TextSpeed = 0.25f; return;
-            case TextSpeedValue.SLOWER: TextSpeed = 0.1f; return;
-            case TextSpeedValue.SLOW: TextSpeed = 0.05f; return;
-            case TextSpeedValue.NORMAL: TextSpeed = 0.025f; return;
-            case TextSpeedValue.FAST: TextSpeed = 0.01f; return;
-            case TextSpeedValue.FASTER: TextSpeed = 0.005f; return;
-            case TextSpeedValue.FASTEST: TextSpeed = 0.0025f; return;
-            default: return;
+            switch (_textSpeed)
+            {
+                case TextSpeedValue.SLOWEST: TextSpeed = 0.25f; return;
+                case TextSpeedValue.SLOWER: TextSpeed = 0.1f; return;
+                case TextSpeedValue.SLOW: TextSpeed = 0.05f; return;
+                case TextSpeedValue.NORMAL: TextSpeed = 0.025f; return;
+                case TextSpeedValue.FAST: TextSpeed = 0.01f; return;
+                case TextSpeedValue.FASTER: TextSpeed = 0.005f; return;
+                case TextSpeedValue.FASTEST: TextSpeed = 0.0025f; return;
+            }
         }
     }
 

@@ -23,7 +23,7 @@ For some reason, the expressions is not working...
 
 <DIALOGUE_SET_000>
 
-@ [SPEED::NORMAL] [ACTION::"SIGH"] Let's get the bread, [EXPRESSION::1] bread has been baked. [EXPRESSION::2]  <<
+@ [SPEED::NORMAL] [ACTION::"SIGH"] [HALT::2000] Let's get the bread, [EXPRESSION::1] bread has been baked. [EXPRESSION::2]  <<
 
 @ [EXPRESSION::KEMMI_EXPRESSION_HAPPY-3] So... [EXPRESSION::KEMMI_EXPRESSION_HAPPY-1] You've finally done it!<<
 
@@ -31,18 +31,18 @@ For some reason, the expressions is not working...
 
 @ Expression command completed.<<
 
-@ [EXPRESSION::KEMMI_EXPRESSION_HAPPY-1] Not only that, [HALT::20] [EXPRESSION::KEMMI_EXPRESSION_SMUG] [SPEED::FASTEST] But you've gone as far as to validate if the expressions had been...<<
+@ [EXPRESSION::KEMMI_EXPRESSION_HAPPY-1] Not only that, [HALT::200] [EXPRESSION::KEMMI_EXPRESSION_SMUG] [SPEED::FASTEST] But you've gone as far as to validate if the expressions had been...<<
 
 @ defined in the document...<<
 
-@ [EXPRESSION::KEMMI_EXPRESSION_AMAZED] That's [HALT::20] freaking [HALT::20] cool!!!<<
+@ [EXPRESSION::KEMMI_EXPRESSION_AMAZED] That's [HALT::200] freaking [HALT::400] cool!!!<<
 
-@ [EXPRESSION::KEMMI_EXPRESSION_MAD-0] [SPEED::NORMAL] Don't get your hopes up though, [HALT::20] [EXPRESSION::KEMMI_EXPRESSION_SMUG] [SPEED::FASTER] we got's a long way to go.<<
+@ [EXPRESSION::KEMMI_EXPRESSION_MAD-0] [SPEED::NORMAL] Don't get your hopes up though, [HALT::100] [EXPRESSION::KEMMI_EXPRESSION_SMUG] [SPEED::FASTER] we got's a long way to go.<<
 
-@ 4 days right? [SPEED::SLOW] [ACTION::"Sigh"] <<
+@ 4 days right? [SPEED::SLOW]  [ACTION::"Sigh"] <<
 
-@ [EXPRESSION::KEMMI_EXPRESSION_HAPPY-4] I think you gots this. You came such a long way just to create this for me.<<
+@ [EXPRESSION::KEMMI_EXPRESSION_HAPPY-4] I think you gots this. [HALT::100] You came such a long way just to create this for me.<<
 
-@ [EXPRESSION::KEMMI_EXPRESSION_HAPPY-1] [BOLD] Thank you so very much!!! [BOLD::END] <<
+@ [EXPRESSION::KEMMI_EXPRESSION_HAPPY-1] [BOLD] Thank you so very much!!! [HALT::400] I appreiciate what you have done so far! [BOLD::END] <<
 
 <END>

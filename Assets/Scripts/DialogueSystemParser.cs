@@ -48,7 +48,7 @@ namespace DSLParser
 
         public static string[] tokens { get; } = { "<<", "::", "END", "@" };
 
-        public static string[] keywords { get; } = { "SPEED", "BOLD", "ITALIZE", "UNDERLINE", "SOUND", "EXPRESSION", "ACTION" };
+        public static string[] keywords { get; } = { "SPEED", "BOLD", "ITALIZE", "UNDERLINE", "SOUND", "EXPRESSION", "ACTION" , "HALT"};
 
         public static string[] validTextSpeeds { get; } = { "SLOWEST", "SLOWER", "SLOW", "NORMAL", "FAST", "FASTER", "FASTEST" };
 
@@ -138,7 +138,8 @@ namespace DSLParser
                     ParseToUnderlineTag(commands, ref line) ||
                     ParseToSpeedTag(commands, ref line) ||
                     ParseToActionTag(commands, ref line) ||
-                    ParseToExpressionTag(commands, ref line);
+                    ParseToExpressionTag(commands, ref line) ||
+                    ParseToWaitTag(commands, ref line);
 
                 if (tagsParser != SUCCESSFUL)
                     line = line.Replace(commands + " ", "");
@@ -327,6 +328,24 @@ namespace DSLParser
 
                 return SUCCESSFUL;
             }
+            return FAILURE;
+        }
+
+        static bool ParseToWaitTag(string _styleCommand, ref string _line)
+        {
+            if(_styleCommand.Contains(delimiters[2] + keywords[7])){
+
+                var value = _styleCommand.Split(delimiters)[1].Split(':')[2];
+
+                /*The Wait should be easy enough. We'll be doing inserting a tag that
+                  and then add in the number. At that point, the DialogueSystem will update
+                  the textSpeed based on the duration. */
+
+                _line = _line.Replace(_styleCommand + " ", "<halt>" + value);
+
+                return SUCCESSFUL;
+            }
+
             return FAILURE;
         }
 
