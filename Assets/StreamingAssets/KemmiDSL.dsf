@@ -88,39 +88,41 @@ KEMMI_POSE_HEADTILT = 4
 
 @ ...[EXPRESSION::3] [SPEED::NORMAL] You[SPEED::SLOWER] ...<<
 
-@ [BOLD] [SPEED::FASTER] You... [SPEED::SLOWEST] [SPEED::FASTEST] YOU TOUCHED ME! [BOLD::END] <<
+@ [BOLD] [SPEED::FASTER] You... [HALT::500] [SPEED::FASTEST] YOU TOUCHED ME! [BOLD::END] <<
 
 @ [BOLD] I CANNOT [SPEED::SLOW] BELIEVE[SPEED::FASTEST] THAT YOU TOUCHED ME! [BOLD::END] <<
 
 @ ...<<
 
-@ [SPEED::FASTER] ...<<
-
 @ [SPEED::NORMAL] ...<<
-
-@ [EXPRESSION::2] I'm sorry. [EXPRESSION::0] You should know better not to click on people as their sleeping.<<
-
-@ [EXPRESSION::7] I'll just pretend that none of that happened.<<
-
-@ [EXPRESSION::1] Hi! My name is [BOLD] Kemmi[BOLD::END] !<<
-
-@ [EXPRESSION::5] So! You came to me to learn about the good o' qualities of superb hygiene?<<
-
-@ [EXPRESSION::7] [SPEED::SLOWEST] ... [EXPRESSION::5] [SPEED::NORMAL] No?<<
-
-@ Is that not why you came to see me?
 
 @ [SPEED::SLOWER] ...<<
 
-@ [EXPRESSION::0] [SPEED::NORMAL] Oh...<<
+@ [EXPRESSION::2] I'm... [HALT::250] sorry. [HALT::500] [EXPRESSION::0] [SPEED::FAST] You should know better not to click on people as their [BOLD] sleeping. [BOLD::END] <<
+
+@ [EXPRESSION::7] Perhaps [BOLD] [ITALIZE] [SPEED::NORMAL] "Clicking" [ITALIZE::END] [BOLD::END] [SPEED::FAST] is a bit of an understatement. 
+
+@ [EXPRESSION::1] [HALT::500] [EXPRESSION::7] [SPEED::SLOW] I'll... [HALT::1000] [SPEED::FAST] just pretend that none of this happened.<<
+
+@ [EXPRESSION::1] Hi! [HALT::500] My name is [BOLD] Kemmi[BOLD::END] !<<
+
+@ So! [HALT::500] [EXPRESSION::7] You came to me to learn about the good o' qualities of [BOLD] superb hygiene? [BOLD]<<
+
+@ [EXPRESSION::1] [SPEED::SLOWEST] ... [HALT::1000] [EXPRESSION::5] [SPEED::NORMAL] No?<<
+
+@ [EXPRESSION::7] [SPEED::FAST] Is that not why you came to see me?<<
+
+@ [SPEED::SLOWER] ...<<
+
+@ [EXPRESSION::4] [SPEED::NORMAL] Oh...<<
 
 @ [SPEED::FAST] [EXPRESSION::7] Well, when you're with me, that's what you're gonna get!<<
 
-@ [EXPRESSION::5] Trust me, you're going to [BOLD] learn a lot from me! [BOLD::END] <<
+@ Trust me, you're going to [BOLD] learn a lot from me! [BOLD::END] <<
 
 @ In fact, you'll have a greater chance of surviving the [BOLD] apocolypse [BOLD::END] <<
 
-@ [EXPRESSION::1] No one shall ever step foot by your great presence...<<
+@ [EXPRESSION::6] No one shall ever step foot by your great presence...<<
 
 @ [EXPRESSION::5] and I'll [BOLD] show you how [BOLD::END] !!!
 
