@@ -108,7 +108,7 @@ public class DialogueSystem : MonoBehaviour
         {
             ExcludeAllTags(Dialogue[(int)LineIndex]);
 
-            yield return new WaitForFixedUpdate();
+            yield return null;
         }
     }
 
@@ -118,7 +118,7 @@ public class DialogueSystem : MonoBehaviour
         {
             if (IS_TYPE_IN() == false)
             {
-
+                ExcludeAllTags(Dialogue[(int)LineIndex]);
 
                 ENABLE_DIALOGUE_BOX();
 
@@ -144,9 +144,7 @@ public class DialogueSystem : MonoBehaviour
 
                         UPDATE_TEXT_SPEED(SpeedValue);
 
-                        ExcludeAllTags(Dialogue[(int)LineIndex]);
-
-                        yield return new WaitForSeconds(TextSpeed);
+                        yield return new WaitForSeconds(TextSpeed); 
                     }
                 }
 
@@ -155,7 +153,7 @@ public class DialogueSystem : MonoBehaviour
 
             }
 
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
 
     }
@@ -207,7 +205,7 @@ public class DialogueSystem : MonoBehaviour
         return FAILURE;
     }
 
-    static void ExecuteSpeedFunctionTag(string _tag, ref string _line)
+    static bool ExecuteSpeedFunctionTag(string _tag, ref string _line)
     {
         try
         {
@@ -220,12 +218,16 @@ public class DialogueSystem : MonoBehaviour
                 int speed = Convert.ToInt32(_tag.Split('<')[1].Split('=')[1].Split('>')[0]);
 
                 SpeedValue = (TextSpeedValue)speed;
+
+                return SUCCESSFUL;
             }
         }
         catch { }
+
+        return FAILURE;
     }
 
-    static void ExecuteActionFunctionTag(string _tag, ref string _line)
+    static bool ExecuteActionFunctionTag(string _tag, ref string _line)
     {
         try
         {
@@ -233,17 +235,21 @@ public class DialogueSystem : MonoBehaviour
             if (_line.Substring((int)CursorPosition, _tag.Length).Contains(_tag))
             {
 
-                _line = _line.Replace(_tag, "");
+                _line = _line.Remove((int)CursorPosition, _tag.Length);
+
+                Dialogue[(int)LineIndex] = _line;
 
                 ShiftCursorPosition(_tag.Length - 1);
 
-                Dialogue[(int)LineIndex] = _line;
+                return SUCCESSFUL;
             }
         }
         catch { }
+
+        return FAILURE;
     }
 
-    static void ExecuteWaitFunctionTag(string _tag, ref string _line)
+    static bool ExecuteWaitFunctionTag(string _tag, ref string _line)
     {
         /*The wait command will take a 4 digit number.
          We will then convert this into a value that is easily understood
@@ -253,19 +259,16 @@ public class DialogueSystem : MonoBehaviour
         try
         {
 
-            if (_line.Substring((int)CursorPosition, _tag.Length + 2).Contains(_tag))
+            //Debug.Log(_line.Substring((int)CursorPosition, _tag.Length));
+            if (_line.Substring((int)CursorPosition, _tag.Length) == _tag)
             {
-                _line = _line.Replace(_tag, "");
+                _line = _line.Remove((int)CursorPosition, _tag.Length);
 
                 Dialogue[(int)LineIndex] = _line;
 
-                Debug.Log("GOOD!!!");
-
                 /*Now we do a substring from the current position to 4 digits.*/
 
-                string value = _line.Substring((int)CursorPosition, _tag.Length);
-
-                Debug.Log(value);
+                string value = _line.Substring((int)CursorPosition, 4);
 
                 Regex ex = new Regex(@"[^\d]");
 
@@ -273,11 +276,7 @@ public class DialogueSystem : MonoBehaviour
 
                 if (match.Success)
                 {
-                    Debug.Log("We did it!");
-
                     string newValue = Regex.Replace(value, @"[^\d]", "");
-
-                    Debug.Log(newValue);
 
                     //We got to make sure that our number is actually a legit number
                     if (Convert.ToInt32(newValue).GetType() == typeof(int))
@@ -286,19 +285,22 @@ public class DialogueSystem : MonoBehaviour
 
                         Instance.StartCoroutine(DelaySpan(millsecs));
 
-                        _line = _line.Replace(newValue, "");
+                        _line = _line.Remove((int)CursorPosition, newValue.Length + 2);
 
                         Dialogue[(int)LineIndex] = _line;
 
-                    }
+                        return SUCCESSFUL;
+                    } 
                 }
             }
         }
         catch { }
+
+        return FAILURE;
     }
 
 
-    static void ExecuteExpressionFunctionTag(string _tag, ref string _line)
+    static bool ExecuteExpressionFunctionTag(string _tag, ref string _line)
     {
         bool notFlaged = true;
         try
@@ -358,7 +360,7 @@ public class DialogueSystem : MonoBehaviour
                 {
                     //Otherwise, we'll through an error saying this hasn't been defined.
                     Debug.LogError(_line + " has not been defined. Perhaps declaring it in the associated .dsf File.");
-                    return;
+                    return FAILURE;
                 }
 
                 //We get the name, keep if it's EXPRESSION or POSE, and the emotion value
@@ -370,9 +372,12 @@ public class DialogueSystem : MonoBehaviour
                 DialogueSystemSpriteChanger changer = Find_Sprite_Changer(characterName + "_" + changeType);
 
                 changer.CHANGE_IMAGE(characterState);
+
+                return SUCCESSFUL;
             }
         }
         catch { }
+        return FAILURE;
     }
 
     static string FindKey(string _key, Dictionary<string, int> _dictionary)
@@ -420,7 +425,6 @@ public class DialogueSystem : MonoBehaviour
         while (OnDelay)
         {
             yield return new WaitForSeconds(_millseconds / 1000f);
-            Debug.Log("Hi!");
             OnDelay = false;
         }
     }
@@ -574,10 +578,6 @@ public class DialogueSystem : MonoBehaviour
                 case TextSpeedValue.FASTER: TextSpeed = 0.005f; return;
                 case TextSpeedValue.FASTEST: TextSpeed = 0.0025f; return;
             }
-        }
-        else
-        {
-            Debug.Log("HIIIII");
         }
     }
 

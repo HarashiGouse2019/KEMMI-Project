@@ -23,7 +23,7 @@ For some reason, the expressions is not working...
 
 <DIALOGUE_SET_000>
 
-@ [SPEED::NORMAL] [ACTION::"Sigh"] Let's get the bread, [HALT::2000] [EXPRESSION::1] bread has [HALT::500] been [HALT::500] baked. [EXPRESSION::2]  <<
+@ [SPEED::NORMAL] [ACTION::"Sigh"] Let's get the bread, [EXPRESSION::1] bread has [HALT::500] been [HALT::500] baked. [EXPRESSION::2] <<
 
 @ [EXPRESSION::8] So... [EXPRESSION::2] You've finally done it!<<
 

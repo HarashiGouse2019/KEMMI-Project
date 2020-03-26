@@ -341,7 +341,7 @@ namespace DSLParser
                   and then add in the number. At that point, the DialogueSystem will update
                   the textSpeed based on the duration. */
 
-                _line = _line.Replace(_styleCommand + " ", "<halt>" + value);
+                _line = _line.Replace(_styleCommand + " ", "<halt> " + value + " ");
 
                 return SUCCESSFUL;
             }
