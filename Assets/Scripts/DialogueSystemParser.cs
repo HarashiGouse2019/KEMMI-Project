@@ -320,7 +320,7 @@ namespace DSLParser
 
                 /*The skip tag will do the shift of the cursor for use one the system sees this
                  parsed information.*/
-                _line = _line.Replace(_styleCommand + " ", " <exp> " + keywords[5] + "::" + value + ']');
+                _line = _line.Replace(_styleCommand + " ", " <exp> " + keywords[5] + "::" + value + delimiters[3]);
 
                 //Skip value will be assigned, so that the system can read it
                 skipValue = (keywords[5] + "::" + value).Length - 1;

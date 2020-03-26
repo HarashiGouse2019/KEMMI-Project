@@ -133,22 +133,20 @@ public class DialogueSystem : MonoBehaviour
                 {
                     for (CursorPosition = 0; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
                     {
-                        if (!OnDelay)
+                        try
                         {
-                            try
-                            {
-                                if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
+                            if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
 
-                                GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
+                            GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
 
-                            }
-                            catch { }
+                        }
+                        catch { }
 
-                            UPDATE_TEXT_SPEED(SpeedValue);
-                       
+                        UPDATE_TEXT_SPEED(SpeedValue);
+
+                        ExcludeAllTags(Dialogue[(int)LineIndex]);
 
                         yield return new WaitForSeconds(TextSpeed);
-                        }
                     }
                 }
 
@@ -251,12 +249,12 @@ public class DialogueSystem : MonoBehaviour
          We will then convert this into a value that is easily understood
          by textSpeed. We'll be mainly affecting the textSpeed to create our
          WAIT function... unless...*/
+
         try
         {
 
             if (_line.Substring((int)CursorPosition, _tag.Length + 2).Contains(_tag))
             {
-
                 _line = _line.Replace(_tag, "");
 
                 Dialogue[(int)LineIndex] = _line;
@@ -286,14 +284,13 @@ public class DialogueSystem : MonoBehaviour
                     {
                         int millsecs = Convert.ToInt32(newValue);
 
+                        Instance.StartCoroutine(DelaySpan(millsecs));
+
                         _line = _line.Replace(newValue, "");
 
                         Dialogue[(int)LineIndex] = _line;
 
-                        Instance.StartCoroutine(DelaySpan(millsecs));
                     }
-                    else
-                        return;
                 }
             }
         }
