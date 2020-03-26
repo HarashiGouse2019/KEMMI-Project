@@ -222,7 +222,6 @@ public class DialogueSystem : MonoBehaviour
             if (_line.Substring((int)CursorPosition, _tag.Length).Contains(_tag))
             {
 
-
                 _line = _line.Replace(_tag, "");
 
                 ShiftCursorPosition(_tag.Length - 1);
@@ -260,11 +259,8 @@ public class DialogueSystem : MonoBehaviour
                 //Check if a key matches
                 string data = STRINGNULL;
 
-                Debug.Log(value);
-
                 if (PARSER.DefinedExpressions.ContainsKey(value))
                 {
-
                     if (value.GetType() == typeof(string))
                     {
                         data = FindKey(value, PARSER.DefinedExpressions);
