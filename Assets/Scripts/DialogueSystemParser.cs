@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections;
+using System.IO;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace DSLParser
@@ -13,10 +12,35 @@ namespace DSLParser
             public string command { get; private set; } = "";
             public int callPosition { get; private set; } = -1;
 
-            public CommandCallLocation(string command, int callPosition)
+            public int callLine { get; private set; } = -1;
+
+            public int dialogueSetLocation { get; private set; } = -1;
+
+            private CommandCallLocation(string command, int dialogueSetLocation, int callLine, int callPosition)
             {
                 this.command = command;
+
+                this.dialogueSetLocation = dialogueSetLocation;
+
+                this.callLine = callLine;
+
                 this.callPosition = callPosition;
+            }
+
+            public static CommandCallLocation New(string command, int dialogueSetLocation, int callLine, int callPosition)
+                => new CommandCallLocation(command, dialogueSetLocation, callLine, callPosition);
+
+            public object[] GetCallLocation()
+            {
+                object[] data =
+                {
+                    dialogueSetLocation,
+                    callLine,
+                    callPosition
+                };
+
+
+                return data;
             }
         }
 
@@ -29,6 +53,8 @@ namespace DSLParser
         public static string[] validTextSpeeds { get; } = { "SLOWEST", "SLOWER", "SLOW", "NORMAL", "FAST", "FASTER", "FASTEST" };
 
         public static List<CommandCallLocation> commandCallLocations = new List<CommandCallLocation>();
+
+        public static Dictionary<string, int> DefinedExpressions { get; private set; } = new Dictionary<string, int>();
         public static bool LINE_HAS(string line, string token) => line.Contains(token);
 
         public static int skipValue = 0;
@@ -36,6 +62,7 @@ namespace DSLParser
 
         const bool SUCCESSFUL = true;
         const bool FAILURE = false;
+        const string STRINGNULL = "";
 
         public static string PARSER_LINE(string line)
         {
@@ -61,8 +88,8 @@ namespace DSLParser
 
             for (int value = 0; value < line.Length; value++)
             {
-                if (line[0] == '@')
-                    line = line.Replace("@ ", "");
+                if ((line[0]).ToString() == "@")
+                    line = line.Replace("@", "");
 
                 //Now, how will we get the position of [ and ]?
                 if (line[value] == delimiters[2])
@@ -90,7 +117,10 @@ namespace DSLParser
                         if (command.Contains(keyword))
                         {
                             foundCommands.Add(command);
-                            CommandCallLocation newCall = new CommandCallLocation(command, startingBracketPos);
+
+                            CommandCallLocation newCall =
+                                CommandCallLocation.New(command, DialogueSystem.DialogueSet, (int)DialogueSystem.LineIndex, startingBracketPos);
+
                             commandCallLocations.Add(newCall);
                         }
                     }
@@ -117,6 +147,119 @@ namespace DSLParser
             /*We finally got it to work!!!*/
 
             return line;
+        }
+
+        public static void Define_Expressions()
+        {
+            string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
+
+            string line = null;
+
+            int position = 0;
+
+            bool foundExpression = false;
+
+            if (File.Exists(dsPath))
+            {
+                using (StreamReader fileReader = new StreamReader(dsPath))
+                {
+                    while (true)
+                    {
+                        line = fileReader.ReadLine();
+
+                        if (line == STRINGNULL)
+                        {
+                            if (foundExpression)
+                                return;
+                        }
+
+                        line.Split(delimiters);
+
+                        if (line.Contains("<EXPRESSIONS>"))
+                        {
+                            foundExpression = true;
+                            GetExpressions(position);
+                        }
+
+                        position++;
+                    }
+                }
+            }
+            Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
+        }
+
+        static void GetExpressions(int _position)
+        {
+            string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
+
+            string line = null;
+
+            bool atTargetLine = false;
+
+            if (File.Exists(dsPath))
+            {
+                using (StreamReader fileReader = new StreamReader(dsPath))
+                {
+                    int position = 0;
+
+                    while (true)
+                    {
+                        line = fileReader.ReadLine();
+
+                        if (line == STRINGNULL && atTargetLine)
+                            return;
+
+
+                        if (position > _position)
+                        {
+                            atTargetLine = true;
+
+                            if (line != STRINGNULL)
+                            {
+                                string[] data = line.Split('=');
+                                DefinedExpressions.Add(data[0].Replace(" ", ""), Convert.ToInt32(data[1].Replace(" ", "")));
+                            }
+                        }
+
+                        position++;
+                    }
+
+
+                }
+            }
+        }
+
+        public static void GetDialogue(int _position)
+        {
+            string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
+
+            string line = null;
+
+            bool atTargetLine = false;
+
+            if (File.Exists(dsPath))
+            {
+                using (StreamReader fileReader = new StreamReader(dsPath))
+                {
+                    int position = 0;
+
+                    while (true)
+                    {
+                        line = fileReader.ReadLine();
+
+                        if (line == "<END>" && atTargetLine)
+                             return;
+
+                        if (position > _position)
+                        {
+                            atTargetLine = true;
+                            if (line != STRINGNULL && line[0] == '@') DialogueSystem.Dialogue.Add(line);
+                        }
+
+                        position++;
+                    }
+                }
+            }
         }
 
         static bool ParseToSpeedTag(string _styleCommand, ref string _line)
@@ -156,6 +299,7 @@ namespace DSLParser
 
                 //Skip value will be assigned, so that the system can read it
                 skipValue = actionString.Length - 1;
+                
 
                 return SUCCESSFUL;
             }
@@ -175,10 +319,11 @@ namespace DSLParser
 
                 /*The skip tag will do the shift of the cursor for use one the system sees this
                  parsed information.*/
-                _line = _line.Replace(_styleCommand + " ", "<exp>");
+                _line = _line.Replace(_styleCommand + " ", " <exp> " + keywords[5] + "::" + value + ']');
 
                 //Skip value will be assigned, so that the system can read it
-                skipValue = value.Length - 1;
+                skipValue = (keywords[5] + "::" + value).Length - 1;
+                returnedValue = value;
 
                 return SUCCESSFUL;
             }

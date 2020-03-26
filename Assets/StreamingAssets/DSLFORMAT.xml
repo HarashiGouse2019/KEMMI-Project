@@ -24,8 +24,8 @@
             <Keywords name="Folders in comment, open"></Keywords>
             <Keywords name="Folders in comment, middle"></Keywords>
             <Keywords name="Folders in comment, close"></Keywords>
-            <Keywords name="Keywords1">SPEED&#x000D;&#x000A;BOLD&#x000D;&#x000A;ITALIZE&#x000D;&#x000A;CUE&#x000D;&#x000A;SOUND&#x000D;&#x000A;UNDERLINE&#x000D;&#x000A;INPUT&#x000D;&#x000A;ACTION&#x000D;&#x000A;EXPRESSION</Keywords>
-            <Keywords name="Keywords2">&lt;DIALOGUE_SET_ &lt;END &lt;EXPRESSIONS &lt;POSES</Keywords>
+            <Keywords name="Keywords1">SPEED&#x000D;&#x000A;BOLD&#x000D;&#x000A;ITALIZE&#x000D;&#x000A;CUE&#x000D;&#x000A;SOUND&#x000D;&#x000A;UNDERLINE&#x000D;&#x000A;INPUT&#x000D;&#x000A;ACTION&#x000D;&#x000A;EXPRESSION&#x000D;&#x000A;HALT</Keywords>
+            <Keywords name="Keywords2">&lt;DIALOGUE_SET_ &lt;END &lt;EXPRESSIONS &lt;POSES &lt;SOUNDS &lt;MUSIC &lt;SCENES</Keywords>
             <Keywords name="Keywords3">SLOWEST SLOWER SLOW NORMAL FAST FASTER FASTEST PRESET_1 PRESET_2 PRESET_3 PRESET_4 PRESET_5 PRESET_6 PRESET_7 PRESET_8 PRESET_9 PRESET_10 PRESET_11 PRESET_12 PRESET_13 PRESET_14 PRESET_15 PRESET_16 END</Keywords>
             <Keywords name="Keywords4"></Keywords>
             <Keywords name="Keywords5"></Keywords>

@@ -14,7 +14,7 @@ public class DialogueSystem : MonoBehaviour
 {
     public static DialogueSystem Instance;
 
-    public enum TextSpeed
+    public enum TextSpeedValue
     {
         SLOWEST,
         SLOWER,
@@ -35,23 +35,23 @@ public class DialogueSystem : MonoBehaviour
     [SerializeField]
     private Image textBoxUI;
 
-    private static TextSpeed text_Speed;
+    private static TextSpeedValue SpeedValue;
 
-    private static float textSpeed;
+    private static float TextSpeed;
 
-    public static List<string> dialogue = new List<string>();
+    public static List<string> Dialogue = new List<string>();
 
-    public static bool runningDialogue { get; private set; } = false;
+    public static bool RunningDialogue { get; private set; } = false;
 
-    public static uint lineIndex { get; private set; } = 0;
+    public static uint LineIndex { get; private set; } = 0;
 
-    public static uint cursorPosition { get; private set; } = 0;
+    public static uint CursorPosition { get; private set; } = 0;
 
     private static bool typeIn;
 
-    public static List<DialogueSystemSpriteChanger> dialogueSystemSpriteChangers { get; private set; } = new List<DialogueSystemSpriteChanger>();
+    public static int DialogueSet { get; private set; } = -1;
 
-    public static Dictionary<string, int> definedExpressions { get; private set; } = new Dictionary<string, int>();
+    public static List<DialogueSystemSpriteChanger> DialogueSystemSpriteChangers { get; private set; } = new List<DialogueSystemSpriteChanger>();
 
     const int reset = 0;
     const string BOLD = "<b>", BOLDEND = "</b>";
@@ -74,24 +74,26 @@ public class DialogueSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Define_Expressions();
+        PARSER.Define_Expressions();
 
         REQUEST_DIALOGUE_SET(0);
 
-        dialogueSystemSpriteChangers = FIND_ALL_SPRITECHANGERS();
+        DialogueSystemSpriteChangers = FIND_ALL_SPRITECHANGERS();
 
         Run();
     }
 
     public static void Run()
     {
-        if (dialogue.Count != 0 && InBounds((int)lineIndex, dialogue) && IS_TYPE_IN() == false)
+        if (Dialogue.Count != 0 && InBounds((int)LineIndex, Dialogue) && IS_TYPE_IN() == false)
         {
             //We'll parse the very first dialogue that is ready to be displayed
-            dialogue[(int)lineIndex] = PARSER.PARSER_LINE(dialogue[(int)lineIndex]);
+            Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
+
+            Instance.StartCoroutine(ExclusionCycle());
 
             Instance.StartCoroutine(PrintCycle());
-            Instance.StartCoroutine(ExclusionCycle());
+
         }
     }
 
@@ -99,20 +101,19 @@ public class DialogueSystem : MonoBehaviour
     {
         while (true)
         {
-            ExcludeAllTags(dialogue[(int)lineIndex]);
+            ExcludeAllTags(Dialogue[(int)LineIndex]);
 
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
     }
 
     static IEnumerator PrintCycle()
     {
-
         while (true)
         {
             if (IS_TYPE_IN() == false)
             {
-                
+
 
                 ENABLE_DIALOGUE_BOX();
 
@@ -120,27 +121,27 @@ public class DialogueSystem : MonoBehaviour
 
                 var text = STRINGNULL;
 
-                if (lineIndex < dialogue.Count) text = dialogue[(int)lineIndex];
+                if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
 
                 //Typewriter effect
                 if (PARSER.LINE_HAS(text, PARSER.tokens[0]))
                 {
-                    for (; cursorPosition < text.Length - PARSER.tokens[0].Length + 1; cursorPosition++)
+                    for (CursorPosition = 0; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition++)
                     {
 
                         try
                         {
-                            if (lineIndex < dialogue.Count) text = dialogue[(int)lineIndex];
+                            if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
 
-                            ExcludeAllTags(text);
+                            UPDATE_TEXT_SPEED(SpeedValue);
 
-                            UPDATE_TEXT_SPEED(text_Speed);
+                            GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
 
-                            GET_TMPGUI().text = text.Substring(0, (int)cursorPosition);
                         }
                         catch { }
 
-                        yield return new WaitForSeconds(textSpeed);
+                        yield return new WaitForSeconds(TextSpeed);
+
                     }
                 }
 
@@ -149,7 +150,7 @@ public class DialogueSystem : MonoBehaviour
 
             }
 
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
 
     }
@@ -166,7 +167,7 @@ public class DialogueSystem : MonoBehaviour
         ExcludeStyleTag(UNDERLINE, UNDERLINEEND, ref _text);
 
         //Speed Command Tag: It will consider all of the possible values.
-        for (int value = 0; value < Enum.GetValues(typeof(TextSpeed)).Length; value++)
+        for (int value = 0; value < Enum.GetValues(typeof(TextSpeedValue)).Length; value++)
             ExecuteSpeedFunctionTag(PARSER.delimiters[0] + SPEED + value + PARSER.delimiters[1], ref _text);
 
         ExecuteActionFunctionTag(SKIP, ref _text);
@@ -177,13 +178,13 @@ public class DialogueSystem : MonoBehaviour
     {
         try
         {
-            if (_line.Substring((int)cursorPosition, _openTag.Length).Contains(_openTag))
+            if (_line.Substring((int)CursorPosition, _openTag.Length).Contains(_openTag))
             {
                 ShiftCursorPosition(_openTag.Length);
                 return SUCCESSFUL;
             }
 
-            else if (_line.Substring((int)cursorPosition, _closeTag.Length).Contains(_closeTag))
+            else if (_line.Substring((int)CursorPosition, _closeTag.Length).Contains(_closeTag))
             {
                 ShiftCursorPosition(_closeTag.Length);
                 return SUCCESSFUL;
@@ -199,17 +200,15 @@ public class DialogueSystem : MonoBehaviour
     {
         try
         {
-            if (_line.Substring((int)cursorPosition, _tag.Length).Contains(_tag))
+            if (_line.Substring((int)CursorPosition, _tag.Length + sizeof(int)).Contains(_tag))
             {
-                Debug.Log(_tag);
-
                 _line = _line.Replace(_tag, "");
 
-                dialogue[(int)lineIndex] = _line;
+                Dialogue[(int)LineIndex] = _line;
 
                 int speed = Convert.ToInt32(_tag.Split('<')[1].Split('=')[1].Split('>')[0]);
 
-                text_Speed = (TextSpeed)speed;
+                SpeedValue = (TextSpeedValue)speed;
             }
         }
         catch { }
@@ -220,7 +219,7 @@ public class DialogueSystem : MonoBehaviour
         try
         {
 
-            if (_line.Substring((int)cursorPosition, _tag.Length).Contains(_tag))
+            if (_line.Substring((int)CursorPosition, _tag.Length).Contains(_tag))
             {
 
 
@@ -228,7 +227,7 @@ public class DialogueSystem : MonoBehaviour
 
                 ShiftCursorPosition(_tag.Length - 1);
 
-                dialogue[(int)lineIndex] = _line;
+                Dialogue[(int)LineIndex] = _line;
             }
         }
         catch { }
@@ -236,60 +235,127 @@ public class DialogueSystem : MonoBehaviour
 
     static void ExecuteExpressionFunctionTag(string _tag, ref string _line)
     {
-        bool validated = false;
-
+        bool notFlaged = true;
         try
         {
-
-            if (_line.Substring((int)cursorPosition, _tag.Length).Contains(_tag))
+            if (_line.Substring((int)CursorPosition, _tag.Length + 2).Contains(_tag))
             {
                 /*The system will now take this information, from 0 to the current position
                  and split it down even further, taking all the information.*/
 
-                _line = _line.Replace(_tag, "");
+                _line = _line.Remove((int)CursorPosition, _tag.Length + 2);
 
-                ShiftCursorPosition(_tag.Length - 1);
+                Dialogue[(int)LineIndex] = _line;
 
-                string value = PARSER.returnedValue.ToString();
+                string value = "";
 
-                dialogue[(int)lineIndex] = _line;
+                if (_line.Substring((int)CursorPosition, "EXPRESSION".Length + 2).Contains("EXPRESSION"))
+                {
+                    value = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
+
+                    if (value.Contains("]"))
+                        value = value.Split(':')[2].Split(']')[0];
+
+                }
+                //Check if a key matches
+                string data = STRINGNULL;
 
                 Debug.Log(value);
 
-                foreach (KeyValuePair<string, int> expressions in definedExpressions)
+                if (PARSER.DefinedExpressions.ContainsKey(value))
                 {
-                    //Check if a key matches
-                    if (expressions.Key == value || expressions.Value == Convert.ToInt32(value))
-                    {
-                        Debug.Log("If you see the 2 before this, that means that it worked.");
-                        //We get the name, keep if it's EXPRESSION or POSE, and the emotion value
-                        string characterName = expressions.Key.Split('_')[0];
-                        string changeType = expressions.Key.Split('_')[1];
-                        string characterState = expressions.Key.Split('_')[2];
 
-                        //Now we see if we can grab the image, and have it change...
-                        DialogueSystemSpriteChanger changer = Find_Sprite_Changer(characterName + "_" + changeType);
-                        changer.CHANGE_IMAGE(characterState);
-                        validated = true;
-                        break;
+                    if (value.GetType() == typeof(string))
+                    {
+                        data = FindKey(value, PARSER.DefinedExpressions);
+
+                        _line = _line.Replace("EXPRESSION::" + value + "]", "");
+
+                        Dialogue[(int)LineIndex] = _line;
+
+                        notFlaged = false;
                     }
-                    
                 }
 
-                if (!validated)
-                    //Otherwise, we'll through an error saying this hasn't been defined.
-                    Debug.LogError(value + " has not been defined. Perhaps declaring it in the associated .dsf File.");
+                else if (PARSER.DefinedExpressions.ContainsValue(Convert.ToInt32(value)))
+                {
+                    if (Convert.ToInt32(value).GetType() == typeof(int))
+                    {
 
+                        data = FindValueAndConvertToKey(Convert.ToInt32(value), PARSER.DefinedExpressions);
+
+                        _line = _line.Replace("EXPRESSION::" + value + "]", "");
+
+                        Dialogue[(int)LineIndex] = _line;
+
+                        notFlaged = false;
+                    }
+                }
+
+                if (notFlaged)
+                {
+                    //Otherwise, we'll through an error saying this hasn't been defined.
+                    Debug.LogError(_line + " has not been defined. Perhaps declaring it in the associated .dsf File.");
+                    return;
+                }
+
+                Debug.Log(data);
+
+                //We get the name, keep if it's EXPRESSION or POSE, and the emotion value
+                string characterName = data.Split('_')[0];
+                string changeType = data.Split('_')[1];
+                string characterState = data.Split('_')[2];
+
+                //Now we see if we can grab the image, and have it change...
+                DialogueSystemSpriteChanger changer = Find_Sprite_Changer(characterName + "_" + changeType);
+
+                changer.CHANGE_IMAGE(characterState);
             }
         }
         catch { }
+    }
+
+    static string FindKey(string _key, Dictionary<string, int> _dictionary)
+    {
+        while (true)
+        {
+            List<string> keys = new List<string>(_dictionary.Keys);
+
+            foreach (string key in keys)
+            {
+                if (key == _key)
+                    return key;
+            }
+
+            return STRINGNULL;
+        }
+    }
+
+    static string FindValueAndConvertToKey(int _value, Dictionary<string, int> _dictionary)
+    {
+        while (true)
+        {
+            List<string> keys = new List<string>(_dictionary.Keys);
+
+            int index = 1;
+
+            foreach(string key in keys)
+            {
+                if (_value == index)
+                    return keys[index - 1];
+
+                index++;
+            }
+
+            return STRINGNULL;
+        }
     }
 
     static bool InBounds(int index, List<string> array) => (index >= reset) && (index < array.Count);
 
     static DialogueSystemSpriteChanger Find_Sprite_Changer(string _name)
     {
-        foreach (DialogueSystemSpriteChanger instance in dialogueSystemSpriteChangers)
+        foreach (DialogueSystemSpriteChanger instance in DialogueSystemSpriteChangers)
         {
             if (_name == instance.Get_Prefix())
                 return instance;
@@ -347,7 +413,10 @@ public class DialogueSystem : MonoBehaviour
                     if (line.Contains("<DIALOGUE_SET_" + _dialogueSet.ToString("D3", CultureInfo.InvariantCulture) + ">"))
                     {
                         foundDialogueSet = true;
-                        GetDialogue(position);
+
+                        DialogueSet = _dialogueSet;
+
+                        PARSER.GetDialogue(position);
                     }
 
                     position++;
@@ -355,122 +424,6 @@ public class DialogueSystem : MonoBehaviour
             }
         }
         Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
-    }
-
-    public static void Define_Expressions()
-    {
-        string dsPath = Application.streamingAssetsPath + @"/" + GET_DIALOGUE_SCRIPTING_FILE();
-
-        string line = null;
-
-        int position = 0;
-
-        bool foundExpression = false;
-
-        if (File.Exists(dsPath))
-        {
-            using (StreamReader fileReader = new StreamReader(dsPath))
-            {
-                while (true)
-                {
-                    line = fileReader.ReadLine();
-
-                    if (line == STRINGNULL)
-                    {
-                        if (foundExpression)
-                            return;
-                    }
-
-                    line.Split(PARSER.delimiters);
-
-                    if (line.Contains("<EXPRESSIONS>"))
-                    {
-                        foundExpression = true;
-                        GetExpressions(position);
-                    }
-
-                    position++;
-                }
-            }
-        }
-        Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
-    }
-
-    static void GetExpressions(int _position)
-    {
-        string dsPath = Application.streamingAssetsPath + @"/" + GET_DIALOGUE_SCRIPTING_FILE();
-
-        string line = null;
-
-        bool atTargetLine = false;
-
-        if (File.Exists(dsPath))
-        {
-            using (StreamReader fileReader = new StreamReader(dsPath))
-            {
-                int position = 0;
-
-                while (true)
-                {
-                    line = fileReader.ReadLine();
-
-                    if (line == STRINGNULL && atTargetLine)
-                            return;
-
-
-                    if (position > _position)
-                    {
-                        atTargetLine = true;
-
-                        if (line != STRINGNULL)
-                        {
-                            string[] data = line.Split('=');
-                            definedExpressions.Add(data[0].Replace(" ", ""), Convert.ToInt32(data[1].Replace(" ", "")));
-                        }
-                    }
-
-                    position++;
-                }
-
-                
-            }
-        }
-    }
-
-    static void GetDialogue(int _position)
-    {
-        string dsPath = Application.streamingAssetsPath + @"/" + GET_DIALOGUE_SCRIPTING_FILE();
-
-        string line = null;
-
-        bool atTargetLine = false;
-
-        if (File.Exists(dsPath))
-        {
-            using (StreamReader fileReader = new StreamReader(dsPath))
-            {
-                int position = 0;
-
-                while (true)
-                {
-                    line = fileReader.ReadLine();
-
-                    if (line == "<END>" && atTargetLine)
-                    {
-                        runningDialogue = true;
-                        return;
-                    }
-
-                    if (position > _position)
-                    {
-                        atTargetLine = true;
-                        if (line != STRINGNULL && line[0] == '@') dialogue.Add(line);
-                    }
-
-                    position++;
-                }
-            }
-        }
     }
 
     public static IEnumerator WaitForResponse()
@@ -479,22 +432,20 @@ public class DialogueSystem : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (lineIndex < dialogue.Count - 1)
+                if (LineIndex < Dialogue.Count - 1)
                 {
                     Progress();
-
-                    cursorPosition = reset;
-
+                    CursorPosition = reset;
                 }
                 else
                 {
-                    runningDialogue = false;
-                    lineIndex = 0;
+                    RunningDialogue = false;
+                    LineIndex = 0;
                     SET_TYPE_IN_VALUE(false);
                     DISABLE_DIALOGUE_BOX();
-                    dialogue.Clear();
+                    Dialogue.Clear();
                     Instance.StopAllCoroutines();
-                    cursorPosition = reset;
+                    CursorPosition = reset;
                 }
             }
 
@@ -504,42 +455,50 @@ public class DialogueSystem : MonoBehaviour
 
     public static void Progress()
     {
-        if (lineIndex < dialogue.Count - 1 && IS_TYPE_IN() == true)
+        if (LineIndex < Dialogue.Count - 1 && IS_TYPE_IN() == true)
         {
-            lineIndex += 1;
+            LineIndex += 1;
 
             GET_TMPGUI().text = STRINGNULL;
             SET_TYPE_IN_VALUE(false);
 
             //We'll parse the next line.
-            dialogue[(int)lineIndex] = PARSER.PARSER_LINE(dialogue[(int)lineIndex]);
+            Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
         }
     }
 
     public static uint ShiftCursorPosition(int _newPosition)
     {
-        cursorPosition += (uint)_newPosition;
-        return cursorPosition;
+        try
+        {
+            CursorPosition += (uint)_newPosition;
+        }
+        catch { }
+        return CursorPosition;
     }
 
     public static uint ShiftCursorPosition(int _newPosition, string _tag, string _removeFrom)
     {
-        cursorPosition += (uint)_newPosition;
-        _removeFrom = _removeFrom.Replace(_tag, "");
-        return cursorPosition;
+        try
+        {
+            CursorPosition += (uint)_newPosition;
+            _removeFrom = _removeFrom.Replace(_tag, "");
+        }
+        catch { }
+        return CursorPosition;
     }
 
-    public static void UPDATE_TEXT_SPEED(TextSpeed _textSpeed)
+    public static void UPDATE_TEXT_SPEED(TextSpeedValue _textSpeed)
     {
         switch (_textSpeed)
         {
-            case TextSpeed.SLOWEST: textSpeed = 0.25f; return;
-            case TextSpeed.SLOWER: textSpeed = 0.1f; return;
-            case TextSpeed.SLOW: textSpeed = 0.05f; return;
-            case TextSpeed.NORMAL: textSpeed = 0.025f; return;
-            case TextSpeed.FAST: textSpeed = 0.01f; return;
-            case TextSpeed.FASTER: textSpeed = 0.005f; return;
-            case TextSpeed.FASTEST: textSpeed = 0.0025f; return;
+            case TextSpeedValue.SLOWEST: TextSpeed = 0.25f; return;
+            case TextSpeedValue.SLOWER: TextSpeed = 0.1f; return;
+            case TextSpeedValue.SLOW: TextSpeed = 0.05f; return;
+            case TextSpeedValue.NORMAL: TextSpeed = 0.025f; return;
+            case TextSpeedValue.FAST: TextSpeed = 0.01f; return;
+            case TextSpeedValue.FASTER: TextSpeed = 0.005f; return;
+            case TextSpeedValue.FASTEST: TextSpeed = 0.0025f; return;
             default: return;
         }
     }
