@@ -49,7 +49,7 @@ public class DialogueSystem : MonoBehaviour
 
     public static uint CursorPosition { get; private set; } = 0;
 
-    private static bool enableCustomSpeed = false;
+    private static bool OnDelay = false;
 
     private static bool typeIn;
 
@@ -131,22 +131,24 @@ public class DialogueSystem : MonoBehaviour
                 //Typewriter effect
                 if (PARSER.LINE_HAS(text, PARSER.tokens[0]))
                 {
-                    for (CursorPosition = 0; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition++)
+                    for (CursorPosition = 0; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
                     {
-
-           
-                        try
+                        if (!OnDelay)
                         {
-                            if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
+                            try
+                            {
+                                if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
 
-                            GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
+                                GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
 
-                        }
-                        catch { }
+                            }
+                            catch { }
 
-                        UPDATE_TEXT_SPEED(SpeedValue);
+                            UPDATE_TEXT_SPEED(SpeedValue);
+                       
 
                         yield return new WaitForSeconds(TextSpeed);
+                        }
                     }
                 }
 
@@ -275,7 +277,9 @@ public class DialogueSystem : MonoBehaviour
                 {
                     Debug.Log("We did it!");
 
-                    string newValue = Regex.Replace(value, @"[^\d]", ""); 
+                    string newValue = Regex.Replace(value, @"[^\d]", "");
+
+                    Debug.Log(newValue);
 
                     //We got to make sure that our number is actually a legit number
                     if (Convert.ToInt32(newValue).GetType() == typeof(int))
@@ -286,7 +290,7 @@ public class DialogueSystem : MonoBehaviour
 
                         Dialogue[(int)LineIndex] = _line;
 
-                        Task.Delay(millsecs).Wait();
+                        Instance.StartCoroutine(DelaySpan(millsecs));
                     }
                     else
                         return;
@@ -411,6 +415,18 @@ public class DialogueSystem : MonoBehaviour
     }
 
     static bool InBounds(int index, List<string> array) => (index >= reset) && (index < array.Count);
+
+    static IEnumerator DelaySpan(float _millseconds)
+    {
+        OnDelay = true;
+
+        while (OnDelay)
+        {
+            yield return new WaitForSeconds(_millseconds / 1000f);
+            Debug.Log("Hi!");
+            OnDelay = false;
+        }
+    }
 
     static DialogueSystemSpriteChanger Find_Sprite_Changer(string _name)
     {
@@ -549,7 +565,7 @@ public class DialogueSystem : MonoBehaviour
 
     public static void UPDATE_TEXT_SPEED(TextSpeedValue _textSpeed)
     {
-        if (enableCustomSpeed == false)
+        if (OnDelay == false)
         {
             switch (_textSpeed)
             {
@@ -561,6 +577,10 @@ public class DialogueSystem : MonoBehaviour
                 case TextSpeedValue.FASTER: TextSpeed = 0.005f; return;
                 case TextSpeedValue.FASTEST: TextSpeed = 0.0025f; return;
             }
+        }
+        else
+        {
+            Debug.Log("HIIIII");
         }
     }
 
