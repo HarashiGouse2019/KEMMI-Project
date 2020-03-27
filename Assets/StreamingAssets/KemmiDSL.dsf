@@ -86,9 +86,9 @@ KEMMI_POSE_HEADTILT = 4
 <DIALOGUE_SET_002>
 @ Huh...<<
 
-@ ... [EXPRESSION::3] [SPEED::NORMAL] You [SPEED::SLOWER] ...<<
+@ [SPEED::NORMAL] ...[HALT::1000] [EXPRESSION::3] You ...<<
 
-@ [BOLD] [SPEED::FASTER] You... [HALT::500] [SPEED::FASTEST] [EXPRESSION::5] YOU TOUCHED ME! [BOLD::END] <<
+@ [SPEED::FASTER] You... [HALT::500] [BOLD] [SPEED::FASTEST] [EXPRESSION::5] YOU TOUCHED ME! [BOLD::END] <<
 
 @ [BOLD] I CANNOT [SPEED::SLOWEST] BELIEVE [SPEED::FASTEST] THAT YOU TOUCHED ME! [BOLD::END] <<
 
@@ -96,21 +96,19 @@ KEMMI_POSE_HEADTILT = 4
 
 @ [SPEED::NORMAL] ...<<
 
-@ [SPEED::SLOWER] ...<<
+@ [EXPRESSION::10] [SPEED::SLOWER] ...<<
 
-@ [EXPRESSION::2] I'm... [HALT::500] sorry. [HALT::500] [EXPRESSION::0] [SPEED::FAST] You should know better not to click on people as their [BOLD] sleeping. [BOLD::END] <<
+@ [EXPRESSION::2] I'm... [HALT::1000] sorry. [SPEED::FAST] [HALT::1200] [EXPRESSION::1] You should know better not to click on people when they are [BOLD] sleeping. [BOLD::END] <<
 
 @ [EXPRESSION::7] Perhaps [BOLD] [ITALIZE] [SPEED::NORMAL] "Clicking" [ITALIZE::END] [BOLD::END] [SPEED::FAST] is a bit of an understatement.<<
 
-@ [EXPRESSION::1] I'll... <<
-
-@ [HALT::1000] [SPEED::FAST] just pretend that none of this happened.<<
+@ [EXPRESSION::1] I'll... [SPEED::FAST] [HALT::1000] [EXPRESSION::7] just pretend that none of this happened.<<
 
 @ [EXPRESSION::1] Hi! [HALT::500] My name is [BOLD] Kemmi[BOLD::END] !<<
 
 @ So! [HALT::500] [EXPRESSION::7] You came to me to learn about the good o' qualities of [BOLD] superb hygiene? [BOLD::END] <<
 
-@ [EXPRESSION::1] [SPEED::SLOWEST] ... [HALT::1000] [EXPRESSION::5] [SPEED::NORMAL] No?<<
+@ [SPEED::SLOWEST] [EXPRESSION::1] ... [HALT::1000] [EXPRESSION::5] [SPEED::NORMAL] No?<<
 
 @ [EXPRESSION::7] [SPEED::FAST] Is that not why you came to see me?<<
 
@@ -122,11 +120,29 @@ KEMMI_POSE_HEADTILT = 4
 
 @ Trust me, you're going to [BOLD] learn a lot from me! [BOLD::END] <<
 
-@ In fact, you'll have a greater chance of surviving the [BOLD] apocolypse [BOLD::END] <<
+@ In fact, you'll have a greater chance of surviving the [BOLD] apocolypse [BOLD::END] .<<
+
+@ ...<<
+
+@ [SPEED::FASTEST] [EXPRESSION::KEMMI_EXPRESSION_SURPRISED] [BOLD] WHAT?! [BOLD::END] <<
+
+@ [SPEED::FAST] [EXPRESSION::7] No one told you about what's going on?<<
+
+@ I mean... [HALT::1000] That's probably why you're here!<<
+
+@ [BOLD] COVID-19... [BOLD::END] also known as...<<
+
+@ [SPEED::SLOWEST] ... [HALT::1000] [EXPRESSION::KEMMI_EXPRESSION_MAD-0] [BOLD] Corona!! [BOLD::END] <<
+
+@ [SPEED::FAST] [EXPRESSION::KEMMI_EXPRESSION_MAD-2] Making people all living vegetables. It's awful...<<
+
+@ [EXPRESSION::KEMMI_EXPRESSION_NEUTRAL] [HALT::2000] [EXPRESSION::7] Don't worry though kid.<<
+
+@ [EXPRESSION::9] You got the [HALT::750] [EXPRESSION::7] Great [HALT::750] Kemmi... [HALT::750] [SPEED::FAST] [EXPRESSION::9] on your side.<<
 
 @ [EXPRESSION::6] No one shall ever step foot by your great presence...<<
 
-@ [EXPRESSION::5] and I'll [BOLD] show you how [BOLD::END] !!!
+@ [EXPRESSION::5] and I'll [BOLD] show you how [BOLD::END] !!!<<
 
 <END>
 

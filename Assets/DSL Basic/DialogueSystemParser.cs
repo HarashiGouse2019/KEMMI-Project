@@ -363,7 +363,7 @@ namespace DSLParser
                 {
                     if (speedValue == speed)
                     {
-                        _line = _line.Replace(_styleCommand + " ", " <" + "sp=" + Array.IndexOf(validTextSpeeds, speed) + "> ");
+                        _line = _line.Replace(_styleCommand + " ", "<" + "sp=" + Array.IndexOf(validTextSpeeds, speed) + ">");
                         return SUCCESSFUL;
                     }
                 }
@@ -375,7 +375,7 @@ namespace DSLParser
         {
             if (_styleCommand.Contains(delimiters[2] + keywords[6]))
             {
-                var actionString = "*" + _styleCommand.Split(delimiters)[1].Split(':')[2].Split('"')[1] + "* ";
+                var actionString = "*" + _styleCommand.Split(delimiters)[1].Split(':')[2].Split('"')[1] + "*";
 
                 /*The action function is simply to add two asteriks between a word.
                  For example: [ACTION::"Sighs"] will be replaced by *Sigh* in the text. 
@@ -465,7 +465,7 @@ namespace DSLParser
 
             else if (_styleCommand == delimiters[2] + keywords[2] + tokens[1] + tokens[2] + delimiters[3])
             {
-                _line = _line.Replace(_styleCommand + " ", "</i>");
+                _line = _line.Replace(_styleCommand + " ", " </i>");
                 return SUCCESSFUL;
             }
 
@@ -482,7 +482,7 @@ namespace DSLParser
 
             else if (_styleCommand == delimiters[2] + keywords[3] + tokens[1] + tokens[2] + delimiters[3])
             {
-                _line = _line.Replace(_styleCommand + " ", "</u>");
+                _line = _line.Replace(_styleCommand + " ", " </u>");
                 return SUCCESSFUL;
             }
 

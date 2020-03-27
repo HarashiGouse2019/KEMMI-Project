@@ -11,9 +11,30 @@ using TMPro;
 
 using PARSER = DSLParser.DialogueSystemParser;
 
+public class DialogueSystemEvents
+{
+    //Interface for events
+    public interface IExecuteOnEnd
+    {
+        void ExecuteOnEnd();
+    }
+
+    public interface IExecuteOnCommand
+    {
+        void ExecuteOnCommand();
+    }
+
+    public interface IExecuteOnStart
+    {
+        void ExecuteOnStart();
+    }
+}
+
 public class DialogueSystem : MonoBehaviour
 {
     public static DialogueSystem Instance;
+
+
 
     public enum TextSpeedValue
     {
@@ -87,7 +108,8 @@ public class DialogueSystem : MonoBehaviour
 
     void Update()
     {
-        
+        if (!OnDelay)
+            ExcludeAllTags(Dialogue[(int)LineIndex]);
     }
 
     public static void Run()
@@ -103,30 +125,16 @@ public class DialogueSystem : MonoBehaviour
                 Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
 
                 Instance.StartCoroutine(PrintCycle());
-
-                Instance.StartCoroutine(ExclusionCycle());
             }
         }
     }
 
-    static IEnumerator ExclusionCycle()
-    {
-        while (true)
-        {
-            if (!OnDelay)
-                ExcludeAllTags(Dialogue[(int)LineIndex]);
-
-            yield return null;
-        }
-    }
     static IEnumerator PrintCycle()
     {
         while (true)
         {
             if (IS_TYPE_IN() == false)
             {
-
-
                 ENABLE_DIALOGUE_BOX();
 
                 GET_TMPGUI().text = STRINGNULL;
@@ -141,6 +149,8 @@ public class DialogueSystem : MonoBehaviour
 
                     for (CursorPosition = 0; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
                     {
+                        yield return new WaitForSeconds(TextSpeed);
+
                         try
                         {
 
@@ -153,11 +163,7 @@ public class DialogueSystem : MonoBehaviour
                         catch { }
 
 
-                        yield return new WaitForSeconds(TextSpeed);
-
-
-
-                        continue;
+                       
                     }
                 }
 
@@ -223,9 +229,13 @@ public class DialogueSystem : MonoBehaviour
     {
         try
         {
-            if (_line.Substring((int)CursorPosition, _tag.Length + sizeof(int)).Contains(_tag))
+            if (_line.Substring((int)CursorPosition, _tag.Length).Contains(_tag))
             {
-                _line = _line.Replace(" " + _tag + " ", "");
+                Debug.Log("Replacing... " + _tag);
+
+                _line = _line.Replace(_tag, "");
+
+
 
                 Dialogue[(int)LineIndex] = _line;
 
@@ -245,7 +255,7 @@ public class DialogueSystem : MonoBehaviour
     {
         try
         {
-            if (_line.Substring((int)CursorPosition, _tag.Length + 2).Contains(_tag))
+            if (_line.Substring((int)CursorPosition, _tag.Length).Contains(_tag))
             {
 
 
@@ -253,7 +263,7 @@ public class DialogueSystem : MonoBehaviour
                 {
                     ShiftCursorPosition(ActionString.Length - 1);
 
-                    _line = _line.Remove((int)CursorPosition - ActionString.Length + 1, _tag.Length - 1);
+                    _line = _line.Replace(_tag, "");
 
                     Dialogue[(int)LineIndex] = _line;
 
@@ -280,7 +290,7 @@ public class DialogueSystem : MonoBehaviour
         {
 
             //Debug.Log(_line.Substring((int)CursorPosition, _tag.Length));
-            if (_line.Substring((int)CursorPosition, _tag.Length) == _tag)
+            if (_line.Substring((int)CursorPosition, _tag.Length).Contains(_tag))
             {
                 _line = _line.Remove((int)CursorPosition, _tag.Length);
 
@@ -301,15 +311,19 @@ public class DialogueSystem : MonoBehaviour
                     //We got to make sure that our number is actually a legit number
                     if (Convert.ToInt32(newValue).GetType() == typeof(int))
                     {
-                        int millsecs = Convert.ToInt32(newValue);
+                        try
+                        {
+                            int millsecs = Convert.ToInt32(newValue);
 
-                        Instance.StartCoroutine(DelaySpan(millsecs));
+                            Instance.StartCoroutine(DelaySpan(millsecs));
 
-                        _line = _line.Remove((int)CursorPosition, newValue.Length + 2);
+                            _line = _line.Remove((int)CursorPosition, newValue.Length + 1);
 
-                        Dialogue[(int)LineIndex] = _line;
+                            Dialogue[(int)LineIndex] = _line;
 
-                        return SUCCESSFUL;
+                            return SUCCESSFUL;
+                        }
+                        catch { }
                     }
                 }
             }
@@ -439,24 +453,34 @@ public class DialogueSystem : MonoBehaviour
 
     static IEnumerator DelaySpan(float _millseconds)
     {
+
         OnDelay = true;
 
         while (OnDelay)
         {
             yield return new WaitForSeconds(_millseconds / 1000f);
-            OnDelay = false;
 
-            if (ActionString != STRINGNULL)
+            try
             {
-                Debug.Log("Okay boomer...");
+                OnDelay = false;
 
-                ShiftCursorPosition(ActionString.Length - 1);
+                if (ActionString != STRINGNULL)
+                {
+                    Debug.Log("Okay boomer...");
 
-                Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace(SKIP, "");
 
-                ActionString = STRINGNULL;
+
+                    Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace(SKIP, "");
+
+                    ShiftCursorPosition(ActionString.Length);
+
+                    ActionString = STRINGNULL;
+
+                }
             }
+            catch { }
         }
+
     }
 
     static DialogueSystemSpriteChanger Find_Sprite_Changer(string _name)

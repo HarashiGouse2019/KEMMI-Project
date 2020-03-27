@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class DialogueNode : MonoBehaviour
+public class DialogueNode : MonoBehaviour, DialogueSystemEvents.IExecuteOnEnd
 {
     /*Dialogue Node will allow us to have full control over what dialogue to run, when we run them, and
      what action we want to take after running the dialogue set.
@@ -27,7 +27,7 @@ public class DialogueNode : MonoBehaviour
 
     void Start()
     {
-        if(executeOnStart)
+        if (executeOnStart)
         {
             DialogueSystem.REQUEST_DIALOGUE_SET(setValue);
             DialogueSystem.Run();
@@ -37,6 +37,12 @@ public class DialogueNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
+    
+    public void ExecuteOnEnd() {
+
+        OnEnd.Invoke();
+    }
+
 }
