@@ -89,9 +89,6 @@ namespace DSLParser
 
             for (int value = 0; value < line.Length; value++)
             {
-                if ((line.Substring(0, 2) == "@ "))
-                    line = line.Replace("@ ", " ");
-
                 //Now, how will we get the position of [ and ]?
                 if (line[value] == delimiters[2])
                 {
@@ -109,6 +106,10 @@ namespace DSLParser
 
                     string command = line.Substring(startingBracketPos, (endingBracketPos - startingBracketPos) + 1);
 
+                    if (startingBracketPos == 0)
+                    {
+                        DialogueSystem.ShiftCursorPosition(endingBracketPos);
+                    } 
 
                     /*Now we have to see if it contains one of the commands.*/
                     foreach (string keyword in keywords)
@@ -144,6 +145,8 @@ namespace DSLParser
 
                 if (tagsParser != SUCCESSFUL)
                     line = line.Replace(commands + " ", "");
+                else
+                    DialogueSystem.ShiftCursorPosition(-1);
 
             }
             /*We finally got it to work!!!*/
@@ -360,7 +363,7 @@ namespace DSLParser
                 {
                     if (speedValue == speed)
                     {
-                        _line = _line.Replace(_styleCommand + " ", "<" + "sp=" + Array.IndexOf(validTextSpeeds, speed) + '>');
+                        _line = _line.Replace(_styleCommand + " ", " <" + "sp=" + Array.IndexOf(validTextSpeeds, speed) + "> ");
                         return SUCCESSFUL;
                     }
                 }
@@ -372,7 +375,7 @@ namespace DSLParser
         {
             if (_styleCommand.Contains(delimiters[2] + keywords[6]))
             {
-                var actionString = '*' + _styleCommand.Split(delimiters)[1].Split(':')[2].Split('"')[1] + "* ";
+                var actionString = "*" + _styleCommand.Split(delimiters)[1].Split(':')[2].Split('"')[1] + "* ";
 
                 /*The action function is simply to add two asteriks between a word.
                  For example: [ACTION::"Sighs"] will be replaced by *Sigh* in the text. 
@@ -381,7 +384,7 @@ namespace DSLParser
 
                 /*The skip tag will do the shift of the cursor for use one the system sees this
                  parsed information.*/
-                _line = _line.Replace(_styleCommand + " ", " <skip> " + actionString);
+                _line = _line.Replace(_styleCommand + " ", "<skip>" + actionString);
 
                 //Skip value will be assigned, so that the system can read it
                 DialogueSystem.UPDATE_ACTION_STRING(actionString);

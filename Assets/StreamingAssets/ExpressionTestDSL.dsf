@@ -52,9 +52,9 @@ KEMMI_EXPRESSION_MAD-1 = 10
 
 																											###
 																											
-@ [SPEED::FAST] Sooooooooo[SPEED::SLOWEST] ...[HALT::1000] [ACTION::"CAHHHHHHHHH!!!!"] <<
+@ [SPEED::FAST] Sooooooooo[SPEED::SLOWEST] ... [HALT::1000] [ACTION::"CAHHHHHHHHH!!!!"] <<
 																											
-@ [HALT::1000] [ACTION::"Sigh"] [SPEED::NORMAL] [HALT::1000] Let's get the bread, [HALT::5000]  [EXPRESSION::1] bread has [HALT::500] been [HALT::500] baked. [EXPRESSION::2] <<
+@ [HALT::1000] [ACTION::"Sigh"] [SPEED::NORMAL] [HALT::1000] Let's get the bread, [EXPRESSION::1] [HALT::5000] bread has [HALT::500] been [HALT::500] baked. [EXPRESSION::2] <<
 
 
 																											###
@@ -67,23 +67,23 @@ KEMMI_EXPRESSION_MAD-1 = 10
 																											
 																											
 																											###
-@ [EXPRESSION::8] So... [HALT::1000]  [EXPRESSION::2] You've finally done it!<<
+@ [EXPRESSION::8] So... [HALT::3000] You've [EXPRESSION::2] finally done it!<<
 
 @ [EXPRESSION::7] Looks like that [BOLD] brain of yours [BOLD::END] managed to get the...<<
 
 @ Expression command completed.<<
 
-@  [EXPRESSION::2] Not only that, [HALT::400]  [EXPRESSION::7]  [SPEED::FASTER] But you've gone as far as to validate if the expressions had been...<<
+@ [EXPRESSION::2] Not only that, [HALT::1000] [EXPRESSION::7] [SPEED::FASTER] But you've gone as far as to validate if the expressions had been...<<
 
 @ defined in the document...<<
 
-@  [EXPRESSION::6]  [SPEED::FASTEST] That's, [HALT::600] freaking, [HALT::600]  [BOLD] COOL!!! [BOLD::END] <<
+@ [EXPRESSION::6] [SPEED::FASTEST] That's, [HALT::600] freaking, [HALT::600] [BOLD] COOL!!! [BOLD::END] <<
 
-@  [EXPRESSION::5]  [SPEED::NORMAL] Don't get your hopes up though, [HALT::1000]  [EXPRESSION::7]  [SPEED::FASTER] we got's a [SPEED::SLOW] long [SPEED::FASTER] way to go.<<
+@ [EXPRESSION::5] [SPEED::NORMAL] Don't get your hopes up though, [HALT::1000] [SPEED::FASTER] we [EXPRESSION::7] got's a [SPEED::SLOW] long [SPEED::FASTER] way to go.<<
 
-@ 4 days right? [HALT::800]  [ACTION::"Sigh"] <<
+@ 4 days right? [HALT::800] [ACTION::"Sigh"] <<
 
-@  [EXPRESSION::9]  [SPEED::NORMAL] I think you gots this. [HALT::750] I mean... [HALT::250] You came such a long way just to create this for me.<<
+@ [EXPRESSION::9] [SPEED::NORMAL] I think you gots this. [HALT::750] I mean... [HALT::250] You came such a long way just to create this for me.<<
 
 @ [EXPRESSION::2] [BOLD] Thank you so very much!!! [BOLD::END] [HALT::500] I appreiciate what you have done so far!<<
 

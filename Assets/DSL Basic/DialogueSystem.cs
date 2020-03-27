@@ -85,15 +85,38 @@ public class DialogueSystem : MonoBehaviour
         DialogueSystemSpriteChangers = FIND_ALL_SPRITECHANGERS();
     }
 
+    void Update()
+    {
+        
+    }
+
     public static void Run()
     {
+
         if (Dialogue.Count != 0 && InBounds((int)LineIndex, Dialogue) && IS_TYPE_IN() == false)
         {
-            //We'll parse the very first dialogue that is ready to be displayed
-            Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
+            if (Dialogue[(int)LineIndex].Contains("@ "))
+            {
+                Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace("@ ", "");
 
-            Instance.StartCoroutine(PrintCycle());
+                //We'll parse the very first dialogue that is ready to be displayed
+                Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
 
+                Instance.StartCoroutine(PrintCycle());
+
+                Instance.StartCoroutine(ExclusionCycle());
+            }
+        }
+    }
+
+    static IEnumerator ExclusionCycle()
+    {
+        while (true)
+        {
+            if (!OnDelay)
+                ExcludeAllTags(Dialogue[(int)LineIndex]);
+
+            yield return null;
         }
     }
     static IEnumerator PrintCycle()
@@ -115,20 +138,24 @@ public class DialogueSystem : MonoBehaviour
                 //Typewriter effect
                 if (PARSER.LINE_HAS(text, PARSER.tokens[0]))
                 {
-                    for (CursorPosition = 1; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
+
+                    for (CursorPosition = 0; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
                     {
-                        
+                        try
+                        {
 
-                        if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
+                            if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
 
-                        GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
+                            GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
 
-                        UPDATE_TEXT_SPEED(SpeedValue);
+                            UPDATE_TEXT_SPEED(SpeedValue);
+                        }
+                        catch { }
 
 
                         yield return new WaitForSeconds(TextSpeed);
 
-                        ExcludeAllTags(Dialogue[(int)LineIndex]);
+
 
                         continue;
                     }
@@ -146,6 +173,10 @@ public class DialogueSystem : MonoBehaviour
 
     static void ExcludeAllTags(string _text)
     {
+        //Action tag!
+        ExecuteActionFunctionTag(SKIP, ref _text);
+
+
         //Bold tag
         ExcludeStyleTag(BOLD, BOLDEND, ref _text);
 
@@ -158,9 +189,6 @@ public class DialogueSystem : MonoBehaviour
         //Speed Command Tag: It will consider all of the possible values.
         for (int value = 0; value < Enum.GetValues(typeof(TextSpeedValue)).Length; value++)
             ExecuteSpeedFunctionTag(PARSER.delimiters[0] + SPEED + value + PARSER.delimiters[1], ref _text);
-
-        //Action tag!
-        ExecuteActionFunctionTag(SKIP, ref _text);
 
         //Expression tag!
         ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
@@ -197,7 +225,7 @@ public class DialogueSystem : MonoBehaviour
         {
             if (_line.Substring((int)CursorPosition, _tag.Length + sizeof(int)).Contains(_tag))
             {
-                _line = _line.Replace(_tag, "");
+                _line = _line.Replace(" " + _tag + " ", "");
 
                 Dialogue[(int)LineIndex] = _line;
 
@@ -217,16 +245,19 @@ public class DialogueSystem : MonoBehaviour
     {
         try
         {
-
-            if (_line.Substring((int)CursorPosition, _tag.Length).Contains(_tag))
+            if (_line.Substring((int)CursorPosition, _tag.Length + 2).Contains(_tag))
             {
-                _line = _line.Remove((int)CursorPosition , _tag.Length);
 
-                Dialogue[(int)LineIndex] = _line;
 
                 if (OnDelay == false)
                 {
-                    ShiftCursorPosition(ActionString.Length);
+                    ShiftCursorPosition(ActionString.Length - 1);
+
+                    _line = _line.Remove((int)CursorPosition - ActionString.Length + 1, _tag.Length - 1);
+
+                    Dialogue[(int)LineIndex] = _line;
+
+                    ActionString = STRINGNULL;
 
                     return SUCCESSFUL;
                 }
@@ -257,9 +288,7 @@ public class DialogueSystem : MonoBehaviour
 
                 /*Now we do a substring from the current position to 4 digits.*/
 
-                string value = _line.Substring((int)CursorPosition, 7);
-
-                Debug.Log(value);
+                string value = _line.Substring((int)CursorPosition, 5);
 
                 Regex ex = new Regex(@"[*\d]");
 
@@ -267,16 +296,12 @@ public class DialogueSystem : MonoBehaviour
 
                 if (match.Success)
                 {
-                    Debug.Log("Okay");
-
                     string newValue = Regex.Replace(value, @"[^\d]", "");
 
                     //We got to make sure that our number is actually a legit number
                     if (Convert.ToInt32(newValue).GetType() == typeof(int))
                     {
                         int millsecs = Convert.ToInt32(newValue);
-
-                        Debug.Log("Waiting for " + newValue + " milliseconds...");
 
                         Instance.StartCoroutine(DelaySpan(millsecs));
 
@@ -287,8 +312,6 @@ public class DialogueSystem : MonoBehaviour
                         return SUCCESSFUL;
                     }
                 }
-                else
-                    Debug.Log("Nope");
             }
         }
         catch { }
@@ -422,6 +445,17 @@ public class DialogueSystem : MonoBehaviour
         {
             yield return new WaitForSeconds(_millseconds / 1000f);
             OnDelay = false;
+
+            if (ActionString != STRINGNULL)
+            {
+                Debug.Log("Okay boomer...");
+
+                ShiftCursorPosition(ActionString.Length - 1);
+
+                Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace(SKIP, "");
+
+                ActionString = STRINGNULL;
+            }
         }
     }
 
@@ -511,18 +545,23 @@ public class DialogueSystem : MonoBehaviour
                 }
                 else
                 {
-                    RunningDialogue = false;
-                    LineIndex = 0;
-                    SET_TYPE_IN_VALUE(false);
-                    DISABLE_DIALOGUE_BOX();
-                    Dialogue.Clear();
-                    Instance.StopAllCoroutines();
-                    CursorPosition = reset;
+                    End();
                 }
             }
 
             yield return null;
         }
+    }
+
+    public static void End()
+    {
+        RunningDialogue = false;
+        LineIndex = 0;
+        SET_TYPE_IN_VALUE(false);
+        DISABLE_DIALOGUE_BOX();
+        Dialogue.Clear();
+        Instance.StopAllCoroutines();
+        CursorPosition = reset;
     }
 
     public static void Progress()
@@ -534,8 +573,14 @@ public class DialogueSystem : MonoBehaviour
             GET_TMPGUI().text = STRINGNULL;
             SET_TYPE_IN_VALUE(false);
 
-            //We'll parse the next line.
-            Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
+            if (Dialogue[(int)LineIndex].Contains("@ "))
+            {
+
+                Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace("@ ", "");
+
+                //We'll parse the next dialogue that is ready to be displayed
+                Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
+            }
         }
     }
 
