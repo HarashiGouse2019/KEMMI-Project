@@ -131,6 +131,7 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD
     void Update()
     {
         actionString = ActionString;
@@ -143,23 +144,27 @@ public class DialogueSystem : MonoBehaviour
             ExcludeAllTags(Dialogue[(int)LineIndex]);
     }
 
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
     public static void Run()
     {
-
         if (Dialogue.Count != 0 && InBounds((int)LineIndex, Dialogue) && IS_TYPE_IN() == false)
         {
-            if (Dialogue[(int)LineIndex].Contains("@ "))
-            {
-                Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace("@ ", "");
+            //We'll parse the very first dialogue that is ready to be displayed
+            Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
 
-                //We'll parse the very first dialogue that is ready to be displayed
-                Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
-
+<<<<<<< HEAD
                 Instance.StartCoroutine(PrintCycle());
             }
         }
     }
 
+=======
+            Instance.StartCoroutine(PrintCycle());
+
+        }
+    }
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
     static IEnumerator PrintCycle()
     {
         while (true)
@@ -177,24 +182,33 @@ public class DialogueSystem : MonoBehaviour
                 //Typewriter effect
                 if (PARSER.LINE_HAS(text, PARSER.tokens[0]))
                 {
-
-                    for (CursorPosition = 0; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
+                    for (CursorPosition = 1; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
                     {
+<<<<<<< HEAD
                         yield return new WaitForSeconds(TextSpeed);
 
                         try
                         {
+=======
+                        
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
-                            if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
+                        if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
 
-                            GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
+                        GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
 
-                            UPDATE_TEXT_SPEED(SpeedValue);
-                        }
-                        catch { }
+                        UPDATE_TEXT_SPEED(SpeedValue);
 
 
+<<<<<<< HEAD
 
+=======
+                        yield return new WaitForSeconds(TextSpeed);
+
+                        ExcludeAllTags(Dialogue[(int)LineIndex]);
+
+                        continue;
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
                     }
                 }
 
@@ -210,12 +224,15 @@ public class DialogueSystem : MonoBehaviour
 
     static void ExcludeAllTags(string _text)
     {
+<<<<<<< HEAD
 
         PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
 
         //Action tag!
         ExecuteActionFunctionTag(ACTION, ref _text);
 
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
         //Bold tag
         ExcludeStyleTag(BOLD, BOLDEND, ref _text);
 
@@ -228,8 +245,16 @@ public class DialogueSystem : MonoBehaviour
         ////Speed Command Tag: It will consider all of the possible values.
         //ExecuteSpeedFunctionTag(SPEED, ref _text);
 
+<<<<<<< HEAD
         ////Expression tag!
         //ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
+=======
+        //Action tag!
+        ExecuteActionFunctionTag(SKIP, ref _text);
+
+        //Expression tag!
+        ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
         ////Halt tage
         //ExecuteWaitFunctionTag(HALT, ref _text);
@@ -266,8 +291,12 @@ public class DialogueSystem : MonoBehaviour
             Debug.Log("HI!!!");
             for (int index = (int)CursorPosition; index < _line.Length; index++)
             {
+<<<<<<< HEAD
                 if (_line[index] == '<')
                     startBracketPos = index;
+=======
+                _line = _line.Replace(_tag, "");
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
                 if (_line[index] == '>')
                 {
@@ -305,6 +334,7 @@ public class DialogueSystem : MonoBehaviour
 
         for (int index = (int)CursorPosition; index < _line.Length; index++)
         {
+<<<<<<< HEAD
             Debug.Log("Okay...");
             if (_line[index] == '<')
                 startBracketPos = index;
@@ -312,9 +342,18 @@ public class DialogueSystem : MonoBehaviour
             if (_line[index] == '>')
             {
                 endBracketPos = index;
+=======
+
+            if (_line.Substring((int)CursorPosition, _tag.Length).Contains(_tag))
+            {
+                _line = _line.Remove((int)CursorPosition , _tag.Length);
+
+                Dialogue[(int)LineIndex] = _line;
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
                 try
                 {
+<<<<<<< HEAD
                     string tag = _line.Substring(startBracketPos, (endBracketPos - startBracketPos) + 1);
 
 
@@ -322,6 +361,9 @@ public class DialogueSystem : MonoBehaviour
                     if (_tagExpression.IsMatch(tag))
                     {
                         Debug.Log("ACTION IS FANTASTIC BEBE!!!");
+=======
+                    ShiftCursorPosition(ActionString.Length);
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
                         if (OnDelay == false)
                         {
@@ -367,7 +409,13 @@ public class DialogueSystem : MonoBehaviour
                     endBracketPos = index;
 
 
+<<<<<<< HEAD
                     string tag = _line.Substring(startBracketPos, (endBracketPos - startBracketPos) + 1);
+=======
+                string value = _line.Substring((int)CursorPosition, 7);
+
+                Debug.Log(value);
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
                     try
                     {
@@ -376,11 +424,25 @@ public class DialogueSystem : MonoBehaviour
                         {
                             Debug.Log("WAIT IS FANTASTIC BEBE!!!");
 
+<<<<<<< HEAD
                             _line = _tagExpression.Replace(tag, "");
+=======
+                if (match.Success)
+                {
+                    Debug.Log("Okay");
+
+                    string newValue = Regex.Replace(value, @"[^\d]", "");
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
                             Dialogue[(int)LineIndex] = _line;
 
+<<<<<<< HEAD
                             /*Now we do a substring from the current position to 4 digits.*/
+=======
+                        Debug.Log("Waiting for " + newValue + " milliseconds...");
+
+                        Instance.StartCoroutine(DelaySpan(millsecs));
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
                             int value = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
 
@@ -396,6 +458,8 @@ public class DialogueSystem : MonoBehaviour
                     }
                     catch { }
                 }
+                else
+                    Debug.Log("Nope");
             }
         }
         return FAILURE;
@@ -541,8 +605,11 @@ public class DialogueSystem : MonoBehaviour
         while (OnDelay)
         {
             yield return new WaitForSeconds(_millseconds / 1000f);
+<<<<<<< HEAD
             Debug.Log("yes?");
 
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
             OnDelay = false;
         }
     }
@@ -633,23 +700,18 @@ public class DialogueSystem : MonoBehaviour
                 }
                 else
                 {
-                    End();
+                    RunningDialogue = false;
+                    LineIndex = 0;
+                    SET_TYPE_IN_VALUE(false);
+                    DISABLE_DIALOGUE_BOX();
+                    Dialogue.Clear();
+                    Instance.StopAllCoroutines();
+                    CursorPosition = reset;
                 }
             }
 
             yield return null;
         }
-    }
-
-    public static void End()
-    {
-        RunningDialogue = false;
-        LineIndex = 0;
-        SET_TYPE_IN_VALUE(false);
-        DISABLE_DIALOGUE_BOX();
-        Dialogue.Clear();
-        Instance.StopAllCoroutines();
-        CursorPosition = reset;
     }
 
     public static void Progress()
@@ -661,14 +723,8 @@ public class DialogueSystem : MonoBehaviour
             GET_TMPGUI().text = STRINGNULL;
             SET_TYPE_IN_VALUE(false);
 
-            if (Dialogue[(int)LineIndex].Contains("@ "))
-            {
-
-                Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace("@ ", "");
-
-                //We'll parse the next dialogue that is ready to be displayed
-                Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
-            }
+            //We'll parse the next line.
+            Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
         }
     }
 
