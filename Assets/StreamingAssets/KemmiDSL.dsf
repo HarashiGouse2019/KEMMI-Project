@@ -86,11 +86,11 @@ KEMMI_POSE_HEADTILT = 4
 <DIALOGUE_SET_002>
 @ Huh...<<
 
-@ [SPEED::NORMAL] ...[HALT::1000] [EXPRESSION::3] You ...<<
+@ [SPEED::NORMAL] ... [HALT::1000] [EXPRESSION::3] You ...<<
 
 @ [SPEED::FASTER] You... [HALT::500] [BOLD] [SPEED::FASTEST] [EXPRESSION::5] YOU TOUCHED ME! [BOLD::END] <<
 
-@ [BOLD] I CANNOT [SPEED::SLOWEST] BELIEVE [SPEED::FASTEST] THAT YOU TOUCHED ME! [BOLD::END] <<
+@ [BOLD] I CANNOT [SPEED::SLOWEST] [ACTION::"CLAP"] BELIEVE [ACTION::"CLAP"] [SPEED::FASTEST] THAT YOU TOUCHED ME! [BOLD::END] <<
 
 @ ...<<
 
@@ -98,7 +98,7 @@ KEMMI_POSE_HEADTILT = 4
 
 @ [EXPRESSION::10] [SPEED::SLOWER] ...<<
 
-@ [EXPRESSION::2] I'm... [HALT::1000] sorry. [SPEED::FAST] [HALT::1200] [EXPRESSION::1] You should know better not to click on people when they are [BOLD] sleeping. [BOLD::END] <<
+@ [EXPRESSION::2] I'm... [HALT::1000] sorry. [HALT::1200] [SPEED::FAST] [EXPRESSION::1] You should know better not to click on people when they are [BOLD] sleeping. [BOLD::END] <<
 
 @ [EXPRESSION::7] Perhaps [BOLD] [ITALIZE] [SPEED::NORMAL] "Clicking" [ITALIZE::END] [BOLD::END] [SPEED::FAST] is a bit of an understatement.<<
 

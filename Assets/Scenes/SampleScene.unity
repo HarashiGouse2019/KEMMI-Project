@@ -2048,9 +2048,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7988fcda255ae44383df5a782df57a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dsfName: KemmiDSL
+  dsfName: ExpressionTestDSL
   TMP_DIALOGUETEXT: {fileID: 1915386710}
   textBoxUI: {fileID: 95990724}
+  actionString: []
+  actionIndex: 0
+  expressionValue: []
+  expressionIndex: 0
 --- !u!4 &1507667168
 Transform:
   m_ObjectHideFlags: 0
@@ -2078,7 +2082,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   executeOnStart: 1
-  setValue: 2
+  setValue: 0
   OnEnd:
     m_PersistentCalls:
       m_Calls: []
@@ -2187,7 +2191,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.18, y: -0.19}
+  m_AnchoredPosition: {x: 0.18, y: 1.38}
   m_SizeDelta: {x: 8.744, y: 9.324}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1856115858
@@ -2223,7 +2227,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -4.6001987, y: 391.7}
+  m_AnchoredPosition: {x: 0, y: 307}
   m_SizeDelta: {x: 1657.2, y: 228.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1877756147

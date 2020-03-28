@@ -52,7 +52,13 @@ KEMMI_EXPRESSION_MAD-1 = 10
 
 																											###
 																											
-@ [SPEED::FAST] Sooooooooo[SPEED::SLOWEST] ...<<
+@ [ACTION::"CLAP"] Imma do a happy dance...[HALT::500][ACTION::"HAPPYDANCE"] [ACTION::"GASP"] <<
+
+###
+
+*CLAP*<halt=2000> Imma do a happy dance...
+
+ ###
 																											
 @ [HALT::1000] [ACTION::"Sigh"] [SPEED::NORMAL] [HALT::1000] Let's get the bread, [EXPRESSION::1] [HALT::5000] bread has [HALT::500] been [HALT::500] baked. [EXPRESSION::2] <<
 
