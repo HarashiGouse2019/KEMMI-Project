@@ -52,9 +52,9 @@ KEMMI_EXPRESSION_MAD-1 = 10
 
 																											###
 																											
-@ [SPEED::NORMAL] Sooooooooo [SPEED::SLOWEST] ... [ACTION::"CAHHHHHHHHH"] [HALT::1000] [ACTION::"SWOSH"] WHAT? [HALT::1000] [ACTION::"SWUSH"] DA FAQ?! [HALT::1000] [ACTION::"SMASHING"] WHAT ARE YOU DOING IN MY SWAMP!!!<<
+@ [SPEED::NORMAL] [HALT::2000] Sooooooooo [HALT::2000] [SPEED::SLOWEST] ... [ACTION::"CAHHHHHHHHH"] [ACTION::"SWOSH"] [ACTION::"SWUSH"] [ACTION::"SMASHING"] <<
 
-<action=CAHHHHHHHHH!!!!>
+<sp=3> Sooooooooo <sp=0> ... <sp=6> <action=CAHHHHHHHHH> <halt=1000>
 																											
 @ [HALT::1000] [ACTION::"Sigh"] [SPEED::NORMAL] [HALT::1000] Let's get the bread, [EXPRESSION::1] [HALT::5000] bread has [HALT::500] been [HALT::500] baked. [EXPRESSION::2] <<
 

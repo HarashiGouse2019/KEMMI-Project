@@ -159,6 +159,9 @@ public class DialogueSystem : MonoBehaviour
     {
         while (true)
         {
+            if (OnDelay)
+                continue;
+
             if (IS_TYPE_IN() == false)
             {
                 ENABLE_DIALOGUE_BOX();
@@ -184,13 +187,16 @@ public class DialogueSystem : MonoBehaviour
 
                             UPDATE_TEXT_SPEED(SpeedValue);
                         }
-                        catch { }
+                        catch
+                        {
+
+                            Debug.LogWarning("Cursor Position is at: " + CursorPosition + ", but text is " + text.Length + " long.");
+                            CursorPosition = (uint)(CursorPosition - text.Length);
+
+                        }
 
 
                         yield return new WaitForSeconds(TextSpeed);
-
-                        if (!OnDelay)
-                            ExcludeAllTags(Dialogue[(int)LineIndex]);
                     }
                 }
 
@@ -225,7 +231,7 @@ public class DialogueSystem : MonoBehaviour
         ExecuteSpeedFunctionTag(SPEED, ref _text);
 
         //Expression tag!
-        ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
+        //ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
 
         //Halt tage
         ExecuteWaitFunctionTag(HALT, ref _text);
@@ -275,17 +281,21 @@ public class DialogueSystem : MonoBehaviour
 
                         if (_tagExpression.IsMatch(tag))
                         {
-                            Debug.Log("SPEEEED!!!! FANTASTIC BEBEEEE!!!");
+                            if (OnDelay == false)
+                            {
+                                Debug.Log("SPEEEED!!!! FANTASTIC BEBEEEE!!!");
 
-                            int speed = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
+                                //<sp=3>
+                                int speed = Convert.ToInt32(tag.Split(PARSER.delimiters)[1].Split('=')[1]);
 
-                            SpeedValue = (TextSpeedValue)speed;
+                                SpeedValue = (TextSpeedValue)speed;
 
-                            _line = _line.Replace(tag, "");
+                                _line = _line.Replace(tag, "");
 
-                            Dialogue[(int)LineIndex] = _line;
+                                Dialogue[(int)LineIndex] = _line;
 
-                            return SUCCESSFUL;
+                                return SUCCESSFUL;
+                            }
                         }
                     }
                 }
@@ -315,20 +325,18 @@ public class DialogueSystem : MonoBehaviour
                     if (letter == '>')
                     {
 
-                        endTagPos = (Array.IndexOf(stringRange.ToCharArray(), letter));
+                        endTagPos = (int)(Array.IndexOf(stringRange.ToCharArray(), letter));
 
                         tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
-
-                        Debug.Log(tag);
 
                         if (_tagExpression.IsMatch(tag))
                         {
                             Debug.Log("WOW FANTASTIC BABY ");
                             if (OnDelay == false)
                             {
-                                string value = "*" + tag.Split('<')[1].Split('=')[1].Split('>')[0] + "*";
+                                string value = "*" + tag.Split(PARSER.delimiters)[1].Split('=')[1] + "*";
 
-                                _line = _line.Replace(tag, value);
+                                _line = ReplaceFirst(_line, tag, value);
 
                                 ShiftCursorPosition(value.Length);
 
@@ -358,46 +366,44 @@ public class DialogueSystem : MonoBehaviour
         try
         {
             string tag = _line.Substring((int)CursorPosition, "<halt=".Length);
+            Debug.Log(tag);
             if (tag.Contains("<halt="))
             {
+
                 int startTagPos = (int)CursorPosition;
                 int endTagPos = 0;
                 string stringRange = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
-                Debug.Log(stringRange);
+
+                Debug.Log("If you got this, you seem to be doing pretty good");
+
                 foreach (char letter in stringRange)
                 {
                     if (letter == '>')
                     {
-
                         endTagPos = (int)(Array.IndexOf(stringRange.ToCharArray(), letter));
-
-                        Debug.Log(_line[endTagPos]);
-
-                        Debug.Log("StartPos is set as: " + startTagPos + ", but EndTagPos is: " + endTagPos + "This is what is stopping you. Line is " + _line.Length + " long");
 
                         tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
 
                         Debug.Log(tag);
 
-                        if (_tagExpression.IsMatch(tag))
+                        if (OnDelay == false)
                         {
-                            Debug.Log("WAIT IS FANTASTIC BEBE!!!");
-
                             /*Now we do a substring from the current position to 4 digits.*/
 
-                            int value = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
+                            int value = Convert.ToInt32(tag.Split(PARSER.delimiters)[1].Split('=')[1]);
 
                             int millsecs = Convert.ToInt32(value);
 
                             Instance.StartCoroutine(DelaySpan(millsecs));
 
-                            _line = _line.Replace(tag, "");
+                            _line = ReplaceFirst(_line, tag, "");
 
                             Dialogue[(int)LineIndex] = _line;
 
                             return SUCCESSFUL;
 
                         }
+
                     }
                 }
             }
@@ -425,13 +431,11 @@ public class DialogueSystem : MonoBehaviour
                 {
                     if (letter == '>')
                     {
-                        CursorPosition = (uint)(Array.IndexOf(stringRange.ToCharArray(), letter));
 
-                        endTagPos = (int)CursorPosition;
+
+                        endTagPos = (int)CursorPosition + (Array.IndexOf(stringRange.ToCharArray(), letter));
 
                         tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
-
-                        Debug.Log(tag);
 
                         if (_tagExpression.IsMatch(tag))
                         {
@@ -440,7 +444,7 @@ public class DialogueSystem : MonoBehaviour
                             /*The system will now take this information, from 0 to the current position
                              and split it down even further, taking all the information.*/
 
-                            _line = _line.Replace(tag, "");
+                            _line = ReplaceFirst(_line, tag, "");
 
                             int value = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
 
@@ -677,6 +681,16 @@ public class DialogueSystem : MonoBehaviour
                 Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
             }
         }
+    }
+
+    static string ReplaceFirst(string text, string search, string replace)
+    {
+        int pos = text.IndexOf(search);
+        if (pos < 0)
+        {
+            return text;
+        }
+        return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
     }
 
     public static uint ShiftCursorPosition(int _newPosition)
