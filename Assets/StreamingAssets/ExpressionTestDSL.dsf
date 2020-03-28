@@ -52,7 +52,7 @@ KEMMI_EXPRESSION_MAD-1 = 10
 
 																											###
 																											
-@ [SPEED::FAST] Sooooooooo [SPEED::SLOWEST] ... [HALT::1000] [ACTION::"CAHHHHHHHHH"] [ACTION::"SWOSH"] [ACTION::"SWUSH"] [ACTION::"SMASHING"]<<
+@ [SPEED::NORMAL] Sooooooooo [SPEED::SLOWEST] ... [ACTION::"CAHHHHHHHHH"] [ACTION::"SWOSH"] [ACTION::"SWUSH"] [ACTION::"SMASHING"]<<
 
 <action=CAHHHHHHHHH!!!!>
 																											

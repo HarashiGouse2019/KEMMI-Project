@@ -225,8 +225,8 @@ public class DialogueSystem : MonoBehaviour
         //Underline tag
         ExcludeStyleTag(UNDERLINE, UNDERLINEEND, ref _text);
 
-        ////Speed Command Tag: It will consider all of the possible values.
-        //ExecuteSpeedFunctionTag(SPEED, ref _text);
+        //Speed Command Tag: It will consider all of the possible values.
+        ExecuteSpeedFunctionTag(SPEED, ref _text);
 
         ////Expression tag!
         //ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
@@ -259,45 +259,57 @@ public class DialogueSystem : MonoBehaviour
 
     static bool ExecuteSpeedFunctionTag(Regex _tagExpression, ref string _line)
     {
-        int startBracketPos = 0;
-        int endBracketPos = 0;
-        if (_line.Substring((int)CursorPosition, "<sp=".Length).Contains("<sp="))
+        try
         {
-            Debug.Log("HI!!!");
-            for (int index = (int)CursorPosition; index < _line.Length; index++)
+            string tag = _line.Substring((int)CursorPosition, "<sp=".Length);
+            if (tag.Contains("<sp="))
             {
-                if (_line[index] == '<')
-                    startBracketPos = index;
+                Debug.Log("SPEED I AM SPEED");
 
-                if (_line[index] == '>')
+                int startTagPos = (int)CursorPosition;
+                int endTagPos = 0;
+                string stringRange = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
+                foreach(char letter in stringRange)
                 {
-                    endBracketPos = index;
-
-
-                    try
+                    if (letter == '>')
                     {
-                        string tag = _line.Substring(startBracketPos, (endBracketPos - startBracketPos) + 1);
+                        endTagPos = (Array.IndexOf(stringRange.ToCharArray(), letter));
+
+                        Debug.Log(_line[endTagPos]);
+
+                        Debug.Log("StartPos is set as: " + startTagPos + ", but EndTagPos is: " + endTagPos + "\rThis is what is stopping you. Line is " + _line.Length + " long");
+
+                        tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
+
+                        Debug.Log(tag);
 
                         if (_tagExpression.IsMatch(tag))
                         {
-                            _line = _tagExpression.Replace(tag, "");
+                            Debug.Log("SPEED IS AMAZING BEBE!!!");
+
+                            _line = _line.Replace(tag, "");
 
                             Dialogue[(int)LineIndex] = _line;
 
                             int speed = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
 
+                            Debug.Log(speed);
+
                             SpeedValue = (TextSpeedValue)speed;
 
+                            Debug.Log("Did you make it here?");
                             return SUCCESSFUL;
                         }
                     }
-                    catch { ShiftCursorPosition(-1); }
                 }
             }
         }
+        catch { }
+        
         return FAILURE;
     }
 
+    #region This one works
     static bool ExecuteActionFunctionTag(Regex _tagExpression, ref string _line)
     {
         try
@@ -312,12 +324,12 @@ public class DialogueSystem : MonoBehaviour
                 string stringRange = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
                 foreach (char letter in stringRange)
                 {
-                    if (letter == '>' )
+                    if (letter == '>')
                     {
 
                         endTagPos = (Array.IndexOf(stringRange.ToCharArray(), letter));
 
-                        Debug.Log(_line[endTagPos]);                       
+                        Debug.Log(_line[endTagPos]);
 
                         Debug.Log("StartPos is set as: " + startTagPos + ", but EndTagPos is: " + endTagPos + "This is what is stopping you. Line is " + _line + " long");
 
@@ -346,13 +358,14 @@ public class DialogueSystem : MonoBehaviour
                     }
                 }
 
-                
+
             }
         }
         catch { }
 
         return FAILURE;
-    }
+    } 
+    #endregion
 
     static bool ExecuteWaitFunctionTag(Regex _tagExpression, ref string _line)
     {
