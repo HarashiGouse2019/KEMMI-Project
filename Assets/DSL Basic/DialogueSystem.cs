@@ -11,6 +11,25 @@ using TMPro;
 
 using PARSER = DSLParser.DialogueSystemParser;
 
+public class DialogueSystemEvents
+{
+    //Interface for events
+    public interface IExecuteOnEnd
+    {
+        void ExecuteOnEnd();
+    }
+
+    public interface IExecuteOnCommand
+    {
+        void ExecuteOnCommand();
+    }
+
+    public interface IExecuteOnStart
+    {
+        void ExecuteOnStart();
+    }
+}
+
 public class DialogueSystem : MonoBehaviour
 {
     public static DialogueSystem Instance;
@@ -48,27 +67,44 @@ public class DialogueSystem : MonoBehaviour
 
     public static uint CursorPosition { get; private set; } = 0;
 
-    public static string ActionString { get; private set; }
+    public static List<string> ActionString { get; private set; } = new List<string>();
+    public List<string> actionString;
+    public static uint ActionIndex { get; private set; } = 0;
+    public uint actionIndex;
+
+    public static List<string> ExpressionValue { get; private set; } = new List<string>();
+    public static uint ExpressionIndex { get; private set; } = 0;
+    public List<string> expressionValue;
+    public uint expressionIndex;
 
     private static bool OnDelay = false;
 
     private static bool typeIn;
-
 
     public static int DialogueSet { get; private set; } = -1;
 
     public static List<DialogueSystemSpriteChanger> DialogueSystemSpriteChangers { get; private set; } = new List<DialogueSystemSpriteChanger>();
 
     const int reset = 0;
-    const string BOLD = "<b>", BOLDEND = "</b>";
-    const string ITALIZE = "<i>", ITALIZEEND = "</i>";
-    const string UNDERLINE = "<u>", UNDERLINEEND = "</u>";
-    const string SKIP = "<skip>";
-    const string EXPRESSION = "<exp>";
-    const string HALT = "<halt>";
-    const string SPEED = "sp=";
-    const string dslFileExtention = ".dsf";
-    const string STRINGNULL = "";
+
+    static readonly string BOLD = "<b>", BOLDEND = "</b>";
+    static readonly string ITALIZE = "<i>", ITALIZEEND = "</i>";
+    static readonly string UNDERLINE = "<u>", UNDERLINEEND = "</u>";
+
+
+
+    static readonly Regex ACTION = new Regex(@"(<)+\w*action=\w*[a-zA-Z]+(>$)");
+
+
+    static readonly Regex EXPRESSION = new Regex(@"(<)+\w*exp=\w*[A-Z0-9_-]+(>$)");
+
+    static readonly Regex HALT = new Regex(@"(<)+\w*halt=\w*[0-9]+(>$)");
+
+    static readonly Regex SPEED = new Regex(@"(<)+\w*sp=\w*[0-6](>$)");
+
+    static readonly string dslFileExtention = ".dsf";
+    static readonly string STRINGNULL = "";
+
     const bool SUCCESSFUL = true;
     const bool FAILURE = false;
 
@@ -83,8 +119,36 @@ public class DialogueSystem : MonoBehaviour
     void Start()
     {
         DialogueSystemSpriteChangers = FIND_ALL_SPRITECHANGERS();
+
+        string testTag = "<action=\"CLAP\">";
+        Match testMatch = ACTION.Match(testTag.Substring(0, testTag.Length));
+        if (testMatch.Success)
+        {
+            string value = testTag.Trim('"');
+
+            Debug.Log("If you got this message, that means that you were successful!!! " + value);
+
+        }
     }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+    void Update()
+    {
+        actionString = ActionString;
+        actionIndex = ActionIndex;
+
+        expressionValue = ExpressionValue;
+        expressionIndex = ExpressionIndex;
+
+        if (!OnDelay)
+            ExcludeAllTags(Dialogue[(int)LineIndex]);
+    }
+
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
     public static void Run()
     {
         if (Dialogue.Count != 0 && InBounds((int)LineIndex, Dialogue) && IS_TYPE_IN() == false)
@@ -92,18 +156,27 @@ public class DialogueSystem : MonoBehaviour
             //We'll parse the very first dialogue that is ready to be displayed
             Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+                Instance.StartCoroutine(PrintCycle());
+            }
+        }
+    }
+
+=======
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
             Instance.StartCoroutine(PrintCycle());
 
         }
     }
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
     static IEnumerator PrintCycle()
     {
         while (true)
         {
             if (IS_TYPE_IN() == false)
             {
-
-
                 ENABLE_DIALOGUE_BOX();
 
                 GET_TMPGUI().text = STRINGNULL;
@@ -117,7 +190,18 @@ public class DialogueSystem : MonoBehaviour
                 {
                     for (CursorPosition = 1; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
                     {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                        yield return new WaitForSeconds(TextSpeed);
+
+                        try
+                        {
+=======
                         
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
+=======
+                        
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
                         if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
 
@@ -126,11 +210,18 @@ public class DialogueSystem : MonoBehaviour
                         UPDATE_TEXT_SPEED(SpeedValue);
 
 
+<<<<<<< HEAD
+
+<<<<<<< HEAD
+=======
                         yield return new WaitForSeconds(TextSpeed);
 
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
                         ExcludeAllTags(Dialogue[(int)LineIndex]);
 
                         continue;
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
                     }
                 }
 
@@ -146,6 +237,18 @@ public class DialogueSystem : MonoBehaviour
 
     static void ExcludeAllTags(string _text)
     {
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+        PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
+
+        //Action tag!
+        ExecuteActionFunctionTag(ACTION, ref _text);
+
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
         //Bold tag
         ExcludeStyleTag(BOLD, BOLDEND, ref _text);
 
@@ -155,18 +258,25 @@ public class DialogueSystem : MonoBehaviour
         //Underline tag
         ExcludeStyleTag(UNDERLINE, UNDERLINEEND, ref _text);
 
-        //Speed Command Tag: It will consider all of the possible values.
-        for (int value = 0; value < Enum.GetValues(typeof(TextSpeedValue)).Length; value++)
-            ExecuteSpeedFunctionTag(PARSER.delimiters[0] + SPEED + value + PARSER.delimiters[1], ref _text);
+        ////Speed Command Tag: It will consider all of the possible values.
+        //ExecuteSpeedFunctionTag(SPEED, ref _text);
+
+<<<<<<< HEAD
+        ////Expression tag!
+        //ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
+=======
+        //Action tag!
+        ExecuteActionFunctionTag(SKIP, ref _text);
 
         //Action tag!
         ExecuteActionFunctionTag(SKIP, ref _text);
 
         //Expression tag!
         ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
-        //Halt tage
-        ExecuteWaitFunctionTag(HALT, ref _text);
+        ////Halt tage
+        //ExecuteWaitFunctionTag(HALT, ref _text);
     }
 
     static bool ExcludeStyleTag(string _openTag, string _closeTag, ref string _line)
@@ -191,189 +301,303 @@ public class DialogueSystem : MonoBehaviour
         return FAILURE;
     }
 
-    static bool ExecuteSpeedFunctionTag(string _tag, ref string _line)
+    static bool ExecuteSpeedFunctionTag(Regex _tagExpression, ref string _line)
     {
-        try
+        int startBracketPos = 0;
+        int endBracketPos = 0;
+        if (_line.Substring((int)CursorPosition, "<sp=".Length).Contains("<sp="))
         {
-            if (_line.Substring((int)CursorPosition, _tag.Length + sizeof(int)).Contains(_tag))
+            Debug.Log("HI!!!");
+            for (int index = (int)CursorPosition; index < _line.Length; index++)
             {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (_line[index] == '<')
+                    startBracketPos = index;
+=======
                 _line = _line.Replace(_tag, "");
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
-                Dialogue[(int)LineIndex] = _line;
+                if (_line[index] == '>')
+                {
+                    endBracketPos = index;
+=======
+                _line = _line.Replace(_tag, "");
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
-                int speed = Convert.ToInt32(_tag.Split('<')[1].Split('=')[1].Split('>')[0]);
 
-                SpeedValue = (TextSpeedValue)speed;
+                    try
+                    {
+                        string tag = _line.Substring(startBracketPos, (endBracketPos - startBracketPos) + 1);
 
-                return SUCCESSFUL;
+                        if (_tagExpression.IsMatch(tag))
+                        {
+                            _line = _tagExpression.Replace(tag, "");
+
+                            Dialogue[(int)LineIndex] = _line;
+
+                            int speed = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
+
+                            SpeedValue = (TextSpeedValue)speed;
+
+                            return SUCCESSFUL;
+                        }
+                    }
+                    catch { }
+                }
             }
         }
-        catch { }
-
         return FAILURE;
     }
 
-    static bool ExecuteActionFunctionTag(string _tag, ref string _line)
+    static bool ExecuteActionFunctionTag(Regex _tagExpression, ref string _line)
     {
-        try
+        int startBracketPos = 0;
+        int endBracketPos = 0;
+
+        for (int index = (int)CursorPosition; index < _line.Length; index++)
         {
+<<<<<<< HEAD
+<<<<<<< HEAD
+            Debug.Log("Okay...");
+            if (_line[index] == '<')
+                startBracketPos = index;
+
+            if (_line[index] == '>')
+            {
+                endBracketPos = index;
+=======
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
             if (_line.Substring((int)CursorPosition, _tag.Length).Contains(_tag))
             {
                 _line = _line.Remove((int)CursorPosition , _tag.Length);
 
                 Dialogue[(int)LineIndex] = _line;
+<<<<<<< HEAD
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
-                if (OnDelay == false)
+                try
                 {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    string tag = _line.Substring(startBracketPos, (endBracketPos - startBracketPos) + 1);
+
+
+
+                    if (_tagExpression.IsMatch(tag))
+                    {
+                        Debug.Log("ACTION IS FANTASTIC BEBE!!!");
+=======
                     ShiftCursorPosition(ActionString.Length);
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
+=======
+                    ShiftCursorPosition(ActionString.Length);
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
-                    return SUCCESSFUL;
+                        if (OnDelay == false)
+                        {
+                            string value = "*" + tag.Split('<')[1].Split('=')[1].Split('>')[0] + "*";
+
+                            Debug.Log(value);
+
+                            _line = _tagExpression.Replace(tag, value);
+
+                            ShiftCursorPosition(value.Length);
+
+                            
+
+                            Dialogue[(int)LineIndex] = _line;
+                        }
+                        return SUCCESSFUL;
+                    }
                 }
-
+                catch { }
             }
         }
-        catch { }
-
         return FAILURE;
     }
 
-    static bool ExecuteWaitFunctionTag(string _tag, ref string _line)
+    static bool ExecuteWaitFunctionTag(Regex _tagExpression, ref string _line)
     {
         /*The wait command will take a 4 digit number.
          We will then convert this into a value that is easily understood
          by textSpeed. We'll be mainly affecting the textSpeed to create our
          WAIT function... unless...*/
-
-        try
+        int startBracketPos = 0;
+        int endBracketPos = 0;
+        if (_line.Substring((int)CursorPosition, "<halt=".Length).Contains("<halt="))
         {
-
-            //Debug.Log(_line.Substring((int)CursorPosition, _tag.Length));
-            if (_line.Substring((int)CursorPosition, _tag.Length) == _tag)
+            Debug.Log("HI!!!");
+            for (int index = (int)CursorPosition; index < _line.Length; index++)
             {
-                _line = _line.Remove((int)CursorPosition, _tag.Length);
+                if (_line[index] == '<')
+                    startBracketPos = index;
 
-                Dialogue[(int)LineIndex] = _line;
+                if (_line[index] == '>')
+                {
+                    endBracketPos = index;
 
-                /*Now we do a substring from the current position to 4 digits.*/
 
+<<<<<<< HEAD
+                    string tag = _line.Substring(startBracketPos, (endBracketPos - startBracketPos) + 1);
+=======
+                string value = _line.Substring((int)CursorPosition, 7);
+
+<<<<<<< HEAD
+                Debug.Log(value);
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
+=======
                 string value = _line.Substring((int)CursorPosition, 7);
 
                 Debug.Log(value);
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
-                Regex ex = new Regex(@"[*\d]");
+                    try
+                    {
 
-                Match match = ex.Match(value);
+                        if (_tagExpression.IsMatch(tag))
+                        {
+                            Debug.Log("WAIT IS FANTASTIC BEBE!!!");
 
+<<<<<<< HEAD
+                            _line = _tagExpression.Replace(tag, "");
+=======
                 if (match.Success)
                 {
                     Debug.Log("Okay");
 
                     string newValue = Regex.Replace(value, @"[^\d]", "");
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
-                    //We got to make sure that our number is actually a legit number
-                    if (Convert.ToInt32(newValue).GetType() == typeof(int))
-                    {
-                        int millsecs = Convert.ToInt32(newValue);
+                            Dialogue[(int)LineIndex] = _line;
+
+<<<<<<< HEAD
+                            /*Now we do a substring from the current position to 4 digits.*/
+=======
+                        Debug.Log("Waiting for " + newValue + " milliseconds...");
 
                         Debug.Log("Waiting for " + newValue + " milliseconds...");
 
                         Instance.StartCoroutine(DelaySpan(millsecs));
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
-                        _line = _line.Remove((int)CursorPosition, newValue.Length + 2);
+                            int value = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
 
-                        Dialogue[(int)LineIndex] = _line;
+                            int millsecs = Convert.ToInt32(value);
 
-                        return SUCCESSFUL;
+                            Instance.StartCoroutine(DelaySpan(millsecs));
+
+                            Dialogue[(int)LineIndex] = _line;
+
+                            return SUCCESSFUL;
+
+                        }
                     }
+                    catch { }
                 }
                 else
                     Debug.Log("Nope");
             }
         }
-        catch { }
-
         return FAILURE;
     }
 
-    static bool ExecuteExpressionFunctionTag(string _tag, ref string _line)
+
+    #region EXECUTE EXPRESSSION
+    static bool ExecuteExpressionFunctionTag(Regex _tagExpression, ref string _line)
     {
+
+
         bool notFlaged = true;
-        try
+        int index = 0;
+        int startBracketPos = 0;
+        int endBracketPos = 0;
+        if (_line.Substring((int)CursorPosition, "<exp=".Length).Contains("<exp="))
         {
-            if (_line.Substring((int)CursorPosition, _tag.Length + 2).Contains(_tag))
+            foreach (char letter in _line)
             {
-                /*The system will now take this information, from 0 to the current position
-                 and split it down even further, taking all the information.*/
+                index = (int)CursorPosition;
 
-                _line = _line.Remove((int)CursorPosition, _tag.Length + 2);
+                if (letter == '<')
+                    startBracketPos = index;
 
-                Dialogue[(int)LineIndex] = _line;
+                if (letter == '>')
+                    endBracketPos = index;
 
-                string value = "";
+                string tag = _line.Substring(startBracketPos, (endBracketPos - startBracketPos) + 1);
 
-                if (_line.Substring((int)CursorPosition, "EXPRESSION".Length + 2).Contains("EXPRESSION"))
+                try
                 {
-                    value = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
-
-                    if (value.Contains("]"))
-                        value = value.Split(':')[2].Split(']')[0];
-
-                }
-                //Check if a key matches
-                string data = STRINGNULL;
-
-                if (PARSER.DefinedExpressions.ContainsKey(value))
-                {
-                    if (value.GetType() == typeof(string))
+                    if (_tagExpression.IsMatch(tag))
                     {
-                        data = FindKey(value, PARSER.DefinedExpressions);
+                        Debug.Log("EXPRESSION IS FANTASTIC BEBE!!!");
 
-                        _line = _line.Replace("EXPRESSION::" + value + "]", "");
+                        /*The system will now take this information, from 0 to the current position
+                         and split it down even further, taking all the information.*/
+
+                        _line = _tagExpression.Replace(tag, "");
+
+                        int value = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
 
                         Dialogue[(int)LineIndex] = _line;
 
-                        notFlaged = false;
+                        return ValidateExpressionsAndChange(value.ToString(), _line, ref notFlaged);
                     }
                 }
-
-                else if (PARSER.DefinedExpressions.ContainsValue(Convert.ToInt32(value)))
-                {
-                    if (Convert.ToInt32(value).GetType() == typeof(int))
-                    {
-
-                        data = FindValueAndConvertToKey(Convert.ToInt32(value), PARSER.DefinedExpressions);
-
-                        _line = _line.Replace("EXPRESSION::" + value + "]", "");
-
-                        Dialogue[(int)LineIndex] = _line;
-
-                        notFlaged = false;
-                    }
-                }
-
-                if (notFlaged)
-                {
-                    //Otherwise, we'll through an error saying this hasn't been defined.
-                    Debug.LogError(_line + " has not been defined. Perhaps declaring it in the associated .dsf File.");
-                    return FAILURE;
-                }
-
-                //We get the name, keep if it's EXPRESSION or POSE, and the emotion value
-                string characterName = data.Split('_')[0];
-                string changeType = data.Split('_')[1];
-                string characterState = data.Split('_')[2];
-
-                //Now we see if we can grab the image, and have it change...
-                DialogueSystemSpriteChanger changer = Find_Sprite_Changer(characterName + "_" + changeType);
-
-                changer.CHANGE_IMAGE(characterState);
-
-                return SUCCESSFUL;
+                catch { }
             }
         }
-        catch { }
         return FAILURE;
+    }
+    #endregion
+
+    static bool ValidateExpressionsAndChange(string value, string _line, ref bool _notFlag)
+    {
+        //Check if a key matches
+        string data = STRINGNULL;
+
+        if (PARSER.DefinedExpressions.ContainsKey(value))
+        {
+            if (value.GetType() == typeof(string))
+            {
+                data = FindKey(value, PARSER.DefinedExpressions);
+                _notFlag = false;
+            }
+        }
+
+        else if (PARSER.DefinedExpressions.ContainsValue(Convert.ToInt32(value)))
+        {
+            if (Convert.ToInt32(value).GetType() == typeof(int))
+            {
+
+                data = FindValueAndConvertToKey(Convert.ToInt32(value), PARSER.DefinedExpressions);
+
+                _notFlag = false;
+            }
+        }
+
+        if (_notFlag)
+        {
+            //Otherwise, we'll through an error saying this hasn't been defined.
+            Debug.LogError(value + " has not been defined. Perhaps declaring it in the associated .dsf File.");
+            return FAILURE;
+        }
+
+        //We get the name, keep if it's EXPRESSION or POSE, and the emotion value
+        string characterName = data.Split('_')[0];
+        string changeType = data.Split('_')[1];
+        string characterState = data.Split('_')[2];
+
+        //Now we see if we can grab the image, and have it change...
+        DialogueSystemSpriteChanger changer = Find_Sprite_Changer(characterName + "_" + changeType);
+
+        changer.CHANGE_IMAGE(characterState);
+
+        return SUCCESSFUL;
     }
 
     static string FindKey(string _key, Dictionary<string, int> _dictionary)
@@ -416,11 +640,20 @@ public class DialogueSystem : MonoBehaviour
 
     static IEnumerator DelaySpan(float _millseconds)
     {
+
         OnDelay = true;
 
         while (OnDelay)
         {
             yield return new WaitForSeconds(_millseconds / 1000f);
+<<<<<<< HEAD
+<<<<<<< HEAD
+            Debug.Log("yes?");
+
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
+=======
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
             OnDelay = false;
         }
     }
@@ -576,7 +809,12 @@ public class DialogueSystem : MonoBehaviour
 
     public static void UPDATE_ACTION_STRING(string _value)
     {
-        ActionString = _value;
+        ActionString.Add(_value);
+    }
+
+    public static void UPDATE_EXPRESSION_VALUE(string _value)
+    {
+        ExpressionValue.Add(_value);
     }
 
     public static string GET_DIALOGUE_SCRIPTING_FILE() => Instance.dsfName + dslFileExtention;

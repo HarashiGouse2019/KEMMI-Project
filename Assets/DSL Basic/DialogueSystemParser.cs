@@ -360,7 +360,15 @@ namespace DSLParser
                 {
                     if (speedValue == speed)
                     {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                        _line = _line.Replace(_styleCommand, "<" + "sp=" + Array.IndexOf(validTextSpeeds, speed) + ">");
+=======
                         _line = _line.Replace(_styleCommand + " ", "<" + "sp=" + Array.IndexOf(validTextSpeeds, speed) + '>');
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
+=======
+                        _line = _line.Replace(_styleCommand + " ", "<" + "sp=" + Array.IndexOf(validTextSpeeds, speed) + '>');
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
                         return SUCCESSFUL;
                     }
                 }
@@ -372,7 +380,15 @@ namespace DSLParser
         {
             if (_styleCommand.Contains(delimiters[2] + keywords[6]))
             {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                var actionString = _styleCommand.Split(delimiters)[1].Split(':')[2].Split('"')[1];
+=======
                 var actionString = '*' + _styleCommand.Split(delimiters)[1].Split(':')[2].Split('"')[1] + "* ";
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
+=======
+                var actionString = '*' + _styleCommand.Split(delimiters)[1].Split(':')[2].Split('"')[1] + "* ";
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
                 /*The action function is simply to add two asteriks between a word.
                  For example: [ACTION::"Sighs"] will be replaced by *Sigh* in the text. 
@@ -381,7 +397,15 @@ namespace DSLParser
 
                 /*The skip tag will do the shift of the cursor for use one the system sees this
                  parsed information.*/
+<<<<<<< HEAD
+<<<<<<< HEAD
+                _line = _line.Replace(_styleCommand, "<action=" + actionString + ">");
+=======
                 _line = _line.Replace(_styleCommand + " ", " <skip> " + actionString);
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
+=======
+                _line = _line.Replace(_styleCommand + " ", " <skip> " + actionString);
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 
                 //Skip value will be assigned, so that the system can read it
                 DialogueSystem.UPDATE_ACTION_STRING(actionString);
@@ -396,7 +420,9 @@ namespace DSLParser
         {
             if (_styleCommand.Contains(delimiters[2] + keywords[5]))
             {
-                var value = _styleCommand.Split(delimiters)[1].Split(':')[2];
+                var value = _styleCommand.Split(delimiters)[1];
+
+                value = value.Replace("EXPRESSION::", "");
 
                 /*The Expression Action is going to be a bit complicated.
                  We'll have to create a expression tag, and just have the expression we are looking for.
@@ -405,11 +431,12 @@ namespace DSLParser
 
                 /*The skip tag will do the shift of the cursor for use one the system sees this
                  parsed information.*/
-                _line = _line.Replace(_styleCommand + " ", " <exp> " + keywords[5] + "::" + value + delimiters[3]);
+                _line = _line.Replace(_styleCommand, "<exp=" + value + ">");
 
                 //Skip value will be assigned, so that the system can read it
                 skipValue = (keywords[5] + "::" + value).Length - 1;
-                returnedValue = value;
+
+                DialogueSystem.UPDATE_EXPRESSION_VALUE(value);
 
                 return SUCCESSFUL;
             }
@@ -427,7 +454,7 @@ namespace DSLParser
                   and then add in the number. At that point, the DialogueSystem will update
                   the textSpeed based on the duration. */
 
-                _line = _line.Replace(_styleCommand + " ", "<halt> " + value + " ");
+                _line = _line.Replace(_styleCommand, "<halt=" + value + ">");
 
                 return SUCCESSFUL;
             }
@@ -439,13 +466,13 @@ namespace DSLParser
         {
             if (_styleCommand == delimiters[2] + keywords[1] + delimiters[3])
             {
-                _line = _line.Replace(_styleCommand + " ", "<b>");
+                _line = _line.Replace(_styleCommand, "<b>");
                 return SUCCESSFUL;
             }
 
             else if (_styleCommand == delimiters[2] + keywords[1] + tokens[1] + tokens[2] + delimiters[3])
             {
-                _line = _line.Replace(_styleCommand + " ", "</b>");
+                _line = _line.Replace( _styleCommand, "</b>");
                 return SUCCESSFUL;
             }
 
@@ -456,13 +483,13 @@ namespace DSLParser
         {
             if (_styleCommand == delimiters[2] + keywords[2] + delimiters[3])
             {
-                _line = _line.Replace(_styleCommand + " ", "<i>");
+                _line = _line.Replace(_styleCommand, "<i>");
                 return SUCCESSFUL;
             }
 
             else if (_styleCommand == delimiters[2] + keywords[2] + tokens[1] + tokens[2] + delimiters[3])
             {
-                _line = _line.Replace(_styleCommand + " ", "</i>");
+                _line = _line.Replace(_styleCommand, " </i>");
                 return SUCCESSFUL;
             }
 
@@ -473,13 +500,13 @@ namespace DSLParser
         {
             if (_styleCommand == delimiters[2] + keywords[3] + delimiters[3])
             {
-                _line = _line.Replace(_styleCommand + " ", "<u>");
+                _line = _line.Replace(" " + _styleCommand + " ", "<u>");
                 return SUCCESSFUL;
             }
 
             else if (_styleCommand == delimiters[2] + keywords[3] + tokens[1] + tokens[2] + delimiters[3])
             {
-                _line = _line.Replace(_styleCommand + " ", "</u>");
+                _line = _line.Replace(" " + _styleCommand + " ", " </u>");
                 return SUCCESSFUL;
             }
 

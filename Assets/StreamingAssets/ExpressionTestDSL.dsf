@@ -52,7 +52,21 @@ KEMMI_EXPRESSION_MAD-1 = 10
 
 																											###
 																											
+<<<<<<< HEAD
+<<<<<<< HEAD
+@ [ACTION::"CLAP"] Imma do a happy dance...[HALT::500][ACTION::"HAPPYDANCE"] [ACTION::"GASP"] <<
+
+###
+
+*CLAP*<halt=2000> Imma do a happy dance...
+
+ ###
+=======
 @ [SPEED::FAST] Sooooooooo[SPEED::SLOWEST] ...[HALT::1000] [ACTION::"CAHHHHHHHHH!!!!"] <<
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
+=======
+@ [SPEED::FAST] Sooooooooo[SPEED::SLOWEST] ...[HALT::1000] [ACTION::"CAHHHHHHHHH!!!!"] <<
+>>>>>>> parent of 4833228... DSL IS NOT BUGGY NO MORE!!!!
 																											
 @ [HALT::1000] [ACTION::"Sigh"] [SPEED::NORMAL] [HALT::1000] Let's get the bread, [HALT::5000]  [EXPRESSION::1] bread has [HALT::500] been [HALT::500] baked. [EXPRESSION::2] <<
 
@@ -85,6 +99,6 @@ KEMMI_EXPRESSION_MAD-1 = 10
 
 @  [EXPRESSION::9]  [SPEED::NORMAL] I think you gots this. [HALT::750] I mean... [HALT::250] You came such a long way just to create this for me.<<
 
-@ [EXPRESSION::2] [BOLD] Thank you so very much!!! [BOLD::END] [HALT::500] I appreiciate what you have done so far!<<
+@ [BOLD] [EXPRESSION::2] Thank you so very much!!! [BOLD::END] [HALT::500] I appreiciate what you have done so far!<<
 
 <END>
