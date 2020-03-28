@@ -410,6 +410,8 @@ namespace DSLParser
                  parsed information.*/
                 _line = _line.Replace(_styleCommand, "<exp=" + value + ">");
 
+                Debug.Log(_line);
+
                 //Skip value will be assigned, so that the system can read it
                 skipValue = (keywords[5] + "::" + value).Length - 1;
                 returnedValue = value;
