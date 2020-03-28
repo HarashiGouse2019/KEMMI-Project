@@ -246,16 +246,19 @@ public class DialogueSystem : MonoBehaviour
                 ShiftCursorPosition(_openTag.Length);
                 return SUCCESSFUL;
             }
+        }
+        catch { }
 
-            else if (_line.Substring((int)CursorPosition, _closeTag.Length).Contains(_closeTag))
+        try
+        {
+            if (_line.Substring((int)CursorPosition, _closeTag.Length).Contains(_closeTag))
             {
                 ShiftCursorPosition(_closeTag.Length);
                 return SUCCESSFUL;
             }
-            else
-                return FAILURE;
-        }
+        }    
         catch { }
+    
         return FAILURE;
     }
 
@@ -603,7 +606,7 @@ public class DialogueSystem : MonoBehaviour
                             return;
                         else
                         {
-                            Debug.Log("Dialogue Set " + _dialogueSet.ToString("D3, CultureInfo.InvariantCulture") + " does not exist. Try adding it to the .dsf referenced.");
+                            Debug.Log("Dialogue Set " + _dialogueSet.ToString("D3", CultureInfo.InvariantCulture) + " does not exist. Try adding it to the .dsf referenced.");
                             return;
                         }
                     }
