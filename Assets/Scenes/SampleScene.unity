@@ -2051,6 +2051,10 @@ MonoBehaviour:
   dsfName: ExpressionTestDSL
   TMP_DIALOGUETEXT: {fileID: 1915386710}
   textBoxUI: {fileID: 95990724}
+  actionString: []
+  actionIndex: 0
+  expressionValue: []
+  expressionIndex: 0
 --- !u!4 &1507667168
 Transform:
   m_ObjectHideFlags: 0

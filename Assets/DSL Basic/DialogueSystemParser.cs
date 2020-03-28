@@ -363,7 +363,7 @@ namespace DSLParser
                 {
                     if (speedValue == speed)
                     {
-                        _line = _line.Replace(_styleCommand + " ", " <" + "sp=" + Array.IndexOf(validTextSpeeds, speed) + "> ");
+                        _line = _line.Replace(_styleCommand, "<" + "sp=" + Array.IndexOf(validTextSpeeds, speed) + ">");
                         return SUCCESSFUL;
                     }
                 }
@@ -375,7 +375,7 @@ namespace DSLParser
         {
             if (_styleCommand.Contains(delimiters[2] + keywords[6]))
             {
-                var actionString = "*" + _styleCommand.Split(delimiters)[1].Split(':')[2].Split('"')[1] + "* ";
+                var actionString = _styleCommand.Split(delimiters)[1].Split(':')[2].Split('"')[1];
 
                 /*The action function is simply to add two asteriks between a word.
                  For example: [ACTION::"Sighs"] will be replaced by *Sigh* in the text. 
@@ -384,7 +384,7 @@ namespace DSLParser
 
                 /*The skip tag will do the shift of the cursor for use one the system sees this
                  parsed information.*/
-                _line = _line.Replace(_styleCommand + " ", "<skip>" + actionString);
+                _line = _line.Replace(_styleCommand, "<action=" + actionString + ">");
 
                 //Skip value will be assigned, so that the system can read it
                 DialogueSystem.UPDATE_ACTION_STRING(actionString);
@@ -408,7 +408,7 @@ namespace DSLParser
 
                 /*The skip tag will do the shift of the cursor for use one the system sees this
                  parsed information.*/
-                _line = _line.Replace(_styleCommand + " ", " <exp> " + keywords[5] + "::" + value + delimiters[3]);
+                _line = _line.Replace(_styleCommand, "<exp=" + value + ">");
 
                 //Skip value will be assigned, so that the system can read it
                 skipValue = (keywords[5] + "::" + value).Length - 1;
@@ -430,7 +430,7 @@ namespace DSLParser
                   and then add in the number. At that point, the DialogueSystem will update
                   the textSpeed based on the duration. */
 
-                _line = _line.Replace(_styleCommand + " ", "<halt> " + value + " ");
+                _line = _line.Replace(_styleCommand, "<halt=" + value + ">");
 
                 return SUCCESSFUL;
             }
@@ -442,13 +442,13 @@ namespace DSLParser
         {
             if (_styleCommand == delimiters[2] + keywords[1] + delimiters[3])
             {
-                _line = _line.Replace(_styleCommand + " ", "<b>");
+                _line = _line.Replace(_styleCommand, "<b>");
                 return SUCCESSFUL;
             }
 
             else if (_styleCommand == delimiters[2] + keywords[1] + tokens[1] + tokens[2] + delimiters[3])
             {
-                _line = _line.Replace(_styleCommand + " ", "</b>");
+                _line = _line.Replace(_styleCommand, "</b>");
                 return SUCCESSFUL;
             }
 
