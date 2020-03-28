@@ -282,7 +282,6 @@ public class DialogueSystem : MonoBehaviour
 
                         if (_tagExpression.IsMatch(tag))
                         {
-                            Debug.Log("SPEEEED!!!! FANTASTIC BEBEEEE!!!");
 
                             //<sp=3>
                             int speed = Convert.ToInt32(tag.Split(PARSER.delimiters)[1].Split('=')[1]);
@@ -365,7 +364,6 @@ public class DialogueSystem : MonoBehaviour
         try
         {
             string tag = _line.Substring((int)CursorPosition, "<halt=".Length);
-            Debug.Log(tag);
             if (tag.Contains("<halt="))
             {
 
@@ -434,8 +432,6 @@ public class DialogueSystem : MonoBehaviour
 
                         if (_tagExpression.IsMatch(tag))
                         {
-                            Debug.Log("EXPRESSION IS FANTASTIC BEBE!!!");
-
                             /*The system will now take this information, from 0 to the current position
                              and split it down even further, taking all the information.*/
 
