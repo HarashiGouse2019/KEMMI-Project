@@ -133,11 +133,6 @@ public class DialogueSystem : MonoBehaviour
 
     void Update()
     {
-        actionString = ActionString;
-        actionIndex = ActionIndex;
-
-        expressionValue = ExpressionValue;
-        expressionIndex = ExpressionIndex;
 
         if (!OnDelay)
             ExcludeAllTags(Dialogue[(int)LineIndex]);
@@ -180,8 +175,6 @@ public class DialogueSystem : MonoBehaviour
 
                     for (CursorPosition = 0; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
                     {
-                        yield return new WaitForSeconds(TextSpeed);
-
                         try
                         {
 
@@ -194,7 +187,10 @@ public class DialogueSystem : MonoBehaviour
                         catch { }
 
 
+                        yield return new WaitForSeconds(TextSpeed);
 
+                        if (!OnDelay)
+                            ExcludeAllTags(Dialogue[(int)LineIndex]);
                     }
                 }
 
@@ -228,11 +224,11 @@ public class DialogueSystem : MonoBehaviour
         //Speed Command Tag: It will consider all of the possible values.
         ExecuteSpeedFunctionTag(SPEED, ref _text);
 
-        ////Expression tag!
-        //ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
+        //Expression tag!
+        ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
 
-        ////Halt tage
-        //ExecuteWaitFunctionTag(HALT, ref _text);
+        //Halt tage
+        ExecuteWaitFunctionTag(HALT, ref _text);
     }
 
     static bool ExcludeStyleTag(string _openTag, string _closeTag, ref string _line)
@@ -253,10 +249,11 @@ public class DialogueSystem : MonoBehaviour
             else
                 return FAILURE;
         }
-        catch {}
+        catch { }
         return FAILURE;
     }
 
+    #region This one works
     static bool ExecuteSpeedFunctionTag(Regex _tagExpression, ref string _line)
     {
         try
@@ -264,61 +261,6 @@ public class DialogueSystem : MonoBehaviour
             string tag = _line.Substring((int)CursorPosition, "<sp=".Length);
             if (tag.Contains("<sp="))
             {
-                Debug.Log("SPEED I AM SPEED");
-
-                int startTagPos = (int)CursorPosition;
-                int endTagPos = 0;
-                string stringRange = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
-                foreach(char letter in stringRange)
-                {
-                    if (letter == '>')
-                    {
-                        endTagPos = (Array.IndexOf(stringRange.ToCharArray(), letter));
-
-                        Debug.Log(_line[endTagPos]);
-
-                        Debug.Log("StartPos is set as: " + startTagPos + ", but EndTagPos is: " + endTagPos + "\rThis is what is stopping you. Line is " + _line.Length + " long");
-
-                        tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
-
-                        Debug.Log(tag);
-
-                        if (_tagExpression.IsMatch(tag))
-                        {
-                            Debug.Log("SPEED IS AMAZING BEBE!!!");
-
-                            _line = _line.Replace(tag, "");
-
-                            Dialogue[(int)LineIndex] = _line;
-
-                            int speed = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
-
-                            Debug.Log(speed);
-
-                            SpeedValue = (TextSpeedValue)speed;
-
-                            Debug.Log("Did you make it here?");
-                            return SUCCESSFUL;
-                        }
-                    }
-                }
-            }
-        }
-        catch { }
-        
-        return FAILURE;
-    }
-
-    #region This one works
-    static bool ExecuteActionFunctionTag(Regex _tagExpression, ref string _line)
-    {
-        try
-        {
-            string tag = _line.Substring((int)CursorPosition, "<action=".Length);
-            if (tag.Contains("<action="))
-            {
-                Debug.Log("Okay!");
-
                 int startTagPos = (int)CursorPosition;
                 int endTagPos = 0;
                 string stringRange = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
@@ -329,9 +271,51 @@ public class DialogueSystem : MonoBehaviour
 
                         endTagPos = (Array.IndexOf(stringRange.ToCharArray(), letter));
 
-                        Debug.Log(_line[endTagPos]);
+                        tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
 
-                        Debug.Log("StartPos is set as: " + startTagPos + ", but EndTagPos is: " + endTagPos + "This is what is stopping you. Line is " + _line + " long");
+                        if (_tagExpression.IsMatch(tag))
+                        {
+                            Debug.Log("SPEEEED!!!! FANTASTIC BEBEEEE!!!");
+
+                            int speed = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
+
+                            SpeedValue = (TextSpeedValue)speed;
+
+                            _line = _line.Replace(tag, "");
+
+                            Dialogue[(int)LineIndex] = _line;
+
+                            return SUCCESSFUL;
+                        }
+                    }
+                }
+            }
+        }
+        catch { }
+
+        return FAILURE;
+    }
+    #endregion
+
+    #region This one works
+    static bool ExecuteActionFunctionTag(Regex _tagExpression, ref string _line)
+    {
+        try
+        {
+            string tag = _line.Substring((int)CursorPosition, "<action=".Length);
+            if (tag.Contains("<action="))
+            {
+
+                int startTagPos = (int)CursorPosition;
+                int endTagPos = 0;
+                string stringRange = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
+
+                foreach (char letter in stringRange)
+                {
+                    if (letter == '>')
+                    {
+
+                        endTagPos = (Array.IndexOf(stringRange.ToCharArray(), letter));
 
                         tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
 
@@ -339,8 +323,7 @@ public class DialogueSystem : MonoBehaviour
 
                         if (_tagExpression.IsMatch(tag))
                         {
-                            Debug.Log("ACTION IS FANTASTIC BEBE!!!");
-
+                            Debug.Log("WOW FANTASTIC BABY ");
                             if (OnDelay == false)
                             {
                                 string value = "*" + tag.Split('<')[1].Split('=')[1].Split('>')[0] + "*";
@@ -348,8 +331,6 @@ public class DialogueSystem : MonoBehaviour
                                 _line = _line.Replace(tag, value);
 
                                 ShiftCursorPosition(value.Length);
-
-
 
                                 Dialogue[(int)LineIndex] = _line;
                             }
@@ -364,43 +345,43 @@ public class DialogueSystem : MonoBehaviour
         catch { }
 
         return FAILURE;
-    } 
+    }
     #endregion
 
+    #region This one works
     static bool ExecuteWaitFunctionTag(Regex _tagExpression, ref string _line)
     {
         /*The wait command will take a 4 digit number.
          We will then convert this into a value that is easily understood
          by textSpeed. We'll be mainly affecting the textSpeed to create our
          WAIT function... unless...*/
-        int startBracketPos = 0;
-        int endBracketPos = 0;
-        if (_line.Substring((int)CursorPosition, "<halt=".Length).Contains("<halt="))
+        try
         {
-            Debug.Log("HI!!!");
-            for (int index = (int)CursorPosition; index < _line.Length; index++)
+            string tag = _line.Substring((int)CursorPosition, "<halt=".Length);
+            if (tag.Contains("<halt="))
             {
-                if (_line[index] == '<')
-                    startBracketPos = index;
-
-                if (_line[index] == '>')
+                int startTagPos = (int)CursorPosition;
+                int endTagPos = 0;
+                string stringRange = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
+                Debug.Log(stringRange);
+                foreach (char letter in stringRange)
                 {
-                    endBracketPos = index;
-
-
-                    string tag = _line.Substring(startBracketPos, (endBracketPos - startBracketPos) + 1);
-                    Debug.Log(tag);
-
-                    try
+                    if (letter == '>')
                     {
+
+                        endTagPos = (int)(Array.IndexOf(stringRange.ToCharArray(), letter));
+
+                        Debug.Log(_line[endTagPos]);
+
+                        Debug.Log("StartPos is set as: " + startTagPos + ", but EndTagPos is: " + endTagPos + "This is what is stopping you. Line is " + _line.Length + " long");
+
+                        tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
+
+                        Debug.Log(tag);
 
                         if (_tagExpression.IsMatch(tag))
                         {
                             Debug.Log("WAIT IS FANTASTIC BEBE!!!");
-
-                            _line = _line.Replace(tag, "");
-
-                            Dialogue[(int)LineIndex] = _line;
 
                             /*Now we do a substring from the current position to 4 digits.*/
 
@@ -410,66 +391,68 @@ public class DialogueSystem : MonoBehaviour
 
                             Instance.StartCoroutine(DelaySpan(millsecs));
 
-                            Dialogue[(int)LineIndex] = _line;
+                            _line = _line.Replace(tag, "");
 
-                            ShiftCursorPosition(-tag.Length);
+                            Dialogue[(int)LineIndex] = _line;
 
                             return SUCCESSFUL;
 
                         }
                     }
-                    catch { ShiftCursorPosition(-1); }
                 }
             }
         }
+        catch { }
+
         return FAILURE;
     }
-
+    #endregion
 
     #region EXECUTE EXPRESSSION
     static bool ExecuteExpressionFunctionTag(Regex _tagExpression, ref string _line)
     {
-
-
-        bool notFlaged = true;
-        int index = 0;
-        int startBracketPos = 0;
-        int endBracketPos = 0;
-        if (_line.Substring((int)CursorPosition, "<exp=".Length).Contains("<exp="))
+        try
         {
-            foreach (char letter in _line)
+            bool notFlaged = true;
+
+            string tag = _line.Substring((int)CursorPosition, "<exp=".Length);
+            if (tag.Contains("<exp="))
             {
-                index = (int)CursorPosition;
-
-                if (letter == '<')
-                    startBracketPos = index;
-
-                if (letter == '>')
-                    endBracketPos = index;
-
-                string tag = _line.Substring(startBracketPos, (endBracketPos - startBracketPos) + 1);
-
-                try
+                int startTagPos = (int)CursorPosition;
+                int endTagPos = 0;
+                string stringRange = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
+                foreach (char letter in stringRange)
                 {
-                    if (_tagExpression.IsMatch(tag))
+                    if (letter == '>')
                     {
-                        Debug.Log("EXPRESSION IS FANTASTIC BEBE!!!");
+                        CursorPosition = (uint)(Array.IndexOf(stringRange.ToCharArray(), letter));
 
-                        /*The system will now take this information, from 0 to the current position
-                         and split it down even further, taking all the information.*/
+                        endTagPos = (int)CursorPosition;
 
-                        _line = _tagExpression.Replace(tag, "");
+                        tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
 
-                        int value = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
+                        Debug.Log(tag);
 
-                        Dialogue[(int)LineIndex] = _line;
+                        if (_tagExpression.IsMatch(tag))
+                        {
+                            Debug.Log("EXPRESSION IS FANTASTIC BEBE!!!");
 
-                        return ValidateExpressionsAndChange(value.ToString(), _line, ref notFlaged);
+                            /*The system will now take this information, from 0 to the current position
+                             and split it down even further, taking all the information.*/
+
+                            _line = _line.Replace(tag, "");
+
+                            int value = Convert.ToInt32(tag.Split('<')[1].Split('=')[1].Split('>')[0]);
+
+                            Dialogue[(int)LineIndex] = _line;
+
+                            return ValidateExpressionsAndChange(value.ToString(), _line, ref notFlaged);
+                        }
                     }
                 }
-                catch { ShiftCursorPosition(-1); }
             }
         }
+        catch { }
         return FAILURE;
     }
     #endregion
@@ -713,7 +696,7 @@ public class DialogueSystem : MonoBehaviour
             CursorPosition += (uint)_newPosition;
             _removeFrom = _removeFrom.Replace(_tag, "");
         }
-        catch {}
+        catch { }
         return CursorPosition;
     }
 
