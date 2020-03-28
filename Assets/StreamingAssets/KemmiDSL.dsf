@@ -86,47 +86,61 @@ KEMMI_POSE_HEADTILT = 4
 <DIALOGUE_SET_002>
 @ Huh...<<
 
-@ ... [EXPRESSION::3] [SPEED::NORMAL] You [SPEED::SLOWER] ...<<
+@ ...[EXPRESSION::3] <<
 
-@ [BOLD] [SPEED::FASTER] You... [HALT::500] [SPEED::FASTEST] [EXPRESSION::KEMMI_EXPRESSION_MAD-0] YOU TOUCHED ME! [BOLD::END] <<
+@ [SPEED::NORMAL]You[SPEED::SLOWER]...<<
 
-@ [BOLD] I CANNOT [SPEED::SLOWEST] BELIEVE [SPEED::FASTEST] THAT YOU TOUCHED ME! [BOLD::END] <<
+@ [BOLD][SPEED::FASTER]You... [HALT::500][SPEED::FASTEST][EXPRESSION::5]YOU TOUCHED ME![BOLD::END]<<
+
+@ [BOLD]I CANNOT [SPEED::SLOWEST]BELIEVE [SPEED::FASTEST]THAT YOU TOUCHED ME![BOLD::END]<<
 
 @ ...<<
 
-@ [SPEED::NORMAL] ...<<
+@ [SPEED::NORMAL]...<<
 
-@ [SPEED::SLOWER] [EXPRESSION::10] ...<<
+@ [SPEED::SLOWER][EXPRESSION::10]...<<
 
-@ [EXPRESSION::2] I'm... [HALT::500] sorry. [HALT::500] [EXPRESSION::0] [SPEED::FAST] You should know better not to click on people as their [BOLD] sleeping. [BOLD::END] <<
+@ [EXPRESSION::2]I'm... [HALT::500]sorry. [SPEED::FAST][HALT::500][EXPRESSION::1]You should know better not to click on people as their [BOLD]sleeping.[BOLD::END] <<
 
-@ [EXPRESSION::7] Perhaps [BOLD] [ITALIZE] [SPEED::NORMAL] "Clicking" [ITALIZE::END] [BOLD::END] [SPEED::FAST] is a bit of an understatement.<<
+@ [HALT::1000][EXPRESSION::7]Perhaps [SPEED::NORMAL][BOLD]"Clicking"[BOLD::END] [SPEED::FAST]is a bit of an understatement. <<
 
-@ [EXPRESSION::1] I'll... <<
+@ [EXPRESSION::1]I'll... [SPEED::FAST][HALT::1000][EXPRESSION::7] just pretend that none of this happened.<<
 
-@ [HALT::1000] [SPEED::FAST] just pretend that none of this happened.<<
+@ [EXPRESSION::1]Hi! [HALT::500]My name is [BOLD]Kemmi[BOLD::END] !<<
 
-@ [EXPRESSION::1] Hi! [HALT::500] My name is [BOLD] Kemmi[BOLD::END] !<<
+@ So! [HALT::500][EXPRESSION::7]You came to me to learn about the good o' qualities of [BOLD]superb hygiene?[BOLD::END]<<
 
-@ So! [HALT::500] [EXPRESSION::7] You came to me to learn about the good o' qualities of [BOLD] superb hygiene? [BOLD::END] <<
+@ [EXPRESSION::1][SPEED::SLOWEST]... [HALT::1000][EXPRESSION::5][SPEED::NORMAL]No?<<
 
-@ [EXPRESSION::1] [SPEED::SLOWEST] ... [HALT::1000] [EXPRESSION::5] [SPEED::NORMAL] No?<<
+@ [EXPRESSION::7][SPEED::FAST]Is that not why you came to see me?<<
 
-@ [EXPRESSION::7] [SPEED::FAST] Is that not why you came to see me?<<
+@ [SPEED::SLOWER]...<<
 
-@ [SPEED::SLOWER] ...<<
+@ [EXPRESSION::4][SPEED::NORMAL]Oh...<<
 
-@ [EXPRESSION::4] [SPEED::NORMAL] Oh...<<
+@ [SPEED::FAST][EXPRESSION::7]Well, when you're with me, that's what you're gonna get!<<
 
-@ [SPEED::FAST] [EXPRESSION::7] Well, when you're with me, that's what you're gonna get!<<
+@ Trust me, you're going to [BOLD]learn a lot from me![BOLD::END]<<
 
-@ Trust me, you're going to [BOLD] learn a lot from me! [BOLD::END] <<
+@ In fact, you'll have a greater chance of surviving the [BOLD]apocolypse[BOLD::END].<<
 
-@ In fact, you'll have a greater chance of surviving the [BOLD] apocolypse [BOLD::END] <<
+@ [SPEED::SLOWEST]...[HALT::3000][SPEED::FASTER][EXPRESSION::3][BOLD]WHAT?!?!?![BOLD::END]<<
 
-@ [EXPRESSION::6] No one shall ever step foot by your great presence...<<
+@ [EXPRESSION::7]No one told you what's happening right now? [HALT::2000]I mean... I'm guessing that's even why you're here.<<
 
-@ [EXPRESSION::5] and I'll [BOLD] show you how [BOLD::END] !!!
+@ [BOLD]COVID-19[BOLD::END][SPEED::SLOWEST]... [SPEED::FASTER]Also known as...<<
+
+@ [SPEED::SLOWEST]... [BOLD][EXPRESSION::5]Corona...[BOLD::END]<<
+
+@ [SPEED::FAST][EXPRESSION::10]This [BOLD]Corona[BOLD::END] thing is making everyone living vegetables! Truly awful.<<
+
+@ [EXPRESSION::4][HALT::2000][EXPRESSION::7]Hey! [HALT::1000]Don't worry about the scary things kid.<<
+
+@ I mean... [HALT::750][EXPRESSION::9]When you have the [HALT::500][EXPRESSION::7][BOLD][SPEED::FASTER]All [HALT::500]and [HALT::500]GREAT [HALT::500]and [HALT::500]POWERFUL [HALT::500]Kemmi [HALT::750][BOLD::END][EXPRESSION::7]on your side...<<
+
+@ [EXPRESSION::6]No one shall ever step foot by your great presence...<<
+
+@ [EXPRESSION::5]and I'll [BOLD]show you how!!![BOLD::END]<< 
 
 <END>
 

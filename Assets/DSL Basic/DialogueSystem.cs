@@ -292,6 +292,8 @@ public class DialogueSystem : MonoBehaviour
 
                             Dialogue[(int)LineIndex] = _line;
 
+                            ShiftCursorPosition(-1);
+
                             return SUCCESSFUL;
 
                         }
@@ -494,6 +496,8 @@ public class DialogueSystem : MonoBehaviour
 
         changer.CHANGE_IMAGE(characterState);
 
+        ShiftCursorPosition(-1);
+
         return SUCCESSFUL;
     }
 
@@ -544,7 +548,7 @@ public class DialogueSystem : MonoBehaviour
         {
             yield return new WaitForSeconds(_millseconds / 1000f);
             Debug.Log("yes?");
-
+            ShiftCursorPosition(-1);
             OnDelay = false;
         }
     }
