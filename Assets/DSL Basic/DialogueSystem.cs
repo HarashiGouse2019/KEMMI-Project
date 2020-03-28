@@ -231,7 +231,7 @@ public class DialogueSystem : MonoBehaviour
         ExecuteSpeedFunctionTag(SPEED, ref _text);
 
         //Expression tag!
-        //ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
+        ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
 
         //Halt tage
         ExecuteWaitFunctionTag(HALT, ref _text);
@@ -433,7 +433,7 @@ public class DialogueSystem : MonoBehaviour
                     {
 
 
-                        endTagPos = (int)CursorPosition + (Array.IndexOf(stringRange.ToCharArray(), letter));
+                        endTagPos = (Array.IndexOf(stringRange.ToCharArray(), letter));
 
                         tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
 
