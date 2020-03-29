@@ -84,6 +84,7 @@ KEMMI_POSE_HEADTILT = 4
 ###---------------------------------------------------------------------------------------------------------------------------------------------------------###
 
 <DIALOGUE_SET_002>
+
 @ Huh...<<
 
 @ ...[EXPRESSION::3] <<
@@ -140,7 +141,7 @@ KEMMI_POSE_HEADTILT = 4
 
 @ [EXPRESSION::6]No one shall ever step foot by your great presence...<<
 
-@ [EXPRESSION::5]and I'll [BOLD]show you how!!![BOLD::END] << 
+@ [EXPRESSION::5]and I'll [BOLD]show you how [BOLD::END]<<
 
 <END>
 

@@ -339,7 +339,7 @@ namespace DSLParser
                         if (position > _position)
                         {
                             atTargetLine = true;
-                            if (line != STRINGNULL && line[0] == '@' && line[line.Length - 1] == '<')
+                            if (line != STRINGNULL && line[0] == '@' && line[line.Length-1] == '<')
                             {
                                 line = line.Replace("<", STRINGNULL).Replace("@ ", STRINGNULL);
                                 DialogueSystem.Dialogue.Add(line);

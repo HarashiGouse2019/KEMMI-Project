@@ -129,6 +129,11 @@ public class DialogueSystem : MonoBehaviour
             Debug.Log("If you got this message, that means that you were successful!!! " + value);
 
         }
+
+        foreach(string dialogue in Dialogue)
+        {
+            Debug.Log(dialogue);
+        }
     }
 
     void FixedUpdate()
