@@ -28,6 +28,11 @@ public class DialogueSystemEvents
     {
         void ExecuteOnStart();
     }
+
+    public interface IExecute
+    {
+        void Execute();
+    }
 }
 
 public class DialogueSystem : MonoBehaviour
@@ -83,6 +88,11 @@ public class DialogueSystem : MonoBehaviour
 
     public static int DialogueSet { get; private set; } = -1;
 
+    [SerializeField]
+    private List<DialogueNode> nodes = new List<DialogueNode>();
+
+    public static int CurrentNode { get; private set; } = -1;
+
     public static List<DialogueSystemSpriteChanger> DialogueSystemSpriteChangers { get; private set; } = new List<DialogueSystemSpriteChanger>();
 
     const int reset = 0;
@@ -93,10 +103,12 @@ public class DialogueSystem : MonoBehaviour
 
 
 
-    static readonly Regex ACTION = new Regex(@"(<)+\w*action=\w*[a-zA-Z]+(>$)");
+    static readonly Regex ACTION = new Regex(@"(<)+\w*action=\w*[a-zA-Z ]+(>$)");
 
 
     static readonly Regex EXPRESSION = new Regex(@"(<)+\w*exp=\w*[A-Z0-9_-]+(>$)");
+
+    static readonly Regex POSE = new Regex(@"(<)+\w*pose=\w*[A-Z0-9_-]+(>$)");
 
     static readonly Regex HALT = new Regex(@"(<)+\w*halt=\w*[0-9]+(>$)");
 
@@ -119,21 +131,6 @@ public class DialogueSystem : MonoBehaviour
     void Start()
     {
         DialogueSystemSpriteChangers = FIND_ALL_SPRITECHANGERS();
-
-        string testTag = "<action=CAHHHHHHHHH!!!!>";
-        Match testMatch = ACTION.Match(testTag.Substring(0, testTag.Length));
-        if (testMatch.Success)
-        {
-            string value = testTag.Trim('"');
-
-            Debug.Log("If you got this message, that means that you were successful!!! " + value);
-
-        }
-
-        foreach(string dialogue in Dialogue)
-        {
-            Debug.Log(dialogue);
-        }
     }
 
     void FixedUpdate()
@@ -146,12 +143,18 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-    public static void Run()
+    public static void Run(int _nodeValue = -1)
     {
 
         if (InBounds((int)LineIndex, Dialogue) && IS_TYPE_IN() == false)
         {
             Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace("@ ", "").Replace("<< ", "");
+
+            RunningDialogue = true;
+
+            CurrentNode = _nodeValue;
+
+            Debug.Log("START!!!");
 
             //We'll parse the very first dialogue that is ready to be displayed
             Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
@@ -236,6 +239,9 @@ public class DialogueSystem : MonoBehaviour
         //Expression tag!
         ExecuteExpressionFunctionTag(EXPRESSION, ref _text);
 
+        //Pose tag!
+        ExecutePoseFunctionTag(POSE, ref _text);
+
         //Halt tage
         ExecuteWaitFunctionTag(HALT, ref _text);
     }
@@ -319,13 +325,12 @@ public class DialogueSystem : MonoBehaviour
         try
         {
             string tag = _line.Substring((int)CursorPosition, "<action=".Length);
+
             if (tag.Contains("<action="))
             {
-
                 int startTagPos = (int)CursorPosition;
                 int endTagPos = 0;
                 string stringRange = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
-
                 foreach (char letter in stringRange)
                 {
                     if (letter == '>')
@@ -458,6 +463,49 @@ public class DialogueSystem : MonoBehaviour
     }
     #endregion
 
+    #region EXECUTE POSE
+    static bool ExecutePoseFunctionTag(Regex _tagExpression, ref string _line)
+    {
+        try
+        {
+            bool notFlaged = true;
+
+            string tag = _line.Substring((int)CursorPosition, "<pose=".Length);
+            if (tag.Contains("<pose="))
+            {
+                int startTagPos = (int)CursorPosition;
+                int endTagPos = 0;
+                string stringRange = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
+                foreach (char letter in stringRange)
+                {
+                    if (letter == '>')
+                    {
+                        endTagPos = (Array.IndexOf(stringRange.ToCharArray(), letter));
+
+                        tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
+
+                        if (_tagExpression.IsMatch(tag))
+                        {
+                            /*The system will now take this information, from 0 to the current position
+                             and split it down even further, taking all the information.*/
+
+                            string value = tag.Split('<')[1].Split('=')[1].Split('>')[0];
+
+                            _line = ReplaceFirst(_line, tag, "");
+
+                            Dialogue[(int)LineIndex] = _line;
+
+                            return ValidatePosesAndChange(value, ref notFlaged);
+                        }
+                    }
+                }
+            }
+        }
+        catch { }
+        return FAILURE;
+    }
+    #endregion
+
     static bool ValidateExpressionsAndChange(string value, ref bool _notFlag)
     {
         //Check if a key matches
@@ -494,6 +542,55 @@ public class DialogueSystem : MonoBehaviour
         string characterName = data.Split('_')[0];
         string changeType = data.Split('_')[1];
         string characterState = data.Split('_')[2];
+
+        //Now we see if we can grab the image, and have it change...
+        DialogueSystemSpriteChanger changer = Find_Sprite_Changer(characterName + "_" + changeType);
+
+        changer.CHANGE_IMAGE(characterState);
+
+        ShiftCursorPosition(-1);
+
+        return SUCCESSFUL;
+    }
+
+    static bool ValidatePosesAndChange(string value, ref bool _notFlag)
+    {
+        //Check if a key matches
+        string data = STRINGNULL;
+
+        if (PARSER.DefinedExpressions.ContainsKey(value))
+        {
+            if (value.GetType() == typeof(string))
+            {
+                data = FindKey(value, PARSER.DefinedPoses);
+                _notFlag = false;
+            }
+        }
+
+        else if (PARSER.DefinedExpressions.ContainsValue(Convert.ToInt32(value)))
+        {
+            if (Convert.ToInt32(value).GetType() == typeof(int))
+            {
+
+                data = FindValueAndConvertToKey(Convert.ToInt32(value), PARSER.DefinedPoses);
+
+                _notFlag = false;
+            }
+        }
+
+        if (_notFlag)
+        {
+            //Otherwise, we'll through an error saying this hasn't been defined.
+            Debug.LogError(value + " has not been defined. Perhaps declaring it in the associated .dsf File.");
+            return FAILURE;
+        }
+
+        //We get the name, keep if it's EXPRESSION or POSE, and the emotion value
+        string characterName = data.Split('_')[0];
+        string changeType = data.Split('_')[1];
+        string characterState = data.Split('_')[2];
+
+        Debug.Log(characterState);
 
         //Now we see if we can grab the image, and have it change...
         DialogueSystemSpriteChanger changer = Find_Sprite_Changer(characterName + "_" + changeType);
@@ -656,6 +753,7 @@ public class DialogueSystem : MonoBehaviour
         Dialogue.Clear();
         Instance.StopAllCoroutines();
         CursorPosition = reset;
+        Instance.nodes[CurrentNode].ExecuteOnEnd();
     }
 
     public static void Progress()
@@ -732,6 +830,8 @@ public class DialogueSystem : MonoBehaviour
     }
 
     public static string GET_DIALOGUE_SCRIPTING_FILE() => Instance.dsfName + dslFileExtention;
+
+    public static List<DialogueNode> GET_NODES() => Instance.nodes;
 
     public static bool IS_TYPE_IN() => typeIn;
 

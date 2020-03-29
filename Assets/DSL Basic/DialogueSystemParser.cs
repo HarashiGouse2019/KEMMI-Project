@@ -48,7 +48,7 @@ namespace DSLParser
 
         public static string[] tokens { get; } = { "<<", "::", "END", "@" };
 
-        public static string[] keywords { get; } = { "SPEED", "BOLD", "ITALIZE", "UNDERLINE", "SOUND", "EXPRESSION", "ACTION", "HALT" };
+        public static string[] keywords { get; } = { "SPEED", "BOLD", "ITALIZE", "UNDERLINE", "SOUND", "EXPRESSION", "ACTION", "HALT" ,"POSE"};
 
         public static string[] validTextSpeeds { get; } = { "SLOWEST", "SLOWER", "SLOW", "NORMAL", "FAST", "FASTER", "FASTEST" };
 
@@ -141,6 +141,7 @@ namespace DSLParser
                     ParseToSpeedTag(commands, ref line) ||
                     ParseToActionTag(commands, ref line) ||
                     ParseToExpressionTag(commands, ref line) ||
+                    ParseToPoseTag(commands, ref line) ||
                     ParseToWaitTag(commands, ref line);
 
                 if (tagsParser != SUCCESSFUL)
@@ -198,7 +199,7 @@ namespace DSLParser
 
             int position = 0;
 
-            bool foundExpression = false;
+            bool foundPose = false;
 
             if (File.Exists(dsPath))
             {
@@ -210,7 +211,7 @@ namespace DSLParser
 
                         if (line == STRINGNULL)
                         {
-                            if (foundExpression)
+                            if (foundPose)
                                 return;
                         }
 
@@ -218,7 +219,7 @@ namespace DSLParser
 
                         if (line.Contains("<POSES>"))
                         {
-                            foundExpression = true;
+                            foundPose = true;
                             try { GetPoses(position); } catch { }
                         }
 
@@ -339,11 +340,13 @@ namespace DSLParser
                         if (position > _position)
                         {
                             atTargetLine = true;
-                            if (line != STRINGNULL && line[0] == '@' && line[line.Length - 1] == '<')
+                            if (line != STRINGNULL && (line[0] == '@' && line[line.Length - 1] == '<'))
                             {
-                                    line = line.Replace("<", STRINGNULL).Replace("@", STRINGNULL);
-                                    DialogueSystem.Dialogue.Add(line);
+                                    line = line.Replace("<", STRINGNULL).Replace("@ ", STRINGNULL);
+                                Debug.Log(line);
+                                DialogueSystem.Dialogue.Add(line);
                             }
+                           
                         }
 
                         position++;
@@ -410,6 +413,30 @@ namespace DSLParser
                 /*The skip tag will do the shift of the cursor for use one the system sees this
                  parsed information.*/
                 _line = _line.Replace(_styleCommand, "<exp=" + value + ">");
+
+                //Skip value will be assigned, so that the system can read it
+                skipValue = (keywords[5] + "::" + value).Length - 1;
+                returnedValue = value;
+
+                return SUCCESSFUL;
+            }
+            return FAILURE;
+        }
+
+        static bool ParseToPoseTag(string _styleCommand, ref string _line)
+        {
+            if (_styleCommand.Contains(delimiters[2] + keywords[8]))
+            {
+                var value = _styleCommand.Split(delimiters)[1].Split(':')[2];
+
+                /*The Expression Action is going to be a bit complicated.
+                 We'll have to create a expression tag, and just have the expression we are looking for.
+                 The expression will act exactly like skip, but this is to let the system know that we need
+                 it to use the SpriteChanger, and change the image.*/
+
+                /*The skip tag will do the shift of the cursor for use one the system sees this
+                 parsed information.*/
+                _line = _line.Replace(_styleCommand, "<pose=" + value + ">");
 
                 //Skip value will be assigned, so that the system can read it
                 skipValue = (keywords[5] + "::" + value).Length - 1;

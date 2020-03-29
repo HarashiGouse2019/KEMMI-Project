@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class DialogueNode : MonoBehaviour, DialogueSystemEvents.IExecuteOnEnd
+[CreateAssetMenu(fileName = "New Node", menuName = "Dialogue Node")]
+public class DialogueNode : ScriptableObject, DialogueSystemEvents.IExecuteOnEnd
 {
     public static DialogueNode Instance;
     /*Dialogue Node will allow us to have full control over what dialogue to run, when we run them, and
@@ -26,12 +27,14 @@ public class DialogueNode : MonoBehaviour, DialogueSystemEvents.IExecuteOnEnd
     [Header("Events"), SerializeField]
     private UnityEvent OnEnd = new UnityEvent();
 
+    private static bool StartingFlag = false;
+
     void Awake()
     {
         Instance = this;
     }
 
-    void Start()
+    public void Start()
     {
         if(executeOnStart)
         {
@@ -49,10 +52,11 @@ public class DialogueNode : MonoBehaviour, DialogueSystemEvents.IExecuteOnEnd
     public void ChangeRequstValue(int _value, bool _runImmediately = false)
     {
         setValue = _value;
-
+        Debug.Log(setValue);
+        Debug.Log("YARU ZO!!!");
         switch (_runImmediately)
         {
-            case true: DialogueSystem.REQUEST_DIALOGUE_SET(setValue); DialogueSystem.Run(); break;
+            case true: DialogueSystem.REQUEST_DIALOGUE_SET(setValue); DialogueSystem.Run(setValue); break;
             case false: DialogueSystem.REQUEST_DIALOGUE_SET(setValue); break;
         }
 
@@ -60,10 +64,13 @@ public class DialogueNode : MonoBehaviour, DialogueSystemEvents.IExecuteOnEnd
 
     public void Run()
     {
-        DialogueSystem.Run();
+        Debug.Log("Okay...");
+        DialogueSystem.Run(setValue);
     }
 
     public void ExecuteOnEnd() {
         OnEnd.Invoke();
     }
+
+    public int GetRunValue() => setValue;
 }

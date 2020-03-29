@@ -44,7 +44,7 @@ public class DialogueSystemSpriteChanger : MonoBehaviour
     public enum CHANGEFOR
     {
         EXPRESSION,
-        POSES
+        POSE
     }
 
 
