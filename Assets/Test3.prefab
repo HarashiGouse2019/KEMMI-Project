@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2603651530312475699}
   - component: {fileID: 2603651530312475698}
-  - component: {fileID: 2603651530312475709}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -82,29 +81,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2603651530312475709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2603651530312475696}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6848dd52b4cffd54ca03145bef50447a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterName: KEMMI
-  changeFor: 1
-  storySpriteElements:
-  - identifier: NEUTRAL
-    image: {fileID: 21300000, guid: b38e8464a112dcb468d49e61afc17d1f, type: 3}
-  - identifier: QUESTION
-    image: {fileID: 21300000, guid: 3c52de4c6d5b4824ea5cfb12c61cf9e7, type: 3}
-  - identifier: WAVE
-    image: {fileID: 21300000, guid: 48ae5ef0a033a0f4fab6ad808f60a6a7, type: 3}
-  - identifier: HEADTILT
-    image: {fileID: 21300000, guid: d6bf846644641194691f1252d3b9064a, type: 3}
 --- !u!1 &2603651530594312421
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,7 +151,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: e55a8f21fb13d344286fd1539a19506d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 719b10eb230f6924d85955115f26ed0b, type: 3}
   m_Color: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 0.7490196}
   m_FlipX: 0
   m_FlipY: 0

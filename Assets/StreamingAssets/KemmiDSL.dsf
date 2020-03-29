@@ -63,13 +63,8 @@ KEMMI_EXPRESSION_HAPPY-3 = 8
 KEMMI_EXPRESSION_HAPPY-4 = 9
 KEMMI_EXPRESSION_MAD-1 = 10
 KEMMI_EXPRESSION_SLEEPY = 11
-KEMMI_EXPRESSION_SMUG-1 = 12
 
 <POSES>
-KEMMI_POSE_NEUTRAL = 1
-KEMMI_POSE_QUESTION = 2
-KEMMI_POSE_WAVE = 3
-KEMMI_POSE_HEADTILT = 4
 
 <DIALOGUE_SET_000>
 
@@ -115,43 +110,43 @@ KEMMI_POSE_HEADTILT = 4
 
 @ [EXPRESSION::2]I'm... [HALT::500]sorry. [SPEED::FAST][HALT::500][EXPRESSION::1]You should know better not to [HALT::250][EXPRESSION::7]click [HALT::250][EXPRESSION::1]on people as their [BOLD]sleeping.[BOLD::END] <<
 
-@ [HALT::1000][EXPRESSION::12][POSE::4]Perhaps [SPEED::NORMAL][BOLD]"Clicking"[BOLD::END] [SPEED::FAST]is a bit of an understatement. [HALT::500] You basically touched me.<<
+@ [HALT::1000][EXPRESSION::7][POSE::3]Perhaps [SPEED::NORMAL][BOLD]"Clicking"[BOLD::END] [SPEED::FAST]is a bit of an understatement. [HALT::500] You basically touched me.<<
 
 @ [EXPRESSION::1][POSE::1]I'll... [SPEED::FAST][HALT::1000]just... [HALT::1000][EXPRESSION::7]pretend that didn't happen.<<
 
-@ [EXPRESSION::9][HALT::2500]Well, [HALT::1000]this is [EXPRESSION::12][POSE::4]awkward...<<
+@ [EXPRESSION::9][HALT::2500]Well, [HALT::1000]this is [EXPRESSION::7]awkward...<<
 
-@ [EXPRESSION::1][POSE::1]Hi! [HALT::500]My name is [BOLD]Kemmi[BOLD::END]! [HALT::750]Very special name!<<
+@ [EXPRESSION::1]Hi! [HALT::500]My name is [BOLD]Kemmi[BOLD::END]! [HALT::750]Very special name!<<
 
 @ So! [HALT::500][EXPRESSION::7]You came to me to learn about the good o' qualities of [BOLD]superb hygiene?[BOLD::END]<<
 
 @ [EXPRESSION::1][SPEED::SLOWEST]... [HALT::1000][EXPRESSION::5][SPEED::NORMAL]No?<<
 
-@ [EXPRESSION::12][POSE::4][SPEED::FAST]Is that not why you came to see me?<<
+@ [EXPRESSION::7][SPEED::FAST]Is that not why you came to see me?<<
 
 @ [SPEED::SLOWER]...<<
 
-@ [EXPRESSION::4][POSE::1][SPEED::NORMAL]Oh...<<
+@ [EXPRESSION::4][SPEED::NORMAL]Oh...<<
 
 @ [SPEED::SLOWEST][EXPRESSION::7]Well, [HALT::250][SPEED::FASTER]when you're with me, [HALT::500]that's what you're gonna get!<<
 
 @ [EXPRESSION::9]Trust me, [HALT::750][EXPRESSION::7]you're going to [BOLD]learn a lot from me![BOLD::END]<<
 
-@ [EXPRESSION::6]In fact, [HALT::500][EXPRESSION::12][POSE::4]you'll have a greater chance of surviving the [BOLD]apocolypse[BOLD::END].<<
+@ [EXPRESSION::6]In fact, [HALT::500][EXPRESSION::7]you'll have a greater chance of surviving the [BOLD]apocolypse[BOLD::END].<<
 
-@ [SPEED::SLOWEST]...[HALT::3000][SPEED::FASTER][EXPRESSION::3][POSE::2][BOLD]WHAT?!?!?![BOLD::END]<<
+@ [SPEED::SLOWEST]...[HALT::3000][SPEED::FASTER][EXPRESSION::3][BOLD]WHAT?!?!?![BOLD::END]<<
 
-@ [EXPRESSION::12][POSE::4]No one told you what's going on right now? [HALT::2000]I mean... [HALT::250]I'm guessing that's even why you're here.<<
+@ [EXPRESSION::7]No one told you what's going on right now? [HALT::2000]I mean... [HALT::250]I'm guessing that's even why you're here.<<
 
-@ [POSE::4][BOLD]COVID-19[BOLD::END][SPEED::SLOWEST]... [SPEED::FASTER]Also known as...<<
+@ [BOLD]COVID-19[BOLD::END][SPEED::SLOWEST]... [SPEED::FASTER]Also known as...<<
 
 @ [SPEED::SLOWEST]... [BOLD][EXPRESSION::5]Corona...[BOLD::END] <<
 
 @ [SPEED::FAST][EXPRESSION::10]This [BOLD]Corona[BOLD::END] thing is making everyone living vegetables! [HALT::550]Truly awful.<<
 
-@ [EXPRESSION::4][HALT::2000][EXPRESSION::12][POSE::4]Hey! [HALT::1000]Don't worry about the [BOLD]scary things[BOLD::END] kid.<<
+@ [EXPRESSION::4][HALT::2000][EXPRESSION::7]Hey! [HALT::1000]Don't worry about the [BOLD]scary things[BOLD::END] kid.<<
 
-@ I mean... [HALT::750][EXPRESSION::9][POSE::1]When you have the [HALT::500][EXPRESSION::7][BOLD][SPEED::FASTEST]All [HALT::500]and [HALT::500]GREAT [HALT::500]and [HALT::500]POWERFUL [HALT::500]Kemmi[BOLD::END] [HALT::750][SPEED::FAST][EXPRESSION::9]on your side...<<
+@ I mean... [HALT::750][EXPRESSION::9]When you have the [HALT::500][EXPRESSION::7][BOLD][SPEED::FASTEST]All [HALT::500]and [HALT::500]GREAT [HALT::500]and [HALT::500]POWERFUL [HALT::500]Kemmi[BOLD::END] [HALT::750][SPEED::FAST][EXPRESSION::9]on your side...<<
 
 @ [EXPRESSION::6]No one shall ever step foot by your great presence...<<
 
