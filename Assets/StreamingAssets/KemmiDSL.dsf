@@ -137,7 +137,7 @@ KEMMI_POSE_HEADTILT = 4
 
 @ [EXPRESSION::4][HALT::2000][EXPRESSION::7]Hey! [HALT::1000]Don't worry about the scary things kid.<<
 
-@ I mean... [HALT::750][EXPRESSION::9]When you have the [HALT::500][EXPRESSION::7][BOLD][SPEED::FASTER]All [HALT::500]and [HALT::500]GREAT [HALT::500]and [HALT::500]POWERFUL [HALT::500]Kemmi[BOLD::END] [HALT::750][EXPRESSION::7]on your side...<<
+@ I mean... [HALT::750][EXPRESSION::9]When you have the [HALT::500][EXPRESSION::7][BOLD][SPEED::FASTER]All [HALT::500]and [HALT::500]GREAT [HALT::500]and [HALT::500]POWERFUL [HALT::500]Kemmi[BOLD::END] [HALT::750][EXPRESSION::9]on your side...<<
 
 @ [EXPRESSION::6]No one shall ever step foot by your great presence...<<
 

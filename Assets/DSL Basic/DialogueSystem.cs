@@ -181,7 +181,6 @@ public class DialogueSystem : MonoBehaviour
 
                 for (CursorPosition = 0; CursorPosition < text.Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
                 {
-                    Debug.Log("HI1!!");
                     try
                     {
 
@@ -388,8 +387,6 @@ public class DialogueSystem : MonoBehaviour
 
                         tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
 
-                        Debug.Log(tag);
-
                         if (OnDelay == false)
                         {
                             /*Now we do a substring from the current position to 4 digits.*/
@@ -554,7 +551,6 @@ public class DialogueSystem : MonoBehaviour
         while (OnDelay)
         {
             yield return new WaitForSeconds(_millseconds / 1000f);
-            Debug.Log("yes?");
             ShiftCursorPosition(-1);
             OnDelay = false;
         }

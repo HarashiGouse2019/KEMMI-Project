@@ -341,9 +341,15 @@ namespace DSLParser
                             atTargetLine = true;
                             if (line != STRINGNULL && line[0] == '@' && line[line.Length-1] == '<')
                             {
-                                line = line.Replace("<", STRINGNULL).Replace("@ ", STRINGNULL);
-                                DialogueSystem.Dialogue.Add(line);
-                                Debug.Log(line);
+                                for (int range = 0; range < line.Length; range++)
+                                {
+                                    string characterName = line.Substring(0, range);
+                                    if (characterName.Contains(":")||characterName.Contains(" ")) {
+                                        characterName.Replace(" ", STRINGNULL);
+                                        line = line.Replace("<", STRINGNULL).Replace("@", characterName);
+                                        DialogueSystem.Dialogue.Add(line);
+                                    }
+                                }
                             }
                         }
 
