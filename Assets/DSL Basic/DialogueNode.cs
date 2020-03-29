@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class DialogueNode : MonoBehaviour
+public class DialogueNode : MonoBehaviour, DialogueSystemEvents.IExecuteOnEnd
 {
+    public static DialogueNode Instance;
     /*Dialogue Node will allow us to have full control over what dialogue to run, when we run them, and
      what action we want to take after running the dialogue set.
      
@@ -25,6 +26,11 @@ public class DialogueNode : MonoBehaviour
     [Header("Events"), SerializeField]
     private UnityEvent OnEnd = new UnityEvent();
 
+    void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
         if(executeOnStart)
@@ -38,5 +44,26 @@ public class DialogueNode : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void ChangeRequstValue(int _value, bool _runImmediately = false)
+    {
+        setValue = _value;
+
+        switch (_runImmediately)
+        {
+            case true: DialogueSystem.REQUEST_DIALOGUE_SET(setValue); DialogueSystem.Run(); break;
+            case false: DialogueSystem.REQUEST_DIALOGUE_SET(setValue); break;
+        }
+
+    }
+
+    public void Run()
+    {
+        DialogueSystem.Run();
+    }
+
+    public void ExecuteOnEnd() {
+        OnEnd.Invoke();
     }
 }

@@ -56,4 +56,6 @@ KEMMI_EXPRESSION_MAD-1 = 10
 																											
 @ [HALT::1000][ACTION::"Sigh"] [SPEED::NORMAL][HALT::1000]Let's get the bread, [EXPRESSION::1][HALT::5000]bread has [HALT::500]been [HALT::500]baked. [EXPRESSION::2] <<
 
+@ [EXPRESSION::9] Sounds awesome doesn't it. [INPUT::0]
+
 <END>
