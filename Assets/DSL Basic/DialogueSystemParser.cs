@@ -109,7 +109,7 @@ namespace DSLParser
                     if (startingBracketPos == 0)
                     {
                         DialogueSystem.ShiftCursorPosition(endingBracketPos);
-                    } 
+                    }
 
                     /*Now we have to see if it contains one of the commands.*/
                     foreach (string keyword in keywords)
@@ -290,7 +290,7 @@ namespace DSLParser
 
                         if (atTargetLine)
                         {
-                            if(line == STRINGNULL)
+                            if (line == STRINGNULL)
                                 return;
                         }
 
@@ -304,7 +304,7 @@ namespace DSLParser
                                 string[] data = line.Split('=');
                                 DefinedPoses.Add(data[0].Replace(" ", ""), Convert.ToInt32(data[1].Replace(" ", "")));
                             }
-                                
+
                         }
 
                         position++;
@@ -339,17 +339,10 @@ namespace DSLParser
                         if (position > _position)
                         {
                             atTargetLine = true;
-                            if (line != STRINGNULL && line[0] == '@' && line[line.Length-1] == '<')
+                            if (line != STRINGNULL && line[0] == '@' && line[line.Length - 1] == '<')
                             {
-                                for (int range = 0; range < line.Length; range++)
-                                {
-                                    string characterName = line.Substring(0, range);
-                                    if (characterName.Contains(":")||characterName.Contains(" ")) {
-                                        characterName.Replace(" ", STRINGNULL);
-                                        line = line.Replace("<", STRINGNULL).Replace("@", characterName);
-                                        DialogueSystem.Dialogue.Add(line);
-                                    }
-                                }
+                                    line = line.Replace("<", STRINGNULL).Replace("@", STRINGNULL);
+                                    DialogueSystem.Dialogue.Add(line);
                             }
                         }
 
