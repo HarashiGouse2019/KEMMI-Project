@@ -53,40 +53,7 @@ KEMMI_EXPRESSION_MAD-1 = 10
 																											###
 																											
 @ [SPEED::NORMAL][HALT::2000]Sooooooooo[SPEED::SLOWEST][HALT::2000]... [ACTION::"CAHHHHHHHHH"] [HALT::1000][ACTION::"SWOSH"] [HALT::1000][ACTION::"SWUSH"] [HALT::1000][ACTION::"SMASHING"] <<
-
-<sp=3> Sooooooooo <sp=0> ... <sp=6> <action=CAHHHHHHHHH> <halt=1000>
 																											
 @ [HALT::1000][ACTION::"Sigh"] [SPEED::NORMAL][HALT::1000]Let's get the bread, [EXPRESSION::1][HALT::5000]bread has [HALT::500]been [HALT::500]baked. [EXPRESSION::2] <<
-
-
-																											###
-
-													Expressions can be assigned any number, and you can refer to that expression through that number.
-																											
-																											
-																							[EXPRESSION::JOHN_EXPRESSION_HAPPY-0]
-																										[EXPRESSION::0]
-																											
-																											
-																											###
-@ [EXPRESSION::8] So... [HALT::3000] You've [EXPRESSION::2] finally done it!<<
-
-@ [EXPRESSION::7] Looks like that [BOLD] brain of yours [BOLD::END] managed to get the...<<
-
-@ Expression command completed.<<
-
-@ [EXPRESSION::2] Not only that, [HALT::1000] [EXPRESSION::7] [SPEED::FASTER] But you've gone as far as to validate if the expressions had been...<<
-
-@ defined in the document...<<
-
-@ [EXPRESSION::6] [SPEED::FASTEST] That's, [HALT::600] freaking, [HALT::600] [BOLD] COOL!!! [BOLD::END] <<
-
-@ [EXPRESSION::5] [SPEED::NORMAL] Don't get your hopes up though, [HALT::1000] [SPEED::FASTER] we [EXPRESSION::7] got's a [SPEED::SLOW] long [SPEED::FASTER] way to go.<<
-
-@ 4 days right? [HALT::800] [ACTION::"Sigh"] <<
-
-@ [EXPRESSION::9] [SPEED::NORMAL] I think you gots this. [HALT::750] I mean... [HALT::250] You came such a long way just to create this for me.<<
-
-@ [EXPRESSION::2] [BOLD] Thank you so very much!!! [BOLD::END] [HALT::500] I appreiciate what you have done so far!<<
 
 <END>

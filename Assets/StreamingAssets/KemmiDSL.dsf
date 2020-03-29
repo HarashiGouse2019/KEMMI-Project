@@ -124,23 +124,23 @@ KEMMI_POSE_HEADTILT = 4
 
 @ In fact, you'll have a greater chance of surviving the [BOLD]apocolypse[BOLD::END].<<
 
-@ [SPEED::SLOWEST]...[HALT::3000][SPEED::FASTER][EXPRESSION::3][BOLD]WHAT?!?!?![BOLD::END]<<
+@ [SPEED::SLOWEST]...[HALT::3000][SPEED::FASTER][EXPRESSION::3][BOLD]WHAT?!?!?![BOLD::END] <<
 
 @ [EXPRESSION::7]No one told you what's happening right now? [HALT::2000]I mean... I'm guessing that's even why you're here.<<
 
 @ [BOLD]COVID-19[BOLD::END][SPEED::SLOWEST]... [SPEED::FASTER]Also known as...<<
 
-@ [SPEED::SLOWEST]... [BOLD][EXPRESSION::5]Corona...[BOLD::END]<<
+@ [SPEED::SLOWEST]... [BOLD][EXPRESSION::5]Corona...[BOLD::END] <<
 
 @ [SPEED::FAST][EXPRESSION::10]This [BOLD]Corona[BOLD::END] thing is making everyone living vegetables! Truly awful.<<
 
 @ [EXPRESSION::4][HALT::2000][EXPRESSION::7]Hey! [HALT::1000]Don't worry about the scary things kid.<<
 
-@ I mean... [HALT::750][EXPRESSION::9]When you have the [HALT::500][EXPRESSION::7][BOLD][SPEED::FASTER]All [HALT::500]and [HALT::500]GREAT [HALT::500]and [HALT::500]POWERFUL [HALT::500]Kemmi [HALT::750][BOLD::END][EXPRESSION::7]on your side...<<
+@ I mean... [HALT::750][EXPRESSION::9]When you have the [HALT::500][EXPRESSION::7][BOLD][SPEED::FASTER]All [HALT::500]and [HALT::500]GREAT [HALT::500]and [HALT::500]POWERFUL [HALT::500]Kemmi[BOLD::END] [HALT::750][EXPRESSION::7]on your side...<<
 
 @ [EXPRESSION::6]No one shall ever step foot by your great presence...<<
 
-@ [EXPRESSION::5]and I'll [BOLD]show you how!!![BOLD::END]<< 
+@ [EXPRESSION::5]and I'll [BOLD]show you how!!![BOLD::END] << 
 
 <END>
 

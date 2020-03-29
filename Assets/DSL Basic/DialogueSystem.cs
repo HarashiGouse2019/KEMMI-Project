@@ -131,27 +131,28 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
 
-        if (!OnDelay)
-            ExcludeAllTags(Dialogue[(int)LineIndex]);
+        if (!OnDelay && Dialogue.Count != 0)
+        {
+            ExcludeAllFunctionTags(Dialogue[(int)LineIndex]);
+            ExcludeAllStyleTags(Dialogue[(int)LineIndex]);
+        }
     }
 
     public static void Run()
     {
 
-        if (Dialogue.Count != 0 && InBounds((int)LineIndex, Dialogue) && IS_TYPE_IN() == false)
+        if (InBounds((int)LineIndex, Dialogue) && IS_TYPE_IN() == false)
         {
-            if (Dialogue[(int)LineIndex].Contains("@ "))
-            {
-                Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace("@ ", "");
+            Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace("@ ", "").Replace("<< ", "");
 
-                //We'll parse the very first dialogue that is ready to be displayed
-                Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
+            //We'll parse the very first dialogue that is ready to be displayed
+            Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
 
-                Instance.StartCoroutine(PrintCycle());
-            }
+            Instance.StartCoroutine(PrintCycle());
+
         }
     }
 
@@ -172,32 +173,28 @@ public class DialogueSystem : MonoBehaviour
 
                 if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
 
-                //Typewriter effect
-                if (PARSER.LINE_HAS(text, PARSER.tokens[0]))
+
+                for (CursorPosition = 0; CursorPosition < text.Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
                 {
-
-                    for (CursorPosition = 0; CursorPosition < text.Length - PARSER.tokens[0].Length + 1; CursorPosition += (uint)((OnDelay) ? 0 : 1))
+                    Debug.Log("HI1!!");
+                    try
                     {
-                        try
-                        {
 
-                            if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
+                        if (LineIndex < Dialogue.Count) text = Dialogue[(int)LineIndex];
 
-                            GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
+                        GET_TMPGUI().text = text.Substring(0, (int)CursorPosition);
 
-                            UPDATE_TEXT_SPEED(SpeedValue);
-                        }
-                        catch
-                        {
-
-                            Debug.LogWarning("Cursor Position is at: " + CursorPosition + ", but text is " + text.Length + " long.");
-                            CursorPosition = (uint)(CursorPosition - text.Length);
-
-                        }
-
-
-                        yield return new WaitForSeconds(TextSpeed);
+                        UPDATE_TEXT_SPEED(SpeedValue);
                     }
+                    catch
+                    {
+
+                        Debug.LogWarning("Cursor Position is at: " + CursorPosition + ", but text is " + text.Length + " long.");
+
+                    }
+
+
+                    yield return new WaitForSeconds(TextSpeed);
                 }
 
                 SET_TYPE_IN_VALUE(true);
@@ -209,16 +206,9 @@ public class DialogueSystem : MonoBehaviour
         }
 
     }
-
-    static void ExcludeAllTags(string _text)
+    static void ExcludeAllStyleTags(string _text)
     {
-
-        PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
-
-        //Action tag!
-        ExecuteActionFunctionTag(ACTION, ref _text);
-
-        //Bold tag
+        //Bold
         ExcludeStyleTag(BOLD, BOLDEND, ref _text);
 
         //Italize tag
@@ -226,6 +216,15 @@ public class DialogueSystem : MonoBehaviour
 
         //Underline tag
         ExcludeStyleTag(UNDERLINE, UNDERLINEEND, ref _text);
+    }
+
+    static void ExcludeAllFunctionTags(string _text)
+    {
+
+        PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
+
+        //Action tag!
+        ExecuteActionFunctionTag(ACTION, ref _text);
 
         //Speed Command Tag: It will consider all of the possible values.
         ExecuteSpeedFunctionTag(SPEED, ref _text);
@@ -243,7 +242,7 @@ public class DialogueSystem : MonoBehaviour
         {
             if (_line.Substring((int)CursorPosition, _openTag.Length).Contains(_openTag))
             {
-                ShiftCursorPosition(_openTag.Length);
+                ShiftCursorPosition(_openTag.Length - 1);
                 return SUCCESSFUL;
             }
         }
@@ -253,12 +252,12 @@ public class DialogueSystem : MonoBehaviour
         {
             if (_line.Substring((int)CursorPosition, _closeTag.Length).Contains(_closeTag))
             {
-                ShiftCursorPosition(_closeTag.Length);
+                ShiftCursorPosition(_closeTag.Length - 1);
                 return SUCCESSFUL;
             }
-        }    
+        }
         catch { }
-    
+
         return FAILURE;
     }
 
@@ -635,15 +634,12 @@ public class DialogueSystem : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (LineIndex < Dialogue.Count - 1)
+                if (LineIndex < Dialogue.Count)
                 {
                     Progress();
                     CursorPosition = reset;
                 }
-                else
-                {
-                    End();
-                }
+                
             }
 
             yield return null;
@@ -670,14 +666,12 @@ public class DialogueSystem : MonoBehaviour
             GET_TMPGUI().text = STRINGNULL;
             SET_TYPE_IN_VALUE(false);
 
-            if (Dialogue[(int)LineIndex].Contains("@ "))
-            {
-
-                Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace("@ ", "");
-
-                //We'll parse the next dialogue that is ready to be displayed
-                Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
-            }
+            //We'll parse the next dialogue that is ready to be displayed
+            Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
+        }
+        else
+        {
+            End();
         }
     }
 

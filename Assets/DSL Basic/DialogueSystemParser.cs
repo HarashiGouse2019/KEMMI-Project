@@ -145,9 +145,6 @@ namespace DSLParser
 
                 if (tagsParser != SUCCESSFUL)
                     line = line.Replace(commands + " ", "");
-                else
-                    DialogueSystem.ShiftCursorPosition(-1);
-
             }
             /*We finally got it to work!!!*/
 
@@ -342,7 +339,12 @@ namespace DSLParser
                         if (position > _position)
                         {
                             atTargetLine = true;
-                            if (line != STRINGNULL && line[0] == '@') DialogueSystem.Dialogue.Add(line);
+                            if (line != STRINGNULL && line[0] == '@' && line[line.Length - 1] == '<')
+                            {
+                                line = line.Replace("<", STRINGNULL).Replace("@ ", STRINGNULL);
+                                DialogueSystem.Dialogue.Add(line);
+                                Debug.Log(line);
+                            }
                         }
 
                         position++;
