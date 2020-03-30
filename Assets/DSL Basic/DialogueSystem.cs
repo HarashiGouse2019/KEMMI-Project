@@ -105,6 +105,7 @@ public class DialogueSystem : MonoBehaviour
 
     static readonly Regex ACTION = new Regex(@"(<)+\w*action=\w*[a-zA-Z ]+(>$)");
 
+    static readonly Regex INSERT = new Regex(@"(<)+\w*ins=\w*[a-zA-Z :]+(>$)");
 
     static readonly Regex EXPRESSION = new Regex(@"(<)+\w*exp=\w*[A-Z0-9_-]+(>$)");
 
@@ -233,6 +234,9 @@ public class DialogueSystem : MonoBehaviour
 
         //Action tag!
         ExecuteActionFunctionTag(ACTION, ref _text);
+
+        //Insert tag!
+        ExecuteInsertFunctionTag(INSERT, ref _text);
 
         //Speed Command Tag: It will consider all of the possible values.
         ExecuteSpeedFunctionTag(SPEED, ref _text);
@@ -367,6 +371,54 @@ public class DialogueSystem : MonoBehaviour
         return FAILURE;
     }
     #endregion
+
+    static bool ExecuteInsertFunctionTag(Regex _tagExpression, ref string _line)
+    {
+        try
+        {
+            string tag = _line.Substring((int)CursorPosition, "<ins=".Length);
+
+            if (tag.Contains("<ins="))
+            {
+                int startTagPos = (int)CursorPosition;
+                int endTagPos = 0;
+                string stringRange = _line.Substring((int)CursorPosition, _line.Length - (int)CursorPosition);
+                foreach (char letter in stringRange)
+                {
+                    if (letter == '>')
+                    {
+
+                        endTagPos = (int)(Array.IndexOf(stringRange.ToCharArray(), letter));
+
+                        tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
+
+                        if (_tagExpression.IsMatch(tag))
+                        {
+                            Debug.Log("WOW FANTASTIC BABY ");
+                            if (OnDelay == false)
+                            {
+                                string value = tag.Split(PARSER.delimiters)[1].Split('=')[1];
+
+                                Debug.Log(value);
+
+                                _line = ReplaceFirst(_line, tag, value);
+
+                                ShiftCursorPosition(value.Length);
+
+                                Dialogue[(int)LineIndex] = _line;
+                            }
+                            return SUCCESSFUL;
+                        }
+                    }
+                }
+
+
+            }
+        }
+        catch { }
+
+        return FAILURE;
+    }
 
     #region This one works
     static bool ExecuteWaitFunctionTag(Regex _tagExpression, ref string _line)
@@ -766,6 +818,8 @@ public class DialogueSystem : MonoBehaviour
 
             GET_TMPGUI().text = STRINGNULL;
             SET_TYPE_IN_VALUE(false);
+
+            CursorPosition = reset;
 
             //We'll parse the next dialogue that is ready to be displayed
             Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);

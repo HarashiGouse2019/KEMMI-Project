@@ -48,7 +48,7 @@ namespace DSLParser
 
         public static string[] tokens { get; } = { "<<", "::", "END", "@" };
 
-        public static string[] keywords { get; } = { "SPEED", "BOLD", "ITALIZE", "UNDERLINE", "SOUND", "EXPRESSION", "ACTION", "HALT" ,"POSE"};
+        public static string[] keywords { get; } = { "SPEED", "BOLD", "ITALIZE", "UNDERLINE", "SOUND", "EXPRESSION", "ACTION", "HALT" ,"POSE", "INSERT"};
 
         public static string[] validTextSpeeds { get; } = { "SLOWEST", "SLOWER", "SLOW", "NORMAL", "FAST", "FASTER", "FASTEST" };
 
@@ -141,6 +141,7 @@ namespace DSLParser
                     ParseToUnderlineTag(commands, ref line) ||
                     ParseToSpeedTag(commands, ref line) ||
                     ParseToActionTag(commands, ref line) ||
+                    ParserToInsertTag(commands, ref line) ||
                     ParseToExpressionTag(commands, ref line) ||
                     ParseToPoseTag(commands, ref line) ||
                     ParseToWaitTag(commands, ref line);
@@ -387,6 +388,7 @@ namespace DSLParser
 
                             if (line != STRINGNULL)
                                 DefinedCharacters.Add(line);
+                           
                         }
 
                         position++;
@@ -423,14 +425,19 @@ namespace DSLParser
                             {
                                 foreach (string character in DefinedCharacters)
                                 {
-                                    string name = line.Substring(0, character.Length);
-                                    if (name == character)
-                                        line = line.Replace("<", STRINGNULL).Replace("@ ", name + ": ");
+                                    string name = line.Substring(1, character.Length) + ":";
+
+                                    if (name.Contains(character))
+                                    {
+                                        line = line.Replace("<", STRINGNULL).Replace("@" + character, "[INSERT::\"" + name + "\"]");
+                                        
+                                    }
                                     else if (name.Contains(" "))
                                         line = line.Replace("<", STRINGNULL).Replace("@ ", STRINGNULL);
                                 }
 
                                 DialogueSystem.Dialogue.Add(line);
+                                Debug.Log(line);
                             }
                            
                         }
@@ -527,6 +534,26 @@ namespace DSLParser
                 //Skip value will be assigned, so that the system can read it
                 skipValue = (keywords[5] + "::" + value).Length - 1;
                 returnedValue = value;
+
+                return SUCCESSFUL;
+            }
+            return FAILURE;
+        }
+
+        static bool ParserToInsertTag(string _styleCommand, ref string _line)
+        {
+            if (_styleCommand.Contains(delimiters[2] + keywords[9]))
+            {
+                var word = _styleCommand.Split(delimiters)[1].Replace(tokens[1], STRINGNULL).Split('"')[1];
+                Debug.Log(word);
+                /*The action function is simply to add two asteriks between a word.
+                 For example: [ACTION::"Sighs"] will be replaced by *Sigh* in the text. 
+                 
+                 Very easy function to do.*/
+
+                /*The skip tag will do the shift of the cursor for use one the system sees this
+                 parsed information.*/
+                _line = _line.Replace(_styleCommand, "<ins=" + word + ">");
 
                 return SUCCESSFUL;
             }

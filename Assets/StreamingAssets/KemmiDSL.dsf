@@ -168,37 +168,3 @@ Josh
 @ [EXPRESSION::9] << 
 
 <END>
-
-###
-
-This is unused dialogue that was going to be in the game, but due to limited time, I couldn't make it happen.
-
-
-<DIALOGUE_SET_004>
-
-@ [SPEED::SLOWEST]... [HALT::750][EXPRESSION::7]You're probably wondering what this is...<<
-
-@ [EXPRESSION::1]... [HALT::750][SPEED::FASTER][EXPRESSION::7]Why... [HALT::500]It's [BOLD]BarSoap![BOLD::END]<<
-
-@ [EXPRESSION::6]That's right! [HALT::500]This baby right here will get you all cleaned up and away from the virus!<<
-
-@ [EXPRESSION::7]Not only that, but you're doing everyone a huge favor...<<
-
-@ [EXPRESSION::9]Like... [HALT::750][EXPRESSION::7] Not making everyone sick!<<
-
-@ Most cases, if you use a [BOLD]bar of soap[BOLD::END] to keep yourself clean, it'll boost your immune system...<<
-
-@ [SPEED::SLOWEST][EXPRESSION::4]... [EXPRESSION::7]I... [HALT::700][SPEED::FAST]probably should say it would boost it...<<
-
-@ [EXPRESSION::9]but you'll be more resistant of keeping the virus...<<
-
-@ [EXPRESSION::7]A [BOLD]clean body [BOLD::END]is a [BOLD]strong body [BOLD::END]<<
-
-@ [EXPRESSION::7]Always keep this in mind. And you'll do just fine.<<
-
-@ [EXPRESSION::1]Now... [HALT::1000]what's [BOLD]RULE #2[BOLD::END] ?<<
-
-@ [EXPRESSION::8]Well... [HALT::500]It's to [EXPRESSION::7]not to touch me.<<
-
-<END>
-###
