@@ -52,7 +52,7 @@ public class DialogueSystem : MonoBehaviour
 
 
     [SerializeField]
-    private string dsfName = "";
+    private string dslFileName = "";
 
     [SerializeField]
     private TextMeshProUGUI TMP_DIALOGUETEXT = null;
@@ -115,7 +115,7 @@ public class DialogueSystem : MonoBehaviour
 
     static readonly Regex SPEED = new Regex(@"(<)+\w*sp=\w*[0-6](>$)");
 
-    static readonly string dslFileExtention = ".dsf";
+    static readonly string dslFileExtention = ".dsl";
     static readonly string STRINGNULL = "";
 
     const bool SUCCESSFUL = true;
@@ -898,7 +898,7 @@ public class DialogueSystem : MonoBehaviour
         ExpressionValue.Add(_value);
     }
 
-    public static string GET_DIALOGUE_SCRIPTING_FILE() => Instance.dsfName + dslFileExtention;
+    public static string GET_DIALOGUE_SCRIPTING_FILE() => Instance.dslFileName + dslFileExtention;
 
     public static List<DialogueNode> GET_NODES() => Instance.nodes;
 

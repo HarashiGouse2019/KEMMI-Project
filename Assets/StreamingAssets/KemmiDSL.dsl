@@ -1,13 +1,15 @@
 
-TITLE: ### KEMMI ###
+TITLE: "Kemmi"
 
 ###---------------------------------------------------------------------------------------------------------------------------------------------------------###
 
-AUTHOR: ### MIIJII ###
+AUTHOR: "Miijii"
 
 ###---------------------------------------------------------------------------------------------------------------------------------------------------------###
 
-DATE: ### March 25, 2020 ###
+DATE: "March 25, 2020"
+
+DESCRIPTION: "Looks like you're going to learn the very importance of personal hygiene."
 
 <EXPRESSIONS>
 KEMMI_EXPRESSION_HAPPY-0 = 1
@@ -143,26 +145,26 @@ Kemmi
 
 @Kemmi I say... [HALT::1000][EXPRESSION::9]make life worth while!<<
 
-@@Kemmi Since I assume you're inside, you can actually do way more than what you think.<<
+@Kemmi Since I assume you're inside, you can actually do way more than what you think.<<
 
-@@Kemmi Like... [HALT::1000][EXPRESSION::7]Watch TV, [HALT::500]read a book, [HALT::500]draw, [HALT::500]learn a new language, [HALT::500]cook, [HALT::500]dance, [HALT::500]sing...<<
+@Kemmi Like... [HALT::1000][EXPRESSION::7]Watch TV, [HALT::500]read a book, [HALT::500]draw, [HALT::500]learn a new language, [HALT::500]cook, [HALT::500]dance, [HALT::500]sing...<<
 
-@@Kemmi Seriously, keep these rules in mind, and just be you...<<
+@Kemmi Seriously, keep these rules in mind, and just be you...<<
 
-@@Kemmi It would suck having to be scared of [SPEED::FASTER][BOLD]THE CORONA [BOLD::END][SPEED::FAST]if it means not enjoying being a kid.<<
+@Kemmi It would suck having to be scared of [SPEED::FASTER][BOLD]THE CORONA [BOLD::END][SPEED::FAST]if it means not enjoying being a kid.<<
 
-@@Kemmi My time is limited though! [EXPRESSION::1]But it's nice talking to you. [EXPRESSION::8]<<
+@Kemmi My time is limited though! [EXPRESSION::1]But it's nice talking to you. [EXPRESSION::8]<<
 
-@@Kemmi Sorry that this game wasn't really... [HALT::1000]well... [HALT::1000][EXPRESSION::7] a game.<<
+@Kemmi Sorry that this game wasn't really... [HALT::1000]well... [HALT::1000][EXPRESSION::7] a game.<<
 
-@@Kemmi Perhaps if the [BOLD]developer [BOLD::END]didn't have issue on this dialogue system that makes me able to talk to you now...<<
+@Kemmi Perhaps if the [BOLD]developer [BOLD::END]didn't have issue on this dialogue system that makes me able to talk to you now...<<
 
-@@Kemmi [EXPRESSION::9]I would probably have way more content.<<
+@Kemmi [EXPRESSION::9]I would probably have way more content.<<
 
-@@Kemmi [HALT::3000]I Guess... [HALT::1000][EXPRESSION::7]I'll see you around kid<<
+@Kemmi [HALT::3000]I Guess... [HALT::1000][EXPRESSION::7]I'll see you around kid<<
 
-@@Kemmi You can just hit [BOLD]ALT+F4 [BOLD::END] or [BOLD]escape [BOLD::END] to quit the game.<<
+@Kemmi You can just hit [BOLD]ALT+F4 [BOLD::END] or [BOLD]escape [BOLD::END] to quit the game.<<
 
-@@Kemmi [EXPRESSION::9] << 
+@Kemmi [EXPRESSION::9] <<
 
 <END>
