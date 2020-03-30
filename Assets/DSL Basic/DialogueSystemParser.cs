@@ -56,6 +56,7 @@ namespace DSLParser
 
         public static Dictionary<string, int> DefinedExpressions { get; private set; } = new Dictionary<string, int>();
         public static Dictionary<string, int> DefinedPoses { get; private set; } = new Dictionary<string, int>();
+        public static List<string> DefinedCharacters { get; private set; } = new List<string>();
         public static bool LINE_HAS(string line, string token) => line.Contains(token);
 
         public static int skipValue = 0;
@@ -230,6 +231,45 @@ namespace DSLParser
             Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
         }
 
+        public static void Define_Characters()
+        {
+            string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
+
+            string line = null;
+
+            int position = 0;
+
+            bool foundPose = false;
+
+            if (File.Exists(dsPath))
+            {
+                using (StreamReader fileReader = new StreamReader(dsPath))
+                {
+                    while (true)
+                    {
+                        line = fileReader.ReadLine();
+
+                        if (line == STRINGNULL)
+                        {
+                            if (foundPose)
+                                return;
+                        }
+
+                        line.Split(delimiters);
+
+                        if (line.Contains("<CHARACTERS>"))
+                        {
+                            foundPose = true;
+                            try { GetCharacterNames(position); } catch { }
+                        }
+
+                        position++;
+                    }
+                }
+            }
+            Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
+        }
+
         public static void GetExpressions(int _position)
         {
             string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
@@ -316,6 +356,45 @@ namespace DSLParser
             }
         }
 
+        public static void GetCharacterNames(int _position)
+        {
+            string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
+
+            string line = null;
+
+            bool atTargetLine = false;
+
+            if (File.Exists(dsPath))
+            {
+                using (StreamReader fileReader = new StreamReader(dsPath))
+                {
+                    int position = 0;
+
+                    while (true)
+                    {
+                        line = fileReader.ReadLine();
+
+                        if (atTargetLine)
+                        {
+                            if (line == STRINGNULL)
+                                return;
+                        }
+
+
+                        if (position > _position)
+                        {
+                            atTargetLine = true;
+
+                            if (line != STRINGNULL)
+                                DefinedCharacters.Add(line);
+                        }
+
+                        position++;
+                    }
+                }
+            }
+        }
+
         public static void GetDialogue(int _position)
         {
             string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
@@ -342,7 +421,14 @@ namespace DSLParser
                             atTargetLine = true;
                             if (line != STRINGNULL && (line[0] == '@' && line[line.Length - 1] == '<'))
                             {
-                                    line = line.Replace("<", STRINGNULL).Replace("@ ", STRINGNULL);
+                                foreach (string character in DefinedCharacters)
+                                {
+                                    string name = line.Substring(0, character.Length);
+                                    if (name == character)
+                                        line = line.Replace("<", STRINGNULL).Replace("@ ", name + ": ");
+                                    else if (name.Contains(" "))
+                                        line = line.Replace("<", STRINGNULL).Replace("@ ", STRINGNULL);
+                                }
 
                                 DialogueSystem.Dialogue.Add(line);
                             }

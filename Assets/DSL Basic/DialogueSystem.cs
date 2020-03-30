@@ -125,6 +125,7 @@ public class DialogueSystem : MonoBehaviour
         Instance = this;
         PARSER.Define_Expressions();
         PARSER.Define_Poses();
+        PARSER.Define_Characters();
     }
 
     // Start is called before the first frame update

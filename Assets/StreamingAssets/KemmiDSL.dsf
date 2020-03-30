@@ -9,48 +9,6 @@ AUTHOR: ### MIIJII ###
 
 DATE: ### March 25, 2020 ###
 
-### 
-	 As of right now, I have no idea how it's going to go.
-	 
-	 I only have 4 days left until I can get this game done. Most 
-	 of my time has been on designing this dialogue scripting language so 
-	 that making dialogue can be super easy.
-	 
-	 So I'm going to do a basic run down of what I want when the player actually starts the game...
-	 
-	 Kemmi will appear on to the screen sleeping. At this point, dialogue will not be running a lot.
-	 
-	 It's just going to be dots... periods... The player should be clicking on her about 3 times. 
-	 
-	 In the Dialogue System (or at least in the game), I should have it to where I don't have 
-	 
-	 the player interact with anything as dialogue is running. I have a boolean in my dialogue system
-	 that states if dialogue is running, so that will come in handy.
-	 
-	 Kemmi Expressions:
-	 
-	 Neutral = 0
-	 Happy = 1
-	 Sad = 2
-	 Mad = 3
-	 Confused = 4
-	 Smug = 5
-	 Cunning = 6
-	 Smile = 7
-###
-
-###
-
-EXPRESSIONS and POSES has the following syntax:
-
-	CHARACTER + _ + (EXPRESSIONS / POSES) + _ + EMOTION
-	
-	For different variants of emotions, the syntax will change slightly:
-	
-	CHARACTER + _ + (EXPRESSIONS / POSES) + _ + EMOTION-#
-
-###
-
 <EXPRESSIONS>
 KEMMI_EXPRESSION_HAPPY-0 = 1
 KEMMI_EXPRESSION_HAPPY-1 = 2
@@ -64,28 +22,37 @@ KEMMI_EXPRESSION_HAPPY-4 = 9
 KEMMI_EXPRESSION_MAD-1 = 10
 KEMMI_EXPRESSION_SLEEPY = 11
 
+<CHARACTERS>
+Kemmi
+Drake
+Josh
+
 <POSES>
+
+<SOUNDS>
+
+<MUSIC>
 
 <DIALOGUE_SET_000>
 
-@ [SPEED::FAST][HALT::5000]Seems like [SPEED::SLOWER][HALT::750]we'll be [SPEED::FAST]waiting here for quite awhile...<<
+@Drake [SPEED::FAST][HALT::5000]Seems like [SPEED::SLOWER][HALT::750]we'll be [SPEED::FAST]waiting here for quite awhile...<<
 
-@ [HALT::3000] Yep... [HALT::1000] She's fast asleep...<<
+@Drake [HALT::3000] Yep... [HALT::1000] She's fast asleep...<<
 
-@ [HALT::3000] Why don't you try waking her up?<<
+@Josh [HALT::3000] Why don't you try waking her up?<<
 
 <END>
 
 ###---------------------------------------------------------------------------------------------------------------------------------------------------------###
 
 <DIALOGUE_SET_001>
-@ [SPEED::SLOWEST] ...<<
+@Kemmi [SPEED::SLOWEST] ...<<
 <END>
 
 ###---------------------------------------------------------------------------------------------------------------------------------------------------------###
 
 <DIALOGUE_SET_002>
-@ [HALT::2000][ACTION::"Lazily Grunts"] Just 5 more minutes... Pleasssssssssssse?<<
+@Kemmi [HALT::2000][ACTION::"Lazily Grunts"] Just 5 more minutes... Pleasssssssssssse?<<
 <END>
 
 ###---------------------------------------------------------------------------------------------------------------------------------------------------------###
@@ -207,7 +174,7 @@ KEMMI_EXPRESSION_SLEEPY = 11
 This is unused dialogue that was going to be in the game, but due to limited time, I couldn't make it happen.
 
 
-<DIALOGUE_SET_004
+<DIALOGUE_SET_004>
 
 @ [SPEED::SLOWEST]... [HALT::750][EXPRESSION::7]You're probably wondering what this is...<<
 
