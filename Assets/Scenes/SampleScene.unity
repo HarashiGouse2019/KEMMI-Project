@@ -710,7 +710,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: c653f1b3640ea154584c60185f8b6bb6, type: 3}
   - {fileID: 2800000, guid: c0206624c14d010479df33cf94dea638, type: 3}
   isClicking: 0
-  renderer: {fileID: 846995273}
+  spriteRenderer: {fileID: 0}
 --- !u!212 &846995273
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1472,7 +1472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7988fcda255ae44383df5a782df57a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dsfName: KemmiDSL
+  dsfName: TagTest
   TMP_DIALOGUETEXT: {fileID: 1915386710}
   textBoxUI: {fileID: 95990724}
   actionString: []

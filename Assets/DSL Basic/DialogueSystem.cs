@@ -124,9 +124,13 @@ public class DialogueSystem : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        PARSER.Define_Expressions();
-        PARSER.Define_Poses();
-        PARSER.Define_Characters();
+        try
+        {
+            PARSER.Define_Expressions();
+            PARSER.Define_Poses();
+            PARSER.Define_Characters();
+        }
+        catch { }
     }
 
     // Start is called before the first frame update

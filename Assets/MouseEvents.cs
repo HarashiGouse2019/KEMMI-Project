@@ -34,7 +34,7 @@ public abstract class MouseEvents : MonoBehaviour
 
     public void OnMouseDown()
     {
-        clickingAmount++;
+        if(allowClicking) clickingAmount++;
     }
 
     public void EnableClicking()

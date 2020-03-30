@@ -420,37 +420,43 @@ namespace DSLParser
                         if (position > _position)
                         {
                             atTargetLine = true;
-                            if (line != STRINGNULL && (line[0] == '@' && line[line.Length - 1] == '<'))
+                            if (line != STRINGNULL && (line[0].ToString() == Tokens[3] && line[line.Length - 1] == '<'))
                             {
-                                foreach (string character in DefinedCharacters)
+                                if (DefinedCharacters.Count != 0)
                                 {
-                                    string name = STRINGNULL;
-                                    try
+                                    foreach (string character in DefinedCharacters)
                                     {
-                                        name = line.Substring(1, character.Length) + ":";
+                                        string name = STRINGNULL;
+                                        try
+                                        {
+                                            name = line.Substring(1, character.Length) + ":";
+                                        }
+                                        catch { }
+
+                                        if (name.Contains(character))
+                                        {
+                                            name = name.Replace("_", WHITESPACE);
+                                            line = line.Replace(Tokens[0], STRINGNULL).Replace(Tokens[3] + character, "[INSERT::\"" + name + "\"]");
+                                        }
+
+                                        else if (name.Substring(0, Tokens[4].Length).Contains(Tokens[4]))
+                                            line = line.Replace(Tokens[0], STRINGNULL).Replace(Tokens[3] + Tokens[4], "[INSERT::\"" + Tokens[4] + ":" + "\"]");
+
+                                        else if (name.Substring(0, WHITESPACE.Length).Contains(WHITESPACE))
+                                            line = line.Replace(Tokens[0], STRINGNULL).Replace(Tokens[3] + WHITESPACE, STRINGNULL);
+
+                                        else if (!DefinedCharacters.Exists(x => x.Contains(line.Substring(1, line.IndexOf(WHITESPACE) - 1))))
+                                        {
+                                            string unidentifiedName = line.Substring(1, line.IndexOf(WHITESPACE) - 1);
+                                            Debug.LogError("Unknown character definition at line " + (position + 1) + ". Did you define \"" + unidentifiedName + "\" under <CHARACTERS>?");
+                                            return;
+                                        }
+
                                     }
-                                    catch { }
-
-                                    if (name.Contains(character))
-                                    {
-                                        name = name.Replace("_", " ");
-                                        line = line.Replace("<", STRINGNULL).Replace("@" + character, "[INSERT::\"" + name + "\"]");
-                                    }
-
-                                    else if (name.Substring(0, Tokens[4].Length).Contains(Tokens[4]))
-                                        line = line.Replace("<", STRINGNULL).Replace("@" + Tokens[4], "[INSERT::\"" + Tokens[4] + ":" + "\"]");
-
-                                    else if (name.Substring(0, WHITESPACE.Length).Contains(" "))
-                                        line = line.Replace("<", STRINGNULL).Replace("@" + WHITESPACE, STRINGNULL);
-
-                                    else if (!DefinedCharacters.Exists(x => x.Contains(line.Substring(1, line.IndexOf(" ") - 1))))
-                                    {
-                                        string unidentifiedName = line.Substring(1, line.IndexOf(" ") - 1);
-                                        Debug.LogError("Unknown character definition at line " + (position + 1) + ". Did you define \"" + unidentifiedName + "\" under <CHARACTERS>?");
-                                        return;
-                                    }
-
                                 }
+                                else
+                                    line = line.Replace(Tokens[0], STRINGNULL).Replace(Tokens[3] + WHITESPACE, STRINGNULL);
+
 
                                 DialogueSystem.Dialogue.Add(line);
                             }

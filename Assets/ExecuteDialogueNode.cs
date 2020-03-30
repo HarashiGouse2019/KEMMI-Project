@@ -9,7 +9,6 @@ public class ExecuteDialogueNode : MonoBehaviour
     public void ExecuteNode()
     {
         DialogueNode node = DialogueSystem.GET_NODES()[nodeNumber];
-        Debug.Log(node.name);
         node.ChangeRequstValue(node.GetRunValue(), true);
 
     }

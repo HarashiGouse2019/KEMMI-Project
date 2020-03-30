@@ -45,7 +45,6 @@ public class DialogueNode : ScriptableObject, DialogueSystemEvents.IExecuteOnEnd
     {
         setValue = _value;
         Debug.Log(setValue);
-        Debug.Log("YARU ZO!!!");
         switch (_runImmediately)
         {
             case true: DialogueSystem.REQUEST_DIALOGUE_SET(setValue); DialogueSystem.Run(setValue); break;

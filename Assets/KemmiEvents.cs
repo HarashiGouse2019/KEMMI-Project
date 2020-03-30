@@ -7,9 +7,6 @@ public class KemmiEvents : MouseEvents
     // Update is called once per frame
     void Update()
     {
-        if (allowClicking == true)
-            Debug.Log("YES!!!");
-
         switch (eventID)
         {
             case 0:
