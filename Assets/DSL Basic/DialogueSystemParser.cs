@@ -432,7 +432,10 @@ namespace DSLParser
                                     catch { }
 
                                     if (name.Contains(character))
+                                    {
+                                        name = name.Replace("_", " ");
                                         line = line.Replace("<", STRINGNULL).Replace("@" + character, "[INSERT::\"" + name + "\"]");
+                                    }
 
                                     else if (name.Substring(0, Tokens[4].Length).Contains(Tokens[4]))
                                         line = line.Replace("<", STRINGNULL).Replace("@" + Tokens[4], "[INSERT::\"" + Tokens[4] + ":" + "\"]");

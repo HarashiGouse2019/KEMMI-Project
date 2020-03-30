@@ -24,7 +24,6 @@ KEMMI_EXPRESSION_SLEEPY = 11
 
 <CHARACTERS>
 Kemmi
-Producer
 
 <POSES>
 
@@ -34,7 +33,7 @@ Producer
 
 <DIALOGUE_SET_000>
 
-@Producer [SPEED::FAST][HALT::5000]Seems like [SPEED::SLOWER][HALT::750]we'll be [SPEED::FAST]waiting here for quite awhile...<<
+@ [SPEED::FAST][HALT::5000]Seems like [SPEED::SLOWER][HALT::750]we'll be [SPEED::FAST]waiting here for quite awhile...<<
 
 @ [HALT::3000] Yep... [HALT::1000] She's fast asleep...<<
 
