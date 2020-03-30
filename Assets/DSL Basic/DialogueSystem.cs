@@ -105,7 +105,7 @@ public class DialogueSystem : MonoBehaviour
 
     static readonly Regex ACTION = new Regex(@"(<)+\w*action=\w*[a-zA-Z ]+(>$)");
 
-    static readonly Regex INSERT = new Regex(@"(<)+\w*ins=\w*[a-zA-Z :]+(>$)");
+    static readonly Regex INSERT = new Regex(@"(<)+\w*ins=\w*[a-zA-Z!@#$%^&*()_\-=\\/<>?,./{}[\| ]+(>$)");
 
     static readonly Regex EXPRESSION = new Regex(@"(<)+\w*exp=\w*[A-Z0-9_-]+(>$)");
 
