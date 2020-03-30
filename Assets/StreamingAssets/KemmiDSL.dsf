@@ -35,11 +35,11 @@ Josh
 
 <DIALOGUE_SET_000>
 
-@Drake [SPEED::FAST][HALT::5000]Seems like [SPEED::SLOWER][HALT::750]we'll be [SPEED::FAST]waiting here for quite awhile...<<
+@ [SPEED::FAST][HALT::5000]Seems like [SPEED::SLOWER][HALT::750]we'll be [SPEED::FAST]waiting here for quite awhile...<<
 
-@Drake [HALT::3000] Yep... [HALT::1000] She's fast asleep...<<
+@ [HALT::3000] Yep... [HALT::1000] She's fast asleep...<<
 
-@Josh [HALT::3000] Why don't you try waking her up?<<
+@ [HALT::3000] Why don't you try waking her up?<<
 
 <END>
 

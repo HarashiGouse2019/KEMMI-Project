@@ -425,7 +425,12 @@ namespace DSLParser
                             {
                                 foreach (string character in DefinedCharacters)
                                 {
-                                    string name = line.Substring(1, character.Length) + ":";
+                                    string name = STRINGNULL;
+                                    try
+                                    {
+                                        name = line.Substring(1, character.Length) + ":";
+                                    }
+                                    catch { }
 
                                     if (name.Contains(character))
                                     {
@@ -437,7 +442,6 @@ namespace DSLParser
                                 }
 
                                 DialogueSystem.Dialogue.Add(line);
-                                Debug.Log(line);
                             }
                            
                         }
