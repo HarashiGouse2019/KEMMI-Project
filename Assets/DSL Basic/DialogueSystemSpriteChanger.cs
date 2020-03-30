@@ -31,10 +31,10 @@ public class DialogueSystemSpriteChanger : MonoBehaviour
     public class StorySpriteElement
     {
         [SerializeField]
-        private string identifier;
+        private string identifier = "";
 
         [SerializeField]
-        private Sprite image;
+        private Sprite image = null;
 
         public string Get_Identifier_Value() => identifier;
 
@@ -49,16 +49,16 @@ public class DialogueSystemSpriteChanger : MonoBehaviour
 
 
     [SerializeField]
-    private string characterName;
+    private string characterName = null;
 
     [SerializeField]
-    private CHANGEFOR changeFor;
+    private CHANGEFOR changeFor = default;
 
     [SerializeField]
     private List<StorySpriteElement> storySpriteElements = new List<StorySpriteElement>();
 
     //Our sprite render
-    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer spriteRenderer = null;
 
     //Prefix is a character man plus _EXPRESSION
     private string prefix;

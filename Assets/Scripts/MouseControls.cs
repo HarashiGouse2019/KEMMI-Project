@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class MouseControls : MonoBehaviour
 {
 
-    int w = 64; //The width of screen
-    int h = 64; //The height of screen
+    readonly int w = 64; //The width of screen
+    readonly int h = 64; //The height of screen
 
     static MouseControls Instance;
 
@@ -23,7 +23,7 @@ public class MouseControls : MonoBehaviour
 
     public bool isClicking = false;
 
-    public SpriteRenderer renderer;
+    public SpriteRenderer spriteRenderer = null;
 
     Vector3 screenPoint;
     Vector3 offset;
@@ -31,7 +31,7 @@ public class MouseControls : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        renderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
 

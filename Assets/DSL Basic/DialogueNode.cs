@@ -27,8 +27,6 @@ public class DialogueNode : ScriptableObject, DialogueSystemEvents.IExecuteOnEnd
     [Header("Events"), SerializeField]
     private UnityEvent OnEnd = new UnityEvent();
 
-    private static bool StartingFlag = false;
-
     void Awake()
     {
         Instance = this;
@@ -41,12 +39,6 @@ public class DialogueNode : ScriptableObject, DialogueSystemEvents.IExecuteOnEnd
             DialogueSystem.REQUEST_DIALOGUE_SET(setValue);
             DialogueSystem.Run();
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void ChangeRequstValue(int _value, bool _runImmediately = false)

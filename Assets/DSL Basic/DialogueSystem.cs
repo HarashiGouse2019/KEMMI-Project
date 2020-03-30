@@ -52,13 +52,13 @@ public class DialogueSystem : MonoBehaviour
 
 
     [SerializeField]
-    private string dsfName;
+    private string dsfName = "";
 
     [SerializeField]
-    private TextMeshProUGUI TMP_DIALOGUETEXT;
+    private TextMeshProUGUI TMP_DIALOGUETEXT = null;
 
     [SerializeField]
-    private Image textBoxUI;
+    private Image textBoxUI = null;
 
     private static TextSpeedValue SpeedValue;
 
@@ -105,7 +105,7 @@ public class DialogueSystem : MonoBehaviour
 
     static readonly Regex ACTION = new Regex(@"(<)+\w*action=\w*[a-zA-Z ]+(>$)");
 
-    static readonly Regex INSERT = new Regex(@"(<)+\w*ins=\w*[a-zA-Z!@#$%^&*()_\-=\\/<>?,./{}[\| ]+(>$)");
+    static readonly Regex INSERT = new Regex(@"(<)+\w*ins=\w*[a-zA-Z!@#$%^&*()_\-=\\/<>?,./{}[\|: ]+(>$)");
 
     static readonly Regex EXPRESSION = new Regex(@"(<)+\w*exp=\w*[A-Z0-9_-]+(>$)");
 
@@ -301,7 +301,7 @@ public class DialogueSystem : MonoBehaviour
                         {
 
                             //<sp=3>
-                            int speed = Convert.ToInt32(tag.Split(PARSER.delimiters)[1].Split('=')[1]);
+                            int speed = Convert.ToInt32(tag.Split(PARSER.Delimiters)[1].Split('=')[1]);
 
                             SpeedValue = (TextSpeedValue)speed;
 
@@ -350,7 +350,7 @@ public class DialogueSystem : MonoBehaviour
                             Debug.Log("WOW FANTASTIC BABY ");
                             if (OnDelay == false)
                             {
-                                string value = "*" + tag.Split(PARSER.delimiters)[1].Split('=')[1] + "*";
+                                string value = "*" + tag.Split(PARSER.Delimiters)[1].Split('=')[1] + "*";
 
                                 _line = ReplaceFirst(_line, tag, value);
 
@@ -397,7 +397,7 @@ public class DialogueSystem : MonoBehaviour
                             Debug.Log("WOW FANTASTIC BABY ");
                             if (OnDelay == false)
                             {
-                                string value = tag.Split(PARSER.delimiters)[1].Split('=')[1];
+                                string value = tag.Split(PARSER.Delimiters)[1].Split('=')[1];
 
                                 Debug.Log(value);
 
@@ -445,22 +445,25 @@ public class DialogueSystem : MonoBehaviour
 
                         tag = Dialogue[(int)LineIndex].Substring(startTagPos, endTagPos + 1);
 
-                        if (OnDelay == false)
+                        if (_tagExpression.IsMatch(tag))
                         {
-                            /*Now we do a substring from the current position to 4 digits.*/
+                            if (OnDelay == false)
+                            {
+                                /*Now we do a substring from the current position to 4 digits.*/
 
-                            int value = Convert.ToInt32(tag.Split(PARSER.delimiters)[1].Split('=')[1]);
+                                int value = Convert.ToInt32(tag.Split(PARSER.Delimiters)[1].Split('=')[1]);
 
-                            int millsecs = Convert.ToInt32(value);
+                                int millsecs = Convert.ToInt32(value);
 
-                            Instance.StartCoroutine(DelaySpan(millsecs));
+                                Instance.StartCoroutine(DelaySpan(millsecs));
 
-                            _line = ReplaceFirst(_line, tag, "");
+                                _line = ReplaceFirst(_line, tag, "");
 
-                            Dialogue[(int)LineIndex] = _line;
+                                Dialogue[(int)LineIndex] = _line;
 
-                            return SUCCESSFUL;
+                                return SUCCESSFUL;
 
+                            }
                         }
 
                     }
@@ -736,47 +739,53 @@ public class DialogueSystem : MonoBehaviour
     {
         string dsPath = Application.streamingAssetsPath + @"/" + GET_DIALOGUE_SCRIPTING_FILE();
 
-        string line = null;
-
         int position = 0;
 
         bool foundDialogueSet = false;
 
         if (File.Exists(dsPath))
         {
-            using (StreamReader fileReader = new StreamReader(dsPath))
-            {
-                while (true)
-                {
-                    line = fileReader.ReadLine();
-
-                    if (line == null)
-                    {
-                        if (foundDialogueSet)
-                            return;
-                        else
-                        {
-                            Debug.Log("Dialogue Set " + _dialogueSet.ToString("D3", CultureInfo.InvariantCulture) + " does not exist. Try adding it to the .dsf referenced.");
-                            return;
-                        }
-                    }
-
-                    line.Split(PARSER.delimiters);
-
-                    if (line.Contains("<DIALOGUE_SET_" + _dialogueSet.ToString("D3", CultureInfo.InvariantCulture) + ">"))
-                    {
-                        foundDialogueSet = true;
-
-                        DialogueSet = _dialogueSet;
-
-                        PARSER.GetDialogue(position);
-                    }
-
-                    position++;
-                }
-            }
+            string line = null;
+            CollectDialogue(_dialogueSet, dsPath, out line, ref position, ref foundDialogueSet);
+            return;
         }
         Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
+    }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "<Pending>")]
+    private static void CollectDialogue(int _dialogueSet, string dsPath, out string line, ref int position, ref bool foundDialogueSet)
+    {
+        using (StreamReader fileReader = new StreamReader(dsPath))
+        {
+            while (true)
+            {
+                line = fileReader.ReadLine();
+
+                if (line == null)
+                {
+                    if (foundDialogueSet)
+                        return;
+                    else
+                    {
+                        Debug.Log("Dialogue Set " + _dialogueSet.ToString("D3", CultureInfo.InvariantCulture) + " does not exist. Try adding it to the .dsf referenced.");
+                        return;
+                    }
+                }
+
+                line.Split(PARSER.Delimiters);
+
+                if (line.Contains("<DIALOGUE_SET_" + _dialogueSet.ToString("D3", CultureInfo.InvariantCulture) + ">"))
+                {
+                    foundDialogueSet = true;
+
+                    DialogueSet = _dialogueSet;
+
+                    PARSER.GetDialogue(position);
+                }
+
+                position++;
+            }
+        }
     }
 
     public static IEnumerator WaitForResponse()
