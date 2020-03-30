@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Collider2D))]
 public class MouseDataReceiver : MonoBehaviour
 {
     //Something to put on a gameObject
@@ -16,6 +16,7 @@ public class MouseDataReceiver : MonoBehaviour
     void Awake()
     {
         entityObj = gameObject;
+       
     }
 
     void OnMouseDown()

@@ -154,7 +154,7 @@ public class DialogueSystem : MonoBehaviour
 
             CurrentNode = _nodeValue;
 
-            Debug.Log("START!!!");
+
 
             //We'll parse the very first dialogue that is ready to be displayed
             Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
@@ -753,7 +753,8 @@ public class DialogueSystem : MonoBehaviour
         Dialogue.Clear();
         Instance.StopAllCoroutines();
         CursorPosition = reset;
-        Instance.nodes[CurrentNode].ExecuteOnEnd();
+        if (CurrentNode != -1 || CurrentNode < Instance.nodes.Count)
+            Instance.nodes[CurrentNode].ExecuteOnEnd();
     }
 
     public static void Progress()

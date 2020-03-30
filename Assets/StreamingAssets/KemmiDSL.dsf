@@ -152,8 +152,86 @@ KEMMI_EXPRESSION_SLEEPY = 11
 
 @ [EXPRESSION::5]and I'll [BOLD]show you how [BOLD::END]<<
 
+@ [EXPRESSION::9]So! [HALT::1000] To protect yourself from, the [EXPRESSION::5][BOLD]Corona[BOLD::END], [HALT::1000][EXPRESSION::7] You'll have to follow [BOLD]The 4 rules of Kemmi[BOLD::END].<<
+
+@ [BOLD]RULE #1[BOLD::END]: [HALT::750]Wash your hands!<<
+
+@ [EXPRESSION::9][BOLD]RULE #2[BOLD::END]: [EXPRESSION::7][HALT::750]Don't touch anyone like you did with me just a moment ago...<<
+
+@ Yeah! [HALT::500]I haven't forgetten!!!<<
+
+@ [BOLD]RULE #3[BOLD::END]: [HALT::750]Wear a mask... [HALT::750][EXPRESSION::2]if you can of course.<<
+
+@ [BOLD]LAST and FINAL RULE[BOLD::END]: [HALT::1000][EXPRESSION::7]Follow the [BOLD]3 Rules of Kemmi [BOLD::END].<<
+
+@ [EXPRESSION::4][HALT::1000][EXPRESSION::7]What?! You thought that this was going to be a game?<<
+
+@ No. [HALT::750]I'm just laying out some really important information.<<
+
+@ [EXPRESSION::4] I'm actually being ran from a custom-made Dialogue Scripting Language...<<
+
+@ [EXPRESSION::5] But it looks like [BOLD]the Developer[BOLD::END] took his sweet time and finished the Dialogue System on the second to last day!<<
+
+@ So... [HALT::750][EXPRESSION::4] I can't really give you all the activities that I would of given you in the game...<<
+
+@ [EXPRESSION::7]But boy! Now what will you do now?!<<
+
+@ I say... [HALT::1000][EXPRESSION::9]make life worth while!<<
+
+@ Since I assume you're inside, you can actually do way more than what you think.<<
+
+@ Like... [HALT::1000][EXPRESSION::7]Watch TV, [HALT::500]read a book, [HALT::500]draw, [HALT::500]learn a new language, [HALT::500]cook, [HALT::500]dance, [HALT::500]sing...<<
+
+@ Seriously, keep these rules in mind, and just be you...<<
+
+@ It would suck having to be scared of [SPEED::FASTER][BOLD]THE CORONA [BOLD::END][SPEED::FAST]if it means not enjoying being a kid.<<
+
+@ My time is limited though! [EXPRESSION::1]But it's nice talking to you. [EXPRESSION::8]<<
+
+@ Sorry that this game wasn't really... [HALT::1000]well... [HALT::1000][EXPRESSION::7] a game.<<
+
+@ Perhaps if the [BOLD]developer [BOLD::END]didn't have issue on this dialogue system that makes me able to talk to you now...<<
+
+@ [EXPRESSION::9]I would probably have way more content.<<
+
+@ [HALT::3000]I Guess... [HALT::1000][EXPRESSION::7]I'll see you around kid<<
+
+@ You can just hit [BOLD]ALT+F4 [BOLD::END] or [BOLD]escape [BOLD::END] to quit the game.<<
+
+@ [EXPRESSION::9] << 
+
 <END>
+
+###
+
+This is unused dialogue that was going to be in the game, but due to limited time, I couldn't make it happen.
+
 
 <DIALOGUE_SET_004
 
+@ [SPEED::SLOWEST]... [HALT::750][EXPRESSION::7]You're probably wondering what this is...<<
+
+@ [EXPRESSION::1]... [HALT::750][SPEED::FASTER][EXPRESSION::7]Why... [HALT::500]It's [BOLD]BarSoap![BOLD::END]<<
+
+@ [EXPRESSION::6]That's right! [HALT::500]This baby right here will get you all cleaned up and away from the virus!<<
+
+@ [EXPRESSION::7]Not only that, but you're doing everyone a huge favor...<<
+
+@ [EXPRESSION::9]Like... [HALT::750][EXPRESSION::7] Not making everyone sick!<<
+
+@ Most cases, if you use a [BOLD]bar of soap[BOLD::END] to keep yourself clean, it'll boost your immune system...<<
+
+@ [SPEED::SLOWEST][EXPRESSION::4]... [EXPRESSION::7]I... [HALT::700][SPEED::FAST]probably should say it would boost it...<<
+
+@ [EXPRESSION::9]but you'll be more resistant of keeping the virus...<<
+
+@ [EXPRESSION::7]A [BOLD]clean body [BOLD::END]is a [BOLD]strong body [BOLD::END]<<
+
+@ [EXPRESSION::7]Always keep this in mind. And you'll do just fine.<<
+
+@ [EXPRESSION::1]Now... [HALT::1000]what's [BOLD]RULE #2[BOLD::END] ?<<
+
+@ [EXPRESSION::8]Well... [HALT::500]It's to [EXPRESSION::7]not to touch me.<<
+
 <END>
+###
