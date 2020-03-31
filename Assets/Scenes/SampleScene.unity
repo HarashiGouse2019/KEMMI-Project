@@ -1472,13 +1472,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7988fcda255ae44383df5a782df57a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dslFileName: 
+  dslFileName: KemmiDSL
   TMP_DIALOGUETEXT: {fileID: 1915386710}
   textBoxUI: {fileID: 95990724}
-  actionString: []
-  actionIndex: 0
-  expressionValue: []
-  expressionIndex: 0
   nodes:
   - {fileID: 11400000, guid: f45b1feea01ea9b4d81d583753666680, type: 2}
   - {fileID: 11400000, guid: 1ff4dbd15d038d241be617f1f185486e, type: 2}

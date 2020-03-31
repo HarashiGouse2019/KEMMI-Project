@@ -18,13 +18,13 @@ namespace DSLParser
 
             private CommandCallLocation(string command, int dialogueSetLocation, int callLine, int callPosition)
             {
-                this.Command = command;
+                Command = command;
 
-                this.DialogueSetLocation = dialogueSetLocation;
+                DialogueSetLocation = dialogueSetLocation;
 
-                this.CallLine = callLine;
+                CallLine = callLine;
 
-                this.CallPosition = callPosition;
+                CallPosition = callPosition;
             }
 
             public static CommandCallLocation New(string command, int dialogueSetLocation, int callLine, int callPosition)
@@ -44,9 +44,9 @@ namespace DSLParser
             }
         }
 
-        public static char[] Delimiters { get; } = { '<', '>', '[', ']', ',' };
+        public static char[] Delimiters { get; } = { '<', '>', '[', ']', ','};
 
-        public static string[] Tokens { get; } = { "<<", "::", "END", "@", "???" };
+        public static string[] Tokens { get; } = { "<<", "::", "END", "@", "???"};
 
         public static string[] Keywords { get; } = { "SPEED", "BOLD", "ITALIZE", "UNDERLINE", "SOUND", "EXPRESSION", "ACTION", "HALT", "POSE", "INSERT" };
 
@@ -57,7 +57,7 @@ namespace DSLParser
         public static Dictionary<string, int> DefinedExpressions { get; private set; } = new Dictionary<string, int>();
         public static Dictionary<string, int> DefinedPoses { get; private set; } = new Dictionary<string, int>();
         public static List<string> DefinedCharacters { get; private set; } = new List<string>();
-        public static bool LINE_HAS(string line, string token) => line.Contains(token);
+        public static bool HAS(string line, string token) => line.Contains(token);
 
         public static int skipValue = 0;
         public static object returnedValue = null;
@@ -67,6 +67,11 @@ namespace DSLParser
         const string STRINGNULL = "";
         const string WHITESPACE = " ";
 
+        /// <summary>
+        /// Parse an entire line into tags based on commands calls.
+        /// </summary>
+        /// <param name="line">The line to parse.</param>
+        /// <returns></returns>
         public static string PARSER_LINE(string line)
         {
             /*The parsering process in the scripting language will be the most challenging thing!!! So challenging that
@@ -116,7 +121,7 @@ namespace DSLParser
                     {
                         //If the parser command is a value one, we can remove it.
                         //This will allow the person
-                        if (command.Contains(keyword))
+                        if (HAS(command, keyword))
                         {
                             foundCommands.Add(command);
 
@@ -143,7 +148,7 @@ namespace DSLParser
                     ParserToInsertTag(commands, ref line) ||
                     ParseToExpressionTag(commands, ref line) ||
                     ParseToPoseTag(commands, ref line) ||
-                    ParseToWaitTag(commands, ref line);
+                    ParseToHaltag(commands, ref line);
 
                 if (tagsParser != SUCCESSFUL)
                     line = line.Replace(commands + " ", "");
@@ -153,6 +158,9 @@ namespace DSLParser
             return line;
         }
 
+        /// <summary>
+        /// Define expressions listed underneath <EXPRESSIONS> in the .dsl file
+        /// </summary>
         public static void Define_Expressions()
         {
             string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
@@ -179,7 +187,7 @@ namespace DSLParser
 
                         line.Split(Delimiters);
 
-                        if (line.Contains("<EXPRESSIONS>"))
+                        if (HAS(line, "<EXPRESSIONS>"))
                         {
                             foundExpression = true;
                             try { GetExpressions(position); } catch { }
@@ -192,6 +200,9 @@ namespace DSLParser
             Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
         }
 
+        //// <summary>
+        /// Define poses listed underneath <POSES> in the .dsl file
+        /// </summary>
         public static void Define_Poses()
         {
             string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
@@ -218,7 +229,7 @@ namespace DSLParser
 
                         line.Split(Delimiters);
 
-                        if (line.Contains("<POSES>"))
+                        if (HAS(line, "<POSES>"))
                         {
                             foundPose = true;
                             try { GetPoses(position); } catch { }
@@ -231,6 +242,9 @@ namespace DSLParser
             Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
         }
 
+        /// <summary>
+        /// Define characters listed underneath <CHARACTERS> in the .dsl file
+        /// </summary>
         public static void Define_Characters()
         {
             string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
@@ -257,7 +271,7 @@ namespace DSLParser
 
                         line.Split(Delimiters);
 
-                        if (line.Contains("<CHARACTERS>"))
+                        if (HAS(line, "<CHARACTERS>"))
                         {
                             foundPose = true;
                             try { GetCharacterNames(position); } catch { }
@@ -270,7 +284,11 @@ namespace DSLParser
             Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
         }
 
-        public static void GetExpressions(int _position)
+        /// <summary>
+        /// Get defined expressions underneath <EXPRESSIONS> in the .dsl file
+        /// </summary>
+        /// <param name="_position">Where to start collecting data</param>
+        static void GetExpressions(int _position)
         {
             string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
 
@@ -305,13 +323,15 @@ namespace DSLParser
 
                         position++;
                     }
-
-
                 }
             }
         }
 
-        public static void GetPoses(int _position)
+        /// <summary>
+        /// Get poses defined underneath <POSES> inside the .dsl file.
+        /// </summary>
+        /// <param name="_position">Where to start collecting data.</param>
+        static void GetPoses(int _position)
         {
             string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
 
@@ -356,7 +376,11 @@ namespace DSLParser
             }
         }
 
-        public static void GetCharacterNames(int _position)
+        /// <summary>
+        /// Get Character names defined underneath <CHARACTERS> inside the .dsl file
+        /// </summary>
+        /// <param name="_position">Where to start collecting data.</param>
+        static void GetCharacterNames(int _position)
         {
             string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
 
@@ -396,6 +420,10 @@ namespace DSLParser
             }
         }
 
+        /// <summary>
+        /// Get all dialogue in a specified Dialogue_Set inside a .dsl file
+        /// </summary>
+        /// <param name="_position">Position to start collecting data</param>
         public static void GetDialogue(int _position)
         {
             string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
@@ -433,34 +461,32 @@ namespace DSLParser
                                         }
                                         catch { }
 
-                                        if (name.Contains(character))
+                                        if (HAS(name, character))
                                         {
                                             name = name.Replace("_", WHITESPACE);
                                             line = line.Replace(Tokens[0], STRINGNULL).Replace(Tokens[3] + character, "[INSERT::\"" + name + "\"]");
                                         }
 
-                                        else if (name.Substring(0, Tokens[4].Length).Contains(Tokens[4]))
+                                        else if (HAS(name.Substring(0, Tokens[4].Length), Tokens[4]))
                                             line = line.Replace(Tokens[0], STRINGNULL).Replace(Tokens[3] + Tokens[4], "[INSERT::\"" + Tokens[4] + ":" + "\"]");
 
-                                        else if (name.Substring(0, WHITESPACE.Length).Contains(WHITESPACE))
+                                        else if (HAS(name.Substring(0, WHITESPACE.Length), WHITESPACE))
                                             line = line.Replace(Tokens[0], STRINGNULL).Replace(Tokens[3] + WHITESPACE, STRINGNULL);
 
-                                        else if (!DefinedCharacters.Exists(x => x.Contains(line.Substring(1, line.IndexOf(WHITESPACE) - 1))))
+                                        else if (!DefinedCharacters.Exists(x => HAS(x, line.Substring(1, line.IndexOf(WHITESPACE) - 1))))
                                         {
                                             string unidentifiedName = line.Substring(1, line.IndexOf(WHITESPACE) - 1);
                                             Debug.LogError("Unknown character definition at line " + (position + 1) + ". Did you define \"" + unidentifiedName + "\" under <CHARACTERS>?");
                                             return;
                                         }
-
                                     }
                                 }
                                 else
                                     line = line.Replace(Tokens[0], STRINGNULL).Replace(Tokens[3] + WHITESPACE, STRINGNULL);
 
-
                                 DialogueSystem.Dialogue.Add(line);
-                            }
 
+                            }
                         }
                         position++;
                     }
@@ -468,9 +494,15 @@ namespace DSLParser
             }
         }
 
+        /// <summary>
+        /// Convert speed command into a tag.
+        /// </summary>
+        /// <param name="_styleCommand">The valid commands.</param>
+        /// <param name="_line">The line to parse.</param>
+        /// <returns></returns>
         static bool ParseToSpeedTag(string _styleCommand, ref string _line)
         {
-            if (_styleCommand.Contains(Delimiters[2] + Keywords[0]))
+            if (HAS(_styleCommand, Delimiters[2] + Keywords[0]))
             {
                 var speedValue = _styleCommand.Split(Delimiters)[1].Split(':')[2];
 
@@ -488,9 +520,15 @@ namespace DSLParser
             return FAILURE;
         }
 
+        /// <summary>
+        /// Convert action command into a tag.
+        /// </summary>
+        /// <param name="_styleCommand">The valid commands.</param>
+        /// <param name="_line">The line to parse.</param>
+        /// <returns></returns>
         static bool ParseToActionTag(string _styleCommand, ref string _line)
         {
-            if (_styleCommand.Contains(Delimiters[2] + Keywords[6]))
+            if (HAS(_styleCommand, Delimiters[2] + Keywords[6]))
             {
                 var actionString = _styleCommand.Split(Delimiters)[1].Split(':')[2].Split('"')[1];
 
@@ -503,18 +541,20 @@ namespace DSLParser
                  parsed information.*/
                 _line = _line.Replace(_styleCommand, "<action=" + actionString + ">");
 
-                //Skip value will be assigned, so that the system can read it
-                DialogueSystem.UPDATE_ACTION_STRING(actionString);
-
-
                 return SUCCESSFUL;
             }
             return FAILURE;
         }
 
+        /// <summary>
+        /// Convert expression command into a tag.
+        /// </summary>
+        /// <param name="_styleCommand">The valid commands.</param>
+        /// <param name="_line">The line to parse.</param>
+        /// <returns></returns>
         static bool ParseToExpressionTag(string _styleCommand, ref string _line)
         {
-            if (_styleCommand.Contains(Delimiters[2] + Keywords[5]))
+            if (HAS(_styleCommand, Delimiters[2] + Keywords[5]))
             {
                 var value = _styleCommand.Split(Delimiters)[1].Split(':')[2];
 
@@ -527,18 +567,20 @@ namespace DSLParser
                  parsed information.*/
                 _line = _line.Replace(_styleCommand, "<exp=" + value + ">");
 
-                //Skip value will be assigned, so that the system can read it
-                skipValue = (Keywords[5] + "::" + value).Length - 1;
-                returnedValue = value;
-
                 return SUCCESSFUL;
             }
             return FAILURE;
         }
 
+        /// <summary>
+        /// Convert pose command into a tag.
+        /// </summary>
+        /// <param name="_styleCommand">The valid commands.</param>
+        /// <param name="_line">The line to parse.</param>
+        /// <returns></returns>
         static bool ParseToPoseTag(string _styleCommand, ref string _line)
         {
-            if (_styleCommand.Contains(Delimiters[2] + Keywords[8]))
+            if (HAS(_styleCommand, Delimiters[2] + Keywords[8]))
             {
                 var value = _styleCommand.Split(Delimiters)[1].Split(':')[2];
 
@@ -551,18 +593,20 @@ namespace DSLParser
                  parsed information.*/
                 _line = _line.Replace(_styleCommand, "<pose=" + value + ">");
 
-                //Skip value will be assigned, so that the system can read it
-                skipValue = (Keywords[5] + "::" + value).Length - 1;
-                returnedValue = value;
-
                 return SUCCESSFUL;
             }
             return FAILURE;
         }
 
+        /// <summary>
+        /// Convert insert command into a tag.
+        /// </summary>
+        /// <param name="_styleCommand">The valid commands.</param>
+        /// <param name="_line">The line to parse.</param>
+        /// <returns></returns>
         static bool ParserToInsertTag(string _styleCommand, ref string _line)
         {
-            if (_styleCommand.Contains(Delimiters[2] + Keywords[9]))
+            if (HAS(_styleCommand, Delimiters[2] + Keywords[9]))
             {
                 var word = _styleCommand.Split(Delimiters)[1].Replace(Tokens[1], STRINGNULL).Split('"')[1];
                 Debug.Log(word);
@@ -580,9 +624,15 @@ namespace DSLParser
             return FAILURE;
         }
 
-        static bool ParseToWaitTag(string _styleCommand, ref string _line)
+        /// <summary>
+        /// Convert halt command into a tag.
+        /// </summary>
+        /// <param name="_styleCommand">The valid commands.</param>
+        /// <param name="_line">The line to parse.</param>
+        /// <returns></returns>
+        static bool ParseToHaltag(string _styleCommand, ref string _line)
         {
-            if (_styleCommand.Contains(Delimiters[2] + Keywords[7]))
+            if (HAS(_styleCommand, Delimiters[2] + Keywords[7]))
             {
 
                 var value = _styleCommand.Split(Delimiters)[1].Split(':')[2];
@@ -599,6 +649,12 @@ namespace DSLParser
             return FAILURE;
         }
 
+        /// <summary>
+        /// Convert bold command into a tag.
+        /// </summary>
+        /// <param name="_styleCommand">The valid commands.</param>
+        /// <param name="_line">The line to parse.</param>
+        /// <returns></returns>
         static bool ParseToBoldTag(string _styleCommand, ref string _line)
         {
             if (_styleCommand == Delimiters[2] + Keywords[1] + Delimiters[3])
@@ -616,6 +672,12 @@ namespace DSLParser
             return FAILURE;
         }
 
+        /// <summary>
+        /// Convert italize command into a tag.
+        /// </summary>
+        /// <param name="_styleCommand">The valid commands.</param>
+        /// <param name="_line">The line to parse.</param>
+        /// <returns></returns>
         static bool ParseToItalizeTag(string _styleCommand, ref string _line)
         {
             if (_styleCommand == Delimiters[2] + Keywords[2] + Delimiters[3])
@@ -633,6 +695,12 @@ namespace DSLParser
             return FAILURE;
         }
 
+        /// <summary>
+        /// Convert underline command into a tag.
+        /// </summary>
+        /// <param name="_styleCommand">The valid commands.</param>
+        /// <param name="_line">The line to parse.</param>
+        /// <returns></returns>
         static bool ParseToUnderlineTag(string _styleCommand, ref string _line)
         {
             if (_styleCommand == Delimiters[2] + Keywords[3] + Delimiters[3])

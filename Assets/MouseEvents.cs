@@ -20,21 +20,34 @@ public abstract class MouseEvents : MonoBehaviour
     [SerializeField]
     protected int eventID = 0;
 
+    IEnumerator inputCycle;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        inputCycle = RecieverMouseInput();
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
-        
+        ReceiveInput();
     }
 
-    public void OnMouseDown()
+    void ReceiveInput()
     {
-        if(allowClicking) clickingAmount++;
+        StartCoroutine(inputCycle);
+    }
+
+    IEnumerator RecieverMouseInput()
+    {
+        while (allowClicking)
+        {
+            if (Input.GetMouseButtonDown(0))
+                clickingAmount++;
+
+            yield return null;
+        }
     }
 
     public void EnableClicking()

@@ -5,8 +5,10 @@ using UnityEngine;
 public class KemmiEvents : MouseEvents
 {
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         switch (eventID)
         {
             case 0:

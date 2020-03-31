@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: INTRO_NODE
   m_EditorClassIdentifier: 
   executeOnStart: 0
-  setValue: 0
+  setValue: 3
   OnEnd:
     m_PersistentCalls:
       m_Calls:

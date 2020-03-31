@@ -72,16 +72,6 @@ public class DialogueSystem : MonoBehaviour
 
     public static uint CursorPosition { get; private set; } = 0;
 
-    public static List<string> ActionString { get; private set; } = new List<string>();
-    public List<string> actionString;
-    public static uint ActionIndex { get; private set; } = 0;
-    public uint actionIndex;
-
-    public static List<string> ExpressionValue { get; private set; } = new List<string>();
-    public static uint ExpressionIndex { get; private set; } = 0;
-    public List<string> expressionValue;
-    public uint expressionIndex;
-
     private static bool OnDelay = false;
 
     private static bool typeIn;
@@ -159,8 +149,6 @@ public class DialogueSystem : MonoBehaviour
             RunningDialogue = true;
 
             CurrentNode = _nodeValue;
-
-
 
             //We'll parse the very first dialogue that is ready to be displayed
             Dialogue[(int)LineIndex] = PARSER.PARSER_LINE(Dialogue[(int)LineIndex]);
@@ -398,7 +386,6 @@ public class DialogueSystem : MonoBehaviour
 
                         if (_tagExpression.IsMatch(tag))
                         {
-                            Debug.Log("WOW FANTASTIC BABY ");
                             if (OnDelay == false)
                             {
                                 string value = tag.Split(PARSER.Delimiters)[1].Split('=')[1];
@@ -594,7 +581,7 @@ public class DialogueSystem : MonoBehaviour
         if (_notFlag)
         {
             //Otherwise, we'll through an error saying this hasn't been defined.
-            Debug.LogError(value + " has not been defined. Perhaps declaring it in the associated .dsf File.");
+            Debug.LogError(value + " has not been defined. Perhaps declaring it in the associated .dsl File.");
             return FAILURE;
         }
 
@@ -641,7 +628,7 @@ public class DialogueSystem : MonoBehaviour
         if (_notFlag)
         {
             //Otherwise, we'll through an error saying this hasn't been defined.
-            Debug.LogError(value + " has not been defined. Perhaps declaring it in the associated .dsf File.");
+            Debug.LogError(value + " has not been defined. Perhaps declaring it in the associated " + dslFileExtention + " File.");
             return FAILURE;
         }
 
@@ -886,16 +873,6 @@ public class DialogueSystem : MonoBehaviour
             case TextSpeedValue.FASTER: TextSpeed = 0.005f; return;
             case TextSpeedValue.FASTEST: TextSpeed = 0.0025f; return;
         }
-    }
-
-    public static void UPDATE_ACTION_STRING(string _value)
-    {
-        ActionString.Add(_value);
-    }
-
-    public static void UPDATE_EXPRESSION_VALUE(string _value)
-    {
-        ExpressionValue.Add(_value);
     }
 
     public static string GET_DIALOGUE_SCRIPTING_FILE() => Instance.dslFileName + dslFileExtention;

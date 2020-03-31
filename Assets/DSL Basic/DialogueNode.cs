@@ -44,7 +44,7 @@ public class DialogueNode : ScriptableObject, DialogueSystemEvents.IExecuteOnEnd
     public void ChangeRequstValue(int _value, bool _runImmediately = false)
     {
         setValue = _value;
-        Debug.Log(setValue);
+
         switch (_runImmediately)
         {
             case true: DialogueSystem.REQUEST_DIALOGUE_SET(setValue); DialogueSystem.Run(setValue); break;
