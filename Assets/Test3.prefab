@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 2603651531687127587}
   - component: {fileID: 2603651531687127586}
   - component: {fileID: 6800544617783348103}
+  - component: {fileID: 62408191419100212}
   m_Layer: 0
   m_Name: Test3
   m_TagString: Untagged
@@ -296,3 +297,16 @@ MonoBehaviour:
   receiver: {fileID: 2603651531687127587}
   useMouseReceiver: 1
   eventID: 0
+--- !u!114 &62408191419100212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603651531687127585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba3078f6ebae6714faac9bca7642200f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodeNumber: 3

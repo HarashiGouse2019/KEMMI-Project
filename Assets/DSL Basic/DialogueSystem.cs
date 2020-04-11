@@ -39,6 +39,8 @@ public class DialogueSystem : MonoBehaviour
 {
     public static DialogueSystem Instance;
 
+
+    //These are valid speeds that you can use in DSL
     public enum TextSpeedValue
     {
         SLOWEST,
@@ -50,13 +52,15 @@ public class DialogueSystem : MonoBehaviour
         FASTEST
     }
 
-
+    //The file name. 
     [SerializeField]
     private string dslFileName = "";
 
+    //Reference to TextMeshPro
     [SerializeField]
     private TextMeshProUGUI TMP_DIALOGUETEXT = null;
 
+    //If there's a frame or dialgoue box, reference it.
     [SerializeField]
     private Image textBoxUI = null;
 
@@ -64,48 +68,57 @@ public class DialogueSystem : MonoBehaviour
 
     public static float TextSpeed { get; private set; }
 
+    //Dialogue that is collected after reading file.
     public static List<string> Dialogue = new List<string>();
 
+    //If dialouge is currently running
     public static bool RunningDialogue { get; private set; } = false;
 
+    //Used to iterate through list of dialogue
     public static uint LineIndex { get; private set; } = 0;
 
+    //Used to iterate through the dialogue text
     public static uint CursorPosition { get; private set; } = 0;
 
+    //If a [HALT] command has been called
     private static bool OnDelay = false;
 
+    //Allow the player to proceed to next dialogue after full text is displayed
     private static bool typeIn;
 
+    //Dialogue set defined in the DSL file.
     public static int DialogueSet { get; private set; } = -1;
 
+    //Nodes to be called
     [SerializeField]
     private List<DialogueNode> nodes = new List<DialogueNode>();
 
+    //Current node that is being used.
     public static int CurrentNode { get; private set; } = -1;
 
+    //A list of sprite changers to allow the changing of images of a character.
     public static List<DialogueSystemSpriteChanger> DialogueSystemSpriteChangers { get; private set; } = new List<DialogueSystemSpriteChanger>();
 
+    //Reset value
     const int reset = 0;
 
+    //Predefined styling tags that already exists.
     static readonly string BOLD = "<b>", BOLDEND = "</b>";
     static readonly string ITALIZE = "<i>", ITALIZEEND = "</i>";
     static readonly string UNDERLINE = "<u>", UNDERLINEEND = "</u>";
 
 
-
+    //The formatting of custom-made tags
     static readonly Regex ACTION = new Regex(@"(<)+\w*action=\w*[a-zA-Z ]+(>$)");
-
     static readonly Regex INSERT = new Regex(@"(<)+\w*ins=\w*[a-zA-Z!@#$%^&*()_\-=\\/<>?,./{}[\|: ]+(>$)");
-
     static readonly Regex EXPRESSION = new Regex(@"(<)+\w*exp=\w*[A-Z0-9_-]+(>$)");
-
     static readonly Regex POSE = new Regex(@"(<)+\w*pose=\w*[A-Z0-9_-]+(>$)");
-
     static readonly Regex HALT = new Regex(@"(<)+\w*halt=\w*[0-9]+(>$)");
-
     static readonly Regex SPEED = new Regex(@"(<)+\w*sp=\w*[0-6](>$)");
 
+    //DSL file extension
     static readonly string dslFileExtention = ".dsl";
+
     static readonly string STRINGNULL = "";
 
     const bool SUCCESSFUL = true;
@@ -114,6 +127,8 @@ public class DialogueSystem : MonoBehaviour
     void Awake()
     {
         Instance = this;
+
+        //Go into file, and check for all defined values
         try
         {
             PARSER.Define_Expressions();
@@ -126,12 +141,13 @@ public class DialogueSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Find all sprite changers in the current scene.
         DialogueSystemSpriteChangers = FIND_ALL_SPRITECHANGERS();
     }
 
     void FixedUpdate()
     {
-
+        //If [HALT] command ends, continue to exclude any tags that may be parsered
         if (!OnDelay && Dialogue.Count != 0)
         {
             ExcludeAllFunctionTags(Dialogue[(int)LineIndex]);
@@ -141,7 +157,7 @@ public class DialogueSystem : MonoBehaviour
 
     public static void Run(int _nodeValue = -1)
     {
-
+        //Check if we are not passed a index value
         if (InBounds((int)LineIndex, Dialogue) && IS_TYPE_IN() == false)
         {
             Dialogue[(int)LineIndex] = Dialogue[(int)LineIndex].Replace("@ ", "").Replace("<< ", "");
