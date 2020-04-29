@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "New Node", menuName = "Dialogue Node")]
@@ -18,33 +16,40 @@ public class DialogueNode : ScriptableObject, DialogueSystemEvents.IExecuteOnEnd
          
          */
 
+
+    //Check if you want to execute dialogue on start
     [SerializeField]
     private bool executeOnStart = false;
 
+    //What dialogue set to read from
     [Header("Dialogue Set"), SerializeField]
     private int setValue = 0;
 
+    //Events to be called at the end of the dialogue set
     [Header("Events"), SerializeField]
     private UnityEvent OnEnd = new UnityEvent();
 
-    void Awake()
-    {
-        Instance = this;
-    }
-
     public void Start()
     {
+        //Dialogue will run on start if executeOnStart is toggled on
         if(executeOnStart)
         {
+            //Grab Dialogue Set number from the specified dsl file
             DialogueSystem.REQUEST_DIALOGUE_SET(setValue);
+
+            //Run the Dialogue Set
             DialogueSystem.Run();
         }
     }
 
-    public void ChangeRequstValue(int _value, bool _runImmediately = false)
+    /// <summary>
+    /// Change the Request value for this node.
+    /// </summary>
+    /// <param name="_value"></param>
+    /// <param name="_runImmediately"></param>
+    public void ChangeRequestValue(int _value, bool _runImmediately = false)
     {
         setValue = _value;
-
         switch (_runImmediately)
         {
             case true: DialogueSystem.REQUEST_DIALOGUE_SET(setValue); DialogueSystem.Run(setValue); break;
@@ -53,15 +58,25 @@ public class DialogueNode : ScriptableObject, DialogueSystemEvents.IExecuteOnEnd
 
     }
 
+    /// <summary>
+    /// Run the Dialogue Set from this node.
+    /// </summary>
     public void Run()
     {
         Debug.Log("Okay...");
         DialogueSystem.Run(setValue);
     }
 
+    /// <summary>
+    /// Execute the listeners in the Unity Events
+    /// </summary>
     public void ExecuteOnEnd() {
         OnEnd.Invoke();
     }
 
+    /// <summary>
+    /// Return the Dialogue Set value
+    /// </summary>
+    /// <returns></returns>
     public int GetRunValue() => setValue;
 }

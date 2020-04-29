@@ -11,13 +11,13 @@ public class ExecuteDialogueNode : MonoBehaviour
     void Start()
     {
         if (executeOnStart)
-            ExecuteNode;
+            ExecuteNode();
     }
 
     public void ExecuteNode()
     {
         DialogueNode node = DialogueSystem.GET_NODES()[nodeNumber];
-        node.ChangeRequstValue(node.GetRunValue(), true);
+        node.ChangeRequestValue(node.GetRunValue(), true);
 
     }
 }

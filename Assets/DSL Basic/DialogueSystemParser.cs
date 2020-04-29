@@ -5,6 +5,13 @@ using UnityEngine;
 
 namespace DSLParser
 {
+    public class UnknownCharacterDefinedException : IOException
+    {
+        public UnknownCharacterDefinedException() { }
+        public UnknownCharacterDefinedException(string message) : base(message) { }
+        public UnknownCharacterDefinedException(string message, Exception inner) : base(message, inner) { }
+    }
+
     public class DialogueSystemParser
     {
         public class CommandCallLocation
@@ -200,7 +207,7 @@ namespace DSLParser
             Debug.LogError("File specified doesn't exist. Try creating one in StreamingAssets folder.");
         }
 
-        //// <summary>
+        /// <summary>
         /// Define poses listed underneath <POSES> in the .dsl file
         /// </summary>
         public static void Define_Poses()
@@ -426,58 +433,80 @@ namespace DSLParser
         /// <param name="_position">Position to start collecting data</param>
         public static void GetDialogue(int _position)
         {
+            //Access the DSL Path
             string dsPath = Application.streamingAssetsPath + @"/" + DialogueSystem.GET_DIALOGUE_SCRIPTING_FILE();
 
+            //This is used to read a line in the file when iterating
             string line = null;
 
+            //Toggle if we are at a desired position in the file.
             bool atTargetLine = false;
 
+            //If the defined path exist, interate through the file
             if (File.Exists(dsPath))
             {
+                //Stream reader allows use to read our file without compromising too much performance.
                 using (StreamReader fileReader = new StreamReader(dsPath))
                 {
+                    //We use this to keep track of our position in the file
                     int position = 0;
-
+                    
+                    //Loop until end of file
                     while (true)
                     {
+                        //Read the current line
                         line = fileReader.ReadLine();
 
+                        //If we reach the end of the dialogue set, we are done reading it
                         if (line == "<END>" && atTargetLine)
                             return;
 
+                        //However, if we are at the DialogueSet tag with a specified number, we collect all the dialogue that starts with "@"
                         if (position > _position)
                         {
-                            atTargetLine = true;
+                            atTargetLine = true; //Toggle on
+
+                            //Make sure that we are specifically encountering "<...>"
                             if (line != STRINGNULL && (line[0].ToString() == Tokens[3] && line[line.Length - 1] == '<'))
                             {
+                                //We should have a list of defined characters with the DefinedCharacters() function. This is used to validate that that character exists
                                 if (DefinedCharacters.Count != 0)
                                 {
+                                    //We iterate through our DefinedCharacters
                                     foreach (string character in DefinedCharacters)
                                     {
                                         string name = STRINGNULL;
+
+                                        //We make an attempt to get the whole name after "@", then we check
                                         try
                                         {
                                             name = line.Substring(1, character.Length) + ":";
                                         }
                                         catch { }
 
+                                        //If this character exist in the list of characters defined, we do some string manipulation
                                         if (HAS(name, character))
                                         {
+                                            //For names with _ scores replacing as spaces
                                             name = name.Replace("_", WHITESPACE);
+
+                                            //Insert the name that's been defined using the Insert command
                                             line = line.Replace(Tokens[0], STRINGNULL).Replace(Tokens[3] + character, "[INSERT::\"" + name + "\"]");
                                         }
 
+                                        //If it has ???, a predefined token that a character's name is not known, we insert it.
                                         else if (HAS(name.Substring(0, Tokens[4].Length), Tokens[4]))
                                             line = line.Replace(Tokens[0], STRINGNULL).Replace(Tokens[3] + Tokens[4], "[INSERT::\"" + Tokens[4] + ":" + "\"]");
 
+                                        //If there's no character or no ??? token, this means the narrator is speaking.
                                         else if (HAS(name.Substring(0, WHITESPACE.Length), WHITESPACE))
                                             line = line.Replace(Tokens[0], STRINGNULL).Replace(Tokens[3] + WHITESPACE, STRINGNULL);
 
+                                        //Then we really check if our defined character exist. If we down, we throw an exception, and end the dialogue reading process.
                                         else if (!DefinedCharacters.Exists(x => HAS(x, line.Substring(1, line.IndexOf(WHITESPACE) - 1))))
                                         {
                                             string unidentifiedName = line.Substring(1, line.IndexOf(WHITESPACE) - 1);
-                                            Debug.LogError("Unknown character definition at line " + (position + 1) + ". Did you define \"" + unidentifiedName + "\" under <CHARACTERS>?");
-                                            return;
+                                            throw new UnknownCharacterDefinedException("Unknown character definition at line " + (position + 1) + ". Did you define \"" + unidentifiedName + "\" under <CHARACTERS>?");
                                         }
                                     }
                                 }

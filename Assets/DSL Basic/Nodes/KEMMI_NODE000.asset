@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca92ef591ad28da4db62b25b49d62d0b, type: 3}
   m_Name: KEMMI_NODE000
   m_EditorClassIdentifier: 
-  executeOnStart: 0
+  executeOnStart: 1
   setValue: 1
   OnEnd:
     m_PersistentCalls:

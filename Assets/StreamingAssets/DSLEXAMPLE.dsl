@@ -2,11 +2,11 @@
 This is going to be the title (obviously).
 This is just your normal everyday comment.
 ###
-TITLE: ###EXAMPLE TEXT###
+TITLE: "EXAMPLE TEXT"
 
-AUTHOR: ###MIIJII###
+AUTHOR: "MIIJII"
 
-DATE: ### March 24, 2020 ###
+DATE: "March 24, 2020"
 
 ###This is how you define a dialogue set.###
 <DIALOGUE_SET_000>
